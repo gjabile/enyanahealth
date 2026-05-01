@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<!--
+  simulator/index.html
+  Browser-based USSD simulator for local development.
+  Mimics the exact request format Africa's Talking uses — no SIM card or AT
+  account required. Open http://localhost:3000 after running `npm run dev`.
+
+  How it works:
+  - Each "Send" appends your choice to a growing "*"-delimited input string
+    (e.g. "" → "1" → "1*2" → "1*2*3") matching AT's progressive text format
+  - A unique sessionId is auto-generated per browser session
+  - "Reset" generates a new sessionId and clears accumulated state
+  - CON responses are shown in green; END responses in orange
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enyana Health — USSD Simulator</title>
+  <style>
+    /* ── Reset & base ───────────────────────────────────────────────────── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111827;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Courier New', Courier, monospace;
+      color: #d1fae5;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 20px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── Phone shell ────────────────────────────────────────────────────── */
+    .phone {
+      background: #0d1117;
+      border: 2px solid #1f2937;
+      border-radius: 24px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.08);
+    }
+
+    /* ── Top bar ────────────────────────────────────────────────────────── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .service-code {
+      background: #1f2937;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #9ca3af;
+    }
+
+    #status-badge {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      background: #1f2937;
+      color: #6b7280;
+    }
+    #status-badge.active { background: #052e16; color: #4ade80; }
+    #status-badge.ended  { background: #431407; color: #fb923c; }
+    #status-badge.error  { background: #1f0a0a; color: #f87171; }
+
+    /* ── Screen ─────────────────────────────────────────────────────────── */
+    .screen-wrap {
+      background: #020d02;
+      border: 1px solid #1a3a1a;
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 180px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    #screen {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #4ade80;
+      min-height: 148px;
+    }
+
+    #screen.idle   { color: #1f4a1f; font-style: italic; }
+    #screen.con    { color: #4ade80; }
+    #screen.end    { color: #fb923c; }
+    #screen.err    { color: #f87171; }
+
+    .screen-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: #4ade80;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+    #screen.end .screen-cursor,
+    #screen.idle .screen-cursor { display: none; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Input area ─────────────────────────────────────────────────────── */
+    .field-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 10px;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #1f2937;
+      border-radius: 6px;
+      color: #d1fae5;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      padding: 9px 10px;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #065f46;
+    }
+
+    /* ── Buttons ────────────────────────────────────────────────────────── */
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: opacity 0.15s;
+    }
+    button:hover  { opacity: 0.85; }
+    button:active { opacity: 0.7; }
+
+    #btn-send  { background: #059669; color: #ecfdf5; }
+    #btn-reset { background: #1f2937; color: #9ca3af; border: 1px solid #374151; }
+
+    /* ── Meta / debug strip ─────────────────────────────────────────────── */
+    .meta {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #1f2937;
+      font-size: 10px;
+      color: #374151;
+      line-height: 1.8;
+    }
+    .meta span { color: #4b5563; }
+  </style>
+</head>
+<body>
+
+  <h1>Enyana Health — USSD Simulator</h1>
+
+  <div class="phone">
+
+    <div class="top-bar">
+      <div class="service-code">*384#</div>
+      <div id="status-badge">READY</div>
+    </div>
+
+    <div class="screen-wrap">
+      <div id="screen" class="idle">Connecting to Enyana Health...<span class="screen-cursor"></span></div>
+    </div>
+
+    <div class="field-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input type="text" id="phoneNumber" value="+256700000000" autocomplete="off">
+    </div>
+
+    <div class="field-group">
+      <label for="keyInput">Press Key / Type Message</label>
+      <input type="text" id="keyInput" placeholder="e.g.  1  or  My cow is limping" autocomplete="off">
+    </div>
+
+    <div class="btn-row">
+      <button id="btn-send"  onclick="send()">SEND</button>
+      <button id="btn-reset" onclick="reset()">RESET</button>
+    </div>
+
+    <div class="meta">
+      Session ID : <span id="meta-session">—</span><br>
+      Full input  : <span id="meta-input">—</span>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Session state ──────────────────────────────────────────────────────
+    let sessionId     = generateId();
+    let fullInput     = '';        // cumulative "*"-delimited input string
+    let sessionActive = false;     // false = next send is the first request
+
+    updateMeta();
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function generateId() {
+      return 'sim_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+    }
+
+    function setStatus(label, cls) {
+      const badge = document.getElementById('status-badge');
+      badge.textContent = label;
+      badge.className   = cls || '';
+    }
+
+    function updateMeta() {
+      document.getElementById('meta-session').textContent = sessionId;
+      document.getElementById('meta-input').textContent   = fullInput || '(empty — first request)';
+    }
+
+    function showScreen(text, type) {
+      // type: 'con' | 'end' | 'err' | 'idle'
+      const el = document.getElementById('screen');
+      el.className = type;
+      // Preserve the blinking cursor element
+      el.innerHTML = escapeHtml(text) + '<span class="screen-cursor"></span>';
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // ── Send ───────────────────────────────────────────────────────────────
+    async function send() {
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const keyInput    = document.getElementById('keyInput').value.trim();
+
+      if (!phoneNumber) {
+        alert('Please enter a phone number.');
+        return;
+      }
+
+      // For non-first requests, require the user to type something
+      if (sessionActive && keyInput === '') {
+        document.getElementById('keyInput').focus();
+        return;
+      }
+
+      // Build the Africa's Talking-style cumulative input string
+      if (!sessionActive) {
+        // First request — text must be empty (signals a new session to AT)
+        fullInput     = '';
+        sessionActive = true;
+      } else {
+        // Append choice with "*" delimiter — matches AT's progressive format
+        fullInput = fullInput === '' ? keyInput : fullInput + '*' + keyInput;
+      }
+
+      updateMeta();
+      setStatus('SENDING…');
+
+      try {
+        const body = new URLSearchParams({
+          sessionId,
+          phoneNumber,
+          text:        fullInput,
+          serviceCode: '*384#',
+        });
+
+        const resp = await fetch('/ussd', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body,
+        });
+
+        const text = await resp.text();
+
+        if (text.startsWith('CON ')) {
+          showScreen(text.slice(4), 'con');
+          setStatus('ACTIVE', 'active');
+        } else if (text.startsWith('END ')) {
+          showScreen(text.slice(4), 'end');
+          setStatus('ENDED', 'ended');
+          sessionActive = false;   // next Send will restart from scratch
+        } else {
+          showScreen(text, 'err');
+          setStatus('ERROR', 'error');
+        }
+
+      } catch (err) {
+        showScreen('Network error: ' + err.message + '\n\nIs the server running?\nnpm run dev', 'err');
+        setStatus('ERROR', 'error');
+      }
+
+      document.getElementById('keyInput').value = '';
+      document.getElementById('keyInput').focus();
+    }
+
+    // ── Reset ──────────────────────────────────────────────────────────────
+    function reset() {
+      sessionId     = generateId();
+      fullInput     = '';
+      sessionActive = false;
+
+      document.getElementById('keyInput').value = '';
+      showScreen('Connecting to Enyana Health...', 'idle');
+      setStatus('READY');
+      updateMeta();
+
+      // Auto-dial to kick off a fresh session immediately
+      send();
+    }
+
+    // ── Keyboard shortcut: Enter submits ───────────────────────────────────
+    document.getElementById('keyInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') send();
+    });
+
+    // ── Auto-dial on page load ─────────────────────────────────────────────
+    window.addEventListener('load', send);
+  </script>
+
+</body>
+</html>

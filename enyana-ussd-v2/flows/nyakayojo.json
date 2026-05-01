@@ -1,0 +1,121 @@
+{
+  "metadata": {
+    "pilot": "nyakayojo",
+    "location": "Nyakayojo Sub-county, Mbarara District, Uganda",
+    "languages": ["english", "runyankole"],
+    "animals": ["cattle", "poultry", "pigs"],
+    "note": "Runyankole text is marked [RUN] — placeholder only, requires review by a native speaker before deployment"
+  },
+  "states": {
+
+    "selectLanguage": {
+      "prompt": {
+        "english": "Welcome to Enyana Health!\nLivestock triage for Uganda.\n\n1. English\n2. Runyankole",
+        "runyankole": "[RUN] Murakaza neza kuri Enyana Health!\n\n1. English\n2. Runyankole"
+      }
+    },
+
+    "selectAnimal": {
+      "prompt": {
+        "english": "Which animal do you need help with?\n\n1. Cattle\n2. Poultry\n3. Pigs",
+        "runyankole": "[RUN] Orikwetaaga obusingye bwa nte ihe?\n\n1. Ente (Cattle)\n2. Enkooko (Poultry)\n3. Embizzi (Pigs)"
+      }
+    },
+
+    "selectTopic": {
+      "prompt": {
+        "english": "What do you need help with?\n\n1. Disease & Symptoms\n2. Nutrition\n3. Breeding\n4. Connect a Vet",
+        "runyankole": "[RUN] Orikwetaaga nkuwa?\n\n1. Endwara n'ebirikuboneraho\n2. Okulisha\n3. Okuzaana\n4. Kweta omusawo w'ente"
+      }
+    },
+
+    "cattle_disease": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Common cattle diseases:\n\n- East Coast Fever: high fever, swollen lymph nodes. Dip every 2 weeks.\n- Foot & Mouth: blisters on hooves/mouth. Isolate & call vet immediately.\n- Lumpy Skin: nodules on skin, fever. Vaccinate annually.\n\nFor emergencies, call your nearest government vet.",
+        "runyankole": "[RUN] Endwara z'ente ezaansi:\n\n- East Coast Fever: omuriro munonga, amatakara okurebuka. Faya buri wiiki 2.\n- FMD: ebisebe ku maguru/omu kanwa. Teeka hamwe ubaze omusawo ahakahaka.\n- Lumpy Skin: amatakara ku ruhu. Fayo entulo buri mwaka.\n\nOmu nsonga ya ngirigata, baza omusawo w'endiija."
+      }
+    },
+
+    "cattle_nutrition": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Cattle nutrition basics:\n\n- Provide quality pasture grass daily\n- Supplement with mineral licks (salt blocks)\n- Dairy cows need extra protein: cotton seed cake or sunflower cake\n- Calves: start creep feed from 2 weeks old\n- Always provide clean, fresh water\n\nUnderweight cattle: consult your extension officer.",
+        "runyankole": "[RUN] Okulisha ente:\n\n- Sha ebitsi ebya mwaro buri eizooba\n- Ogunga amayu g'emicungwa\n- Ente z'amata: sha obuzibu bw'ebyambu (cotton cake)\n- Ebyana: tandika okulisha obu biri mu wiiki 2\n- Sha amazi maaryo buhorobuhoro\n\nEnte z'obutungu: baza omukozi w'obukulisi."
+      }
+    },
+
+    "cattle_breeding": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Cattle breeding tips:\n\n- Best breeding age: 2-3 years old\n- Signs of heat: restlessness, mounting others, clear discharge\n- Heat cycle: every 21 days, active for 18 hours\n- Artificial Insemination (AI): available at the district vet office\n- Gestation period: 9 months\n\nFor AI services, contact your district livestock officer.",
+        "runyankole": "[RUN] Okuzaana kw'ente:\n\n- Obukye bwekunda: emyaka 2-3\n- Ebirikuboneraho bw'omwete: okuteerana, okuziina ente ndiija\n- Olukanga: buri eizooba 21, omwete 18 saawa\n- AI: erikubonereka ku kyanya ky'omusawo w'ente gy'orurembo\n- Okuzaana: emyezi 9"
+      }
+    },
+
+    "poultry_disease": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Common poultry diseases:\n\n- Newcastle: gasping, twisted neck, sudden deaths. Vaccinate ALL birds immediately.\n- Gumboro (IBD): depression, white/bloody diarrhoea. No cure — prevent with vaccine.\n- Fowl Typhoid: greenish droppings, sudden deaths. Use antibiotics + strict biosecurity.\n\nIsolate sick birds immediately. Quarantine new birds for 2 weeks.",
+        "runyankole": "[RUN] Endwara z'enkooko:\n\n- Newcastle: okugaspa, ensingo zigosanye, okufa ahakahaka. Fayo entulo enkooko zonna.\n- Gumboro: okubijirwa, amasiga maweru/amarukutu. Gwira fayo.\n- Fowl Typhoid: ebiturire ebyorobu. Sha eddagala + teera obuzima.\n\nTeeka enkooko eziruha hamwe ahakahaka."
+      }
+    },
+
+    "poultry_nutrition": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Poultry nutrition by stage:\n\n- Chicks (0-8 wks): chick starter mash, 22% protein\n- Growers (8-20 wks): grower mash, 18% protein\n- Layers (20+ wks): layer mash + calcium (eggshells or limestone)\n- Local breeds: supplement maize bran with insects, fishmeal, or soya\n\nAlways provide clean water. Wet or mouldy feed causes disease.",
+        "runyankole": "[RUN] Okulisha enkooko:\n\n- Ebyana (0-8 wiiki): okulisha kw'ebyana, protein 22%\n- Ezikura (8-20 wiiki): okulisha kw'ezikura, protein 18%\n- Ezitagya amaai: layer mash + calcium\n- Endaro z'omu nsi: ogunga ebitsi eby'ebyambu (endiga, enka y'enyanja)\n\nSha amazi maaryo. Okulisha okwibuha kureetera endwara."
+      }
+    },
+
+    "poultry_breeding": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Poultry breeding — content coming soon.\n\nFor now, contact your local agricultural extension officer or nearest veterinary clinic for flock improvement advice.\n\nDial back anytime for updates.",
+        "runyankole": "[RUN] Okuzaana kw'enkooko — obusingye burikujaho.\n\nKombeddi: baza omukozi w'obukulisi gy'omuhendo wawe.\n\nBaza bundi omugyeyo kugira obumanyiso obushya."
+      }
+    },
+
+    "pigs_disease": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Common pig diseases:\n\n- African Swine Fever (ASF): high fever, red/purple skin blotches. REPORT to authorities immediately — no cure, highly contagious.\n- PRRS: reproductive failures, breathing problems. Vaccinate.\n- Intestinal worms: poor growth, rough coat. Deworm every 3 months.\n\nNever feed pigs raw meat, blood, or uncooked kitchen scraps.",
+        "runyankole": "[RUN] Endwara z'embizzi:\n\n- African Swine Fever: omuriro munonga, enhumuro ya ruhu. BWATIKA ba ndiija AHAKAHAKA — ntakura kugya.\n- PRRS: okwita amahanga, okuhuumura. Fayo entulo.\n- Endiga: okukura kubi. Kura buri myezi 3.\n\nOtataha embizzi enyama kamu oba okulisha okutahaikiriizibwa."
+      }
+    },
+
+    "pigs_nutrition": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Pig nutrition basics:\n\n- Feed twice daily: morning and evening\n- Good diet: maize bran, cassava, sweet potato vines, cooked kitchen scraps\n- Sows in late pregnancy: increase feed by 50%\n- Provide clean water — pigs drink 5-10 litres daily\n- Avoid: raw meat, mouldy feed, excess salt\n\nUnderweight pigs likely have worms — deworm before adjusting diet.",
+        "runyankole": "[RUN] Okulisha embizzi:\n\n- Sha ebyokulya emirundi ebiri buri eizooba: ku makya no kumaryenga\n- Okulisha okwekunda: obutunda bw'ebigimbi, manioka, amashami g'amatembe\n- Embizzi ezitaana: yongera okulisha 50%\n- Sha amazi maaryo — embizzi zimwa 5-10L buri eizooba\n- Otarisha: enyama kamu, okulisha kwonona, omucwa munonga"
+      }
+    },
+
+    "pigs_breeding": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Pig breeding — content coming soon.\n\nFor now, contact your local agricultural extension officer or nearest veterinary clinic.\n\nDial back anytime for updates.",
+        "runyankole": "[RUN] Okuzaana kw'embizzi — obusingye burikujaho.\n\nKombeddi: baza omukozi w'obukulisi gy'omuhendo wawe.\n\nBaza bundi omugyeyo kugira obumanyiso obushya."
+      }
+    },
+
+    "connectVet": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Describe your animal's problem in a few words.\nA vet will be alerted on WhatsApp.\n\nType your message and press Send:",
+        "runyankole": "[RUN] Gamba obushobozi bw'ente yawe mu magambo mansi.\nOmusawo azabwirwa kuri WhatsApp.\n\nAndika obutumwa bwawe ushindike Send:"
+      }
+    },
+
+    "vetConfirm": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
+        "runyankole": "[RUN] Webare. Omusawo yabwirwa kandi azakweta kuri nomba yaawe mu masaa 24.\n\nEnyana Health — kugumya ente zawe."
+      }
+    }
+
+  }
+}
