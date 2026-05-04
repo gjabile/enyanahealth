@@ -10,8 +10,47 @@
 
     "selectLanguage": {
       "prompt": {
-        "english": "Welcome to Enyana Health!\nLivestock triage for Uganda.\n\n1. English\n2. Leb Acoli (Acholi)",
-        "acholi": "[ACH] Woo matek bot Enyana Health!\n\n1. English\n2. Leb Acoli"
+        "english": "Welcome / Wanongo\n\n1. English\n2. Leb Acoli (Acholi)",
+        "acholi": "[ACH] Welcome / Wanongo\n\n1. English\n2. Leb Acoli"
+      }
+    },
+
+    "selectCommunity": {
+      "prompt": {
+        "english": "Select your community:\n\n1. Nyakayojo\n2. Gulu",
+        "acholi": "[ACH] Yer kakube mamegi:\n\n1. Nyakayojo\n2. Gulu"
+      }
+    },
+
+    "enterName": {
+      "isEnd": false,
+      "prompt": {
+        "english": "What is your full name?",
+        "acholi": "[ACH] Nyinji nyingi mamegi weng?"
+      }
+    },
+
+    "welcomeNewFarmer": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Welcome to Enyana Health, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
+        "acholi": "[ACH] Wanongo i Enyana Health, {{name}}!\nIyet kony ki ngo tin?\n\n1. Lee mera two\n2. Tye lapeny"
+      }
+    },
+
+    "welcomeReturning": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Welcome back, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
+        "acholi": "[ACH] Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n\n1. Lee mera two\n2. Tye lapeny"
+      }
+    },
+
+    "mainMenuPlaceholder": {
+      "isEnd": true,
+      "prompt": {
+        "english": "CON [Main menu coming soon]",
+        "acholi": "[ACH] CON [Main menu coming soon]"
       }
     },
 

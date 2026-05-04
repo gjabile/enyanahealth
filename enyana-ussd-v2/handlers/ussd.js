@@ -24,6 +24,7 @@ const fs   = require('fs');
 
 const { getSession, setSession, clearSession } = require('../services/session');
 const { sendVetAlert }                          = require('../services/notify');
+const { getFarmer, createFarmer, updateReturningFarmer } = require('../services/firestore');
 
 // ---------------------------------------------------------------------------
 // Load the flow JSON once at startup — restart the server to pick up changes
@@ -82,11 +83,14 @@ async function handleUSSD(req, res) {
   // -------------------------------------------------------------------------
   if (isNewSession) {
     const freshSession = {
-      state:       'selectLanguage',
-      language:    'english',   // overwritten once the user picks a language
-      animal:      null,        // set at selectAnimal
+      state:               'selectLanguage',
+      language:            'english',
       phoneNumber,
-      inputs:      [],
+      community:           null,
+      name:                null,
+      isReturningFarmer:   false,
+      animal:              null,
+      inputs:              [],
     };
     setSession(sessionId, freshSession);
     return res.send(`CON ${getPrompt('selectLanguage', 'english')}`);
@@ -100,11 +104,14 @@ async function handleUSSD(req, res) {
   if (!session) {
     // Session expired — restart cleanly rather than returning a bare error
     const freshSession = {
-      state:       'selectLanguage',
-      language:    'english',
-      animal:      null,
+      state:               'selectLanguage',
+      language:            'english',
       phoneNumber,
-      inputs:      [],
+      community:           null,
+      name:                null,
+      isReturningFarmer:   false,
+      animal:              null,
+      inputs:              [],
     };
     setSession(sessionId, freshSession);
     return res.send(
@@ -132,17 +139,96 @@ async function handleUSSD(req, res) {
   switch (currentState) {
 
     // ── Language selection ──────────────────────────────────────────────────
+    // Show all 3 languages and check Firestore for farmer status
     case 'selectLanguage':
       if (input === '1') {
         session.language = 'english';
-        nextState = 'selectAnimal';
       } else if (input === '2') {
-        // Pilot's second language is the second entry in flow.metadata.languages
         session.language = (flow.metadata.languages && flow.metadata.languages[1]) || 'english';
-        nextState = 'selectAnimal';
+      } else if (input === '3') {
+        session.language = (flow.metadata.languages && flow.metadata.languages[2]) || 'english';
       } else {
         return reshowCurrent(res, 'selectLanguage', session.language);
       }
+
+      // Check Firestore to see if this farmer is new or returning
+      try {
+        const existingFarmer = await getFarmer(phoneNumber);
+        if (existingFarmer) {
+          // Returning farmer
+          session.isReturningFarmer = true;
+          session.name = existingFarmer.name;
+          session.community = existingFarmer.community;
+          // Update lastSeen and totalSessions in Firestore (fire-and-forget)
+          updateReturningFarmer(phoneNumber).catch(err => {
+            console.error('[ussd] Failed to update returning farmer:', err.message);
+          });
+          nextState = 'welcomeReturning';
+        } else {
+          // New farmer
+          session.isReturningFarmer = false;
+          nextState = 'selectCommunity';
+        }
+      } catch (err) {
+        console.error('[ussd] Firestore check failed:', err.message);
+        // Default to new farmer flow if Firestore fails
+        session.isReturningFarmer = false;
+        nextState = 'selectCommunity';
+      }
+      break;
+
+    // ── Community selection (first-time only) ────────────────────────────────
+    case 'selectCommunity':
+      if (input === '1') {
+        session.community = 'nyakayojo';
+        nextState = 'enterName';
+      } else if (input === '2') {
+        session.community = 'gulu';
+        nextState = 'enterName';
+      } else {
+        return reshowCurrent(res, 'selectCommunity', session.language);
+      }
+      break;
+
+    // ── Name collection (first-time only) ────────────────────────────────────
+    case 'enterName':
+      if (!input || !input.trim()) {
+        return reshowCurrent(res, 'enterName', session.language);
+      }
+      session.name = input.trim();
+      // Save new farmer to Firestore (fire-and-forget)
+      createFarmer(phoneNumber, session.name, session.community, session.language).catch(err => {
+        console.error('[ussd] Failed to create farmer:', err.message);
+      });
+      nextState = 'welcomeNewFarmer';
+      break;
+
+    // ── Welcome screen for new farmers ───────────────────────────────────────
+    case 'welcomeNewFarmer':
+      if (input === '1') {
+        nextState = 'mainMenuPlaceholder';
+      } else if (input === '2') {
+        nextState = 'mainMenuPlaceholder';
+      } else {
+        return reshowCurrent(res, 'welcomeNewFarmer', session.language);
+      }
+      break;
+
+    // ── Welcome screen for returning farmers ─────────────────────────────────
+    case 'welcomeReturning':
+      if (input === '1') {
+        nextState = 'mainMenuPlaceholder';
+      } else if (input === '2') {
+        nextState = 'mainMenuPlaceholder';
+      } else {
+        return reshowCurrent(res, 'welcomeReturning', session.language);
+      }
+      break;
+
+    // ── Main menu placeholder ────────────────────────────────────────────────
+    // This will be replaced with actual main menu logic later
+    case 'mainMenuPlaceholder':
+      nextState = 'mainMenuPlaceholder';
       break;
 
     // ── Animal selection ────────────────────────────────────────────────────
@@ -199,7 +285,12 @@ async function handleUSSD(req, res) {
     return res.send('END State not found. Please dial again.');
   }
 
-  const prompt = stateData.prompt[session.language] || stateData.prompt.english;
+  let prompt = stateData.prompt[session.language] || stateData.prompt.english;
+
+  // Interpolate {{name}} for welcome screens
+  if ((nextState === 'welcomeNewFarmer' || nextState === 'welcomeReturning') && session.name) {
+    prompt = prompt.replace(/\{\{name\}\}/g, session.name);
+  }
 
   if (stateData.isEnd) {
     clearSession(sessionId);

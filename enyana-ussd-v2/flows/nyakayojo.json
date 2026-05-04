@@ -10,8 +10,47 @@
 
     "selectLanguage": {
       "prompt": {
-        "english": "Welcome to Enyana Health!\nLivestock triage for Uganda.\n\n1. English\n2. Runyankole",
-        "runyankole": "[RUN] Murakaza neza kuri Enyana Health!\n\n1. English\n2. Runyankole"
+        "english": "Welcome / Tukwakiira\n\n1. English\n2. Runyankole",
+        "runyankole": "[RUN] Welcome / Tukwakiira\n\n1. English\n2. Runyankole"
+      }
+    },
+
+    "selectCommunity": {
+      "prompt": {
+        "english": "Select your community:\n\n1. Nyakayojo\n2. Gulu",
+        "runyankole": "[RUN] Toora ekihuuga kyaawe:\n\n1. Nyakayojo\n2. Gulu"
+      }
+    },
+
+    "enterName": {
+      "isEnd": false,
+      "prompt": {
+        "english": "What is your full name?",
+        "runyankole": "[RUN] Niina amaziina gawe gonna?"
+      }
+    },
+
+    "welcomeNewFarmer": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Welcome to Enyana Health, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
+        "runyankole": "[RUN] Tukwakiira aha Enyana Health, {{name}}!\nTukuyambe omuki erizooba?\n\n1. Oruhwire rwawe nirwire\n2. Niine ekiboozo"
+      }
+    },
+
+    "welcomeReturning": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Welcome back, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
+        "runyankole": "[RUN] Tukwakiira enjura, {{name}}!\nTukuyambe omuki erizooba?\n\n1. Oruhwire rwawe nirwire\n2. Niine ekiboozo"
+      }
+    },
+
+    "mainMenuPlaceholder": {
+      "isEnd": true,
+      "prompt": {
+        "english": "CON [Main menu coming soon]",
+        "runyankole": "[RUN] CON [Main menu coming soon]"
       }
     },
 
