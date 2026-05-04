@@ -47,15 +47,17 @@ try {
 // ---------------------------------------------------------------------------
 
 /** Return the localised prompt for a state, falling back to English. */
-function getPrompt(stateName, language) {
+function getPrompt(stateName, language, session) {
   const state = flow.states[stateName];
   if (!state) return `[Error: state "${stateName}" not found in flow]`;
-  return state.prompt[language] || state.prompt.english;
+  let prompt = state.prompt[language] || state.prompt.english;
+  if (session && session.name) prompt = prompt.replace(/\{\{name\}\}/g, session.name);
+  return prompt;
 }
 
 /** Re-display the current screen (called when the user enters an invalid choice). */
-function reshowCurrent(res, stateName, language) {
-  return res.send(`CON ${getPrompt(stateName, language)}`);
+function reshowCurrent(res, stateName, language, session) {
+  return res.send(`CON ${getPrompt(stateName, language, session)}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -148,7 +150,7 @@ async function handleUSSD(req, res) {
       } else if (input === '3') {
         session.language = 'acholi';
       } else {
-        return reshowCurrent(res, 'selectLanguage', session.language);
+        return reshowCurrent(res, 'selectLanguage', session.language, session);
       }
 
       // Check Firestore to see if this farmer is new or returning
@@ -186,14 +188,14 @@ async function handleUSSD(req, res) {
         session.community = 'gulu';
         nextState = 'enterName';
       } else {
-        return reshowCurrent(res, 'selectCommunity', session.language);
+        return reshowCurrent(res, 'selectCommunity', session.language, session);
       }
       break;
 
     // ── Name collection (first-time only) ────────────────────────────────────
     case 'enterName':
       if (!input || !input.trim()) {
-        return reshowCurrent(res, 'enterName', session.language);
+        return reshowCurrent(res, 'enterName', session.language, session);
       }
       session.name = input.trim();
       // Save new farmer to Firestore (fire-and-forget)
@@ -210,7 +212,7 @@ async function handleUSSD(req, res) {
       } else if (input === '2') {
         nextState = 'mainMenu';
       } else {
-        return reshowCurrent(res, 'welcomeNewFarmer', session.language);
+        return reshowCurrent(res, 'welcomeNewFarmer', session.language, session);
       }
       break;
 
@@ -221,7 +223,7 @@ async function handleUSSD(req, res) {
       } else if (input === '2') {
         nextState = 'mainMenu';
       } else {
-        return reshowCurrent(res, 'welcomeReturning', session.language);
+        return reshowCurrent(res, 'welcomeReturning', session.language, session);
       }
       break;
 
@@ -230,14 +232,14 @@ async function handleUSSD(req, res) {
       if (input === '1') {
         nextState = 'describeVetProblem';
       } else {
-        return reshowCurrent(res, 'mainMenu', session.language);
+        return reshowCurrent(res, 'mainMenu', session.language, session);
       }
       break;
 
     // ── Vet contact — farmer describes their problem ──────────────────────────
     case 'describeVetProblem':
       if (!input || !input.trim()) {
-        return reshowCurrent(res, 'describeVetProblem', session.language);
+        return reshowCurrent(res, 'describeVetProblem', session.language, session);
       }
       session.problem = input.trim();
       sendVetAlert(phoneNumber, null, session.problem).catch(err => {
@@ -251,7 +253,7 @@ async function handleUSSD(req, res) {
       if      (input === '1') { session.animal = 'cattle';  nextState = 'selectTopic'; }
       else if (input === '2') { session.animal = 'poultry'; nextState = 'selectTopic'; }
       else if (input === '3') { session.animal = 'pigs';    nextState = 'selectTopic'; }
-      else { return reshowCurrent(res, 'selectAnimal', session.language); }
+      else { return reshowCurrent(res, 'selectAnimal', session.language, session); }
       break;
 
     // ── Topic selection ─────────────────────────────────────────────────────
@@ -262,13 +264,13 @@ async function handleUSSD(req, res) {
       else if (input === '2') nextState = `${session.animal}_nutrition`;
       else if (input === '3') nextState = `${session.animal}_breeding`;
       else if (input === '4') nextState = 'connectVet';
-      else { return reshowCurrent(res, 'selectTopic', session.language); }
+      else { return reshowCurrent(res, 'selectTopic', session.language, session); }
       break;
 
     // ── Vet connection — farmer types their problem as free text ─────────────
     case 'connectVet':
       if (!input || !input.trim()) {
-        return reshowCurrent(res, 'connectVet', session.language);
+        return reshowCurrent(res, 'connectVet', session.language, session);
       }
       // Fire-and-forget: do not await so the farmer is not held waiting for Twilio
       sendVetAlert(phoneNumber, session.animal || 'unknown', input).catch(err => {
@@ -300,12 +302,7 @@ async function handleUSSD(req, res) {
     return res.send('END State not found. Please dial again.');
   }
 
-  let prompt = stateData.prompt[session.language] || stateData.prompt.english;
-
-  // Interpolate {{name}} for welcome screens
-  if ((nextState === 'welcomeNewFarmer' || nextState === 'welcomeReturning') && session.name) {
-    prompt = prompt.replace(/\{\{name\}\}/g, session.name);
-  }
+  const prompt = getPrompt(nextState, session.language, session);
 
   if (stateData.isEnd) {
     clearSession(sessionId);
