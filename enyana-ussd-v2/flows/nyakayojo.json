@@ -47,12 +47,30 @@
       }
     },
 
-    "mainMenuPlaceholder": {
+    "mainMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "[Main menu coming soon]",
-        "runyankole": "[Main menu coming soon]",
-        "acholi":     "[Main menu coming soon]"
+        "english":    "What do you need help with today?\n\n1. Contact a vet",
+        "runyankole": "Tukuyambe omuki erizooba?\n\n1. Sindiikira omushaho obubaka",
+        "acholi":     "Iyet kony ki ngo tin?\n\n1. Kube ki daktari"
+      }
+    },
+
+    "describeVetProblem": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Describe your problem and we will\nalert a vet right away.",
+        "runyankole": "[RUN] Coroora enshonga yawe nitwasindikira\nomushaho obubaka.",
+        "acholi":     "[ACH] Pyer tam mamegi, wabiok daktari\nmapwod."
+      }
+    },
+
+    "vetAlertSent": {
+      "isEnd": true,
+      "prompt": {
+        "english":    "Thank you. A vet has been alerted\nand will contact you shortly.",
+        "runyankole": "[RUN] Webale. Twasindikira omushaho\nobubaka, akugarukamu mangu.",
+        "acholi":     "[ACH] Apwoyo. Daktari omako lok mamegi,\nbicwiny boti weng."
       }
     },
 

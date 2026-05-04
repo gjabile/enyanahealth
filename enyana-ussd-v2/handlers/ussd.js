@@ -206,9 +206,9 @@ async function handleUSSD(req, res) {
     // ── Welcome screen for new farmers ───────────────────────────────────────
     case 'welcomeNewFarmer':
       if (input === '1') {
-        nextState = 'mainMenuPlaceholder';
+        nextState = 'mainMenu';
       } else if (input === '2') {
-        nextState = 'mainMenuPlaceholder';
+        nextState = 'mainMenu';
       } else {
         return reshowCurrent(res, 'welcomeNewFarmer', session.language);
       }
@@ -217,18 +217,33 @@ async function handleUSSD(req, res) {
     // ── Welcome screen for returning farmers ─────────────────────────────────
     case 'welcomeReturning':
       if (input === '1') {
-        nextState = 'mainMenuPlaceholder';
+        nextState = 'mainMenu';
       } else if (input === '2') {
-        nextState = 'mainMenuPlaceholder';
+        nextState = 'mainMenu';
       } else {
         return reshowCurrent(res, 'welcomeReturning', session.language);
       }
       break;
 
-    // ── Main menu placeholder ────────────────────────────────────────────────
-    // This will be replaced with actual main menu logic later
-    case 'mainMenuPlaceholder':
-      nextState = 'mainMenuPlaceholder';
+    // ── Main menu ────────────────────────────────────────────────────────────
+    case 'mainMenu':
+      if (input === '1') {
+        nextState = 'describeVetProblem';
+      } else {
+        return reshowCurrent(res, 'mainMenu', session.language);
+      }
+      break;
+
+    // ── Vet contact — farmer describes their problem ──────────────────────────
+    case 'describeVetProblem':
+      if (!input || !input.trim()) {
+        return reshowCurrent(res, 'describeVetProblem', session.language);
+      }
+      session.problem = input.trim();
+      sendVetAlert(phoneNumber, null, session.problem).catch(err => {
+        console.error('[ussd] Vet alert failed:', err.message);
+      });
+      nextState = 'vetAlertSent';
       break;
 
     // ── Animal selection ────────────────────────────────────────────────────
