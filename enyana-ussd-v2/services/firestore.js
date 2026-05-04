@@ -20,20 +20,30 @@ let db = null;
  * Called once at startup if FIREBASE_CREDENTIALS_PATH is set.
  */
 function initializeFirebase() {
-  const credsPath = process.env.FIREBASE_CREDENTIALS_PATH;
-
-  if (!credsPath) {
-    console.warn('[firestore] FIREBASE_CREDENTIALS_PATH not set — Firestore disabled');
-    return;
-  }
+  const credsPath    = process.env.FIREBASE_CREDENTIALS_PATH;
+  const projectId    = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail  = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKey   = process.env.FIREBASE_PRIVATE_KEY;
 
   try {
     const admin = require('firebase-admin');
-    const serviceAccount = require(credsPath);
 
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
+    if (credsPath) {
+      // Service account JSON file on disk
+      admin.initializeApp({ credential: admin.credential.cert(require(credsPath)) });
+    } else if (projectId && clientEmail && privateKey) {
+      // Individual env vars — private key may have literal \n from .env file
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId,
+          clientEmail,
+          privateKey: privateKey.replace(/\\n/g, '\n'),
+        }),
+      });
+    } else {
+      console.warn('[firestore] No Firebase credentials found — Firestore disabled');
+      return;
+    }
 
     db = admin.firestore();
     console.log('[firestore] Firebase initialized successfully');
