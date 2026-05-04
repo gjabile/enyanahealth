@@ -46,7 +46,8 @@ async function sendVetAlert(phoneNumber, animal, problem) {
   }
 
   const client  = twilio(sid, token);
-  const message = `🐄 Enyana Health Alert\nFarmer: ${phoneNumber}\nAnimal: ${animal}\nProblem: ${problem}`;
+  const animalLine = animal ? `\nAnimal: ${animal}` : '';
+  const message = `🐄 Enyana Health Alert\nFarmer: ${phoneNumber}${animalLine}\nProblem: ${problem}`;
 
   await client.messages.create({ body: message, from, to });
   console.log(`[notify] WhatsApp alert sent to vet at ${to}`);
