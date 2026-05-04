@@ -10,8 +10,9 @@
 
     "selectLanguage": {
       "prompt": {
-        "english": "Welcome / Wanongo\n\n1. English\n2. Leb Acoli (Acholi)",
-        "acholi": "[ACH] Welcome / Wanongo\n\n1. English\n2. Leb Acoli"
+        "english":    "Welcome / Tukwakiira / Wanongo\n\n1. English\n2. Runyankole\n3. Acholi",
+        "runyankole": "Welcome / Tukwakiira / Wanongo\n\n1. English\n2. Runyankole\n3. Acholi",
+        "acholi":     "Welcome / Tukwakiira / Wanongo\n\n1. English\n2. Runyankole\n3. Acholi"
       }
     },
 
@@ -47,10 +48,11 @@
     },
 
     "mainMenuPlaceholder": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
-        "english": "CON [Main menu coming soon]",
-        "acholi": "[ACH] CON [Main menu coming soon]"
+        "english":    "[Main menu coming soon]",
+        "runyankole": "[Main menu coming soon]",
+        "acholi":     "[Main menu coming soon]"
       }
     },
 

@@ -144,9 +144,9 @@ async function handleUSSD(req, res) {
       if (input === '1') {
         session.language = 'english';
       } else if (input === '2') {
-        session.language = (flow.metadata.languages && flow.metadata.languages[1]) || 'english';
+        session.language = 'runyankole';
       } else if (input === '3') {
-        session.language = (flow.metadata.languages && flow.metadata.languages[2]) || 'english';
+        session.language = 'acholi';
       } else {
         return reshowCurrent(res, 'selectLanguage', session.language);
       }
