@@ -1,0 +1,162 @@
+{
+  "metadata": {
+    "pilot": "gulu",
+    "location": "Gulu District, Northern Uganda",
+    "languages": ["english", "acholi"],
+    "animals": ["cattle", "poultry", "pigs"],
+    "note": "All content is placeholder — English is marked [EN], Acholi is marked [ACH]. Requires a local team to fill in context-appropriate advice for the Gulu area."
+  },
+  "states": {
+
+    "selectLanguage": {
+      "prompt": {
+        "english":    "Welcome / Tukwakiira / Wanongo\n\n1. English\n2. Runyankole\n3. Acholi",
+        "runyankole": "Welcome / Tukwakiira / Wanongo\n\n1. English\n2. Runyankole\n3. Acholi",
+        "acholi":     "Welcome / Tukwakiira / Wanongo\n\n1. English\n2. Runyankole\n3. Acholi"
+      }
+    },
+
+    "selectCommunity": {
+      "prompt": {
+        "english": "Select your community:\n\n1. Nyakayojo\n2. Gulu",
+        "acholi": "[ACH] Yer kakube mamegi:\n\n1. Nyakayojo\n2. Gulu"
+      }
+    },
+
+    "enterName": {
+      "isEnd": false,
+      "prompt": {
+        "english": "What is your full name?",
+        "acholi": "[ACH] Nyinji nyingi mamegi weng?"
+      }
+    },
+
+    "welcomeNewFarmer": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Welcome to Enyana Health, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
+        "acholi": "[ACH] Wanongo i Enyana Health, {{name}}!\nIyet kony ki ngo tin?\n\n1. Lee mera two\n2. Tye lapeny"
+      }
+    },
+
+    "welcomeReturning": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Welcome back, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
+        "acholi": "[ACH] Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n\n1. Lee mera two\n2. Tye lapeny"
+      }
+    },
+
+    "mainMenuPlaceholder": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "[Main menu coming soon]",
+        "runyankole": "[Main menu coming soon]",
+        "acholi":     "[Main menu coming soon]"
+      }
+    },
+
+    "selectAnimal": {
+      "prompt": {
+        "english": "[EN] Which animal do you need help with?\n\n1. Cattle\n2. Poultry\n3. Pigs",
+        "acholi": "[ACH] Lee aŋo ma imaro kony me?\n\n1. Dyaŋ (Cattle)\n2. Winyo (Poultry)\n3. Meo (Pigs)"
+      }
+    },
+
+    "selectTopic": {
+      "prompt": {
+        "english": "[EN] What do you need help with?\n\n1. Disease & Symptoms\n2. Nutrition\n3. Breeding\n4. Connect a Vet",
+        "acholi": "[ACH] Imiyo ano?\n\n1. Two ki tambe\n2. Cam\n3. Nywalo\n4. Kub lakwat lee"
+      }
+    },
+
+    "cattle_disease": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Cattle disease content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Two me dyaŋ pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "cattle_nutrition": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Cattle nutrition content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Cam me dyaŋ pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "cattle_breeding": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Cattle breeding content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Nywalo me dyaŋ pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "poultry_disease": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Poultry disease content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Two me winyo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "poultry_nutrition": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Poultry nutrition content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Cam me winyo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "poultry_breeding": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Poultry breeding content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Nywalo me winyo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "pigs_disease": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Pig disease content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Two me meo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "pigs_nutrition": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Pig nutrition content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Cam me meo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "pigs_breeding": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Pig breeding content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
+        "acholi": "[ACH] Nywalo me meo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+      }
+    },
+
+    "connectVet": {
+      "isEnd": false,
+      "prompt": {
+        "english": "[EN] Describe your animal's problem in a few words.\nA vet will be alerted on WhatsApp.\n\nType your message and press Send:",
+        "acholi": "[ACH] Nyut tam me lee madit mo mapol me gin acel.\nLakwat lee bibedo ni myero okwony.\n\nCor lok mamegi ki i olo Send:"
+      }
+    },
+
+    "vetConfirm": {
+      "isEnd": true,
+      "prompt": {
+        "english": "[EN] Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
+        "acholi": "[ACH] Apwoyo. Lakwat lee otiŋ ki bino, en biter kwede i namba mamegi i cawa 24.\n\nEnyana Health — gwoko lee mamegi."
+      }
+    }
+
+  }
+}
