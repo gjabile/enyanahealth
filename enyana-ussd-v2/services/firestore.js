@@ -141,18 +141,16 @@ async function saveTriageSession(session) {
   try {
     const now = new Date();
     await db.collection('sessions').add({
-      language:    session.language,
-      community:   session.community,
-      phoneNumber: session.phoneNumber,
-      name:        session.name,
-      animal:      session.animal,
-      duration:    session.duration,
-      stillEating: session.stillEating,
-      symptoms:    session.symptoms || {},
-      triageScore: session.triageScore,
-      triageLevel: session.triageLevel,
-      outcome:     session.outcome,
-      timestamp:   now,
+      language:         session.language,
+      community:        session.community,
+      phoneNumber:      session.phoneNumber,
+      name:             session.name,
+      animal:           session.animal,
+      symptoms:         session.symptoms || {},
+      diseaseScores:    session.diseaseScores || {},
+      highestRiskLevel: session.highestRiskLevel,
+      outcome:          session.outcome,
+      timestamp:        now,
     });
 
     if (session.phoneNumber) {

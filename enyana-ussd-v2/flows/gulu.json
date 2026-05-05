@@ -3,7 +3,7 @@
     "pilot": "gulu",
     "location": "Gulu District, Northern Uganda",
     "languages": ["english", "acholi"],
-    "animals": ["cattle", "poultry", "pigs"],
+    "animals": ["cattle", "poultry", "pigs", "rabbit"],
     "note": "All content is placeholder — English is marked [EN], Acholi is marked [ACH]. Requires a local team to fill in context-appropriate advice for the Gulu area."
   },
   "states": {
@@ -19,7 +19,7 @@
     "selectCommunity": {
       "prompt": {
         "english": "Select your community:\n\n1. Nyakayojo\n2. Gulu",
-        "acholi": "[ACH] Yer kakube mamegi:\n\n1. Nyakayojo\n2. Gulu"
+        "acholi":  "[ACH] Yer kakube mamegi:\n\n1. Nyakayojo\n2. Gulu"
       }
     },
 
@@ -27,7 +27,7 @@
       "isEnd": false,
       "prompt": {
         "english": "What is your full name?",
-        "acholi": "[ACH] Nyinji nyingi mamegi weng?"
+        "acholi":  "[ACH] Nyinji nyingi mamegi weng?"
       }
     },
 
@@ -48,123 +48,33 @@
     "describeVetProblem": {
       "isEnd": false,
       "prompt": {
-        "english":    "Describe your problem and we will\nalert a vet right away.",
-        "runyankole": "[RUN] Coroora enshonga yawe nitwasindikira\nomushaho obubaka.",
-        "acholi":     "[ACH] Pyer tam mamegi, wabiok daktari\nmapwod."
+        "english": "Describe your problem and we will\nalert a vet right away.",
+        "acholi":  "[ACH] Pyer tam mamegi, wabiok daktari\nmapwod."
       }
     },
 
     "vetAlertSent": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you. A vet has been alerted\nand will contact you shortly.",
-        "runyankole": "[RUN] Webale. Twasindikira omushaho\nobubaka, akugarukamu mangu.",
-        "acholi":     "[ACH] Apwoyo. Daktari omako lok mamegi,\nbicwiny boti weng."
-      }
-    },
-
-    "selectAnimal": {
-      "prompt": {
-        "english":    "Which animal is sick?\n\n1. Cow\n2. Goat\n3. Pig\n4. Chicken",
-        "runyankole": "Kiki oruhwire rurwire?\n1. Ente\n2. Embuzi\n3. Nguruwe\n4. Enkoko",
-        "acholi":     "Lee mene ma two?\n1. Dyel\n2. Dyel ŋom\n3. Meo\n4. Cak"
+        "english": "Thank you. A vet has been alerted\nand will contact you shortly.",
+        "acholi":  "[ACH] Apwoyo. Daktari omako lok mamegi,\nbicwiny boti weng."
       }
     },
 
     "informationMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "[Information menu coming soon]",
-        "runyankole": "[Information menu coming soon]",
-        "acholi":     "[Information menu coming soon]"
+        "english": "[Information menu coming soon]",
+        "acholi":  "[Information menu coming soon]"
       }
     },
 
-    "animalComingSoon": {
+    "selectAnimal": {
       "isEnd": false,
       "prompt": {
-        "english":    "Coming soon. Please contact a vet\ndirectly for help with this animal.\n\n1. Contact a vet",
-        "runyankole": "Coming soon. Please contact a vet\ndirectly for help with this animal.\n\n1. Contact a vet",
-        "acholi":     "Coming soon. Please contact a vet\ndirectly for help with this animal.\n\n1. Contact a vet"
-      }
-    },
-
-    "selectTopic": {
-      "prompt": {
-        "english": "[EN] What do you need help with?\n\n1. Disease & Symptoms\n2. Nutrition\n3. Breeding\n4. Connect a Vet",
-        "acholi": "[ACH] Imiyo ano?\n\n1. Two ki tambe\n2. Cam\n3. Nywalo\n4. Kub lakwat lee"
-      }
-    },
-
-    "cattle_disease": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Cattle disease content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Two me dyaŋ pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "cattle_nutrition": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Cattle nutrition content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Cam me dyaŋ pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "cattle_breeding": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Cattle breeding content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Nywalo me dyaŋ pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "poultry_disease": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Poultry disease content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Two me winyo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "poultry_nutrition": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Poultry nutrition content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Cam me winyo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "poultry_breeding": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Poultry breeding content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Nywalo me winyo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "pigs_disease": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Pig disease content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Two me meo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "pigs_nutrition": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Pig nutrition content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Cam me meo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
-      }
-    },
-
-    "pigs_breeding": {
-      "isEnd": true,
-      "prompt": {
-        "english": "[EN] Pig breeding content for Gulu pilot — coming soon.\n\nPlease contact your local vet or extension officer for advice.",
-        "acholi": "[ACH] Nywalo me meo pi Gulu — tye ka bedo.\n\nKub lakwat lee mamegi kombeddi."
+        "english":    "Which animal is sick?\n\n1. Cow\n2. Poultry (chickens)\n3. Pig\n4. Rabbit",
+        "runyankole": "Kiki oruhwire rurwire?\n1. Ente\n2. Enkoko\n3. Nguruwe\n4. Muhigo",
+        "acholi":     "Lee mene ma two?\n1. Dyel\n2. Cak\n3. Meo\n4. Ekwee"
       }
     },
 
@@ -172,7 +82,7 @@
       "isEnd": false,
       "prompt": {
         "english": "[EN] Describe your animal's problem in a few words.\nA vet will be alerted on WhatsApp.\n\nType your message and press Send:",
-        "acholi": "[ACH] Nyut tam me lee madit mo mapol me gin acel.\nLakwat lee bibedo ni myero okwony.\n\nCor lok mamegi ki i olo Send:"
+        "acholi":  "[ACH] Nyut tam me lee madit mo mapol me gin acel.\nLakwat lee bibedo ni myero okwony.\n\nCor lok mamegi ki i olo Send:"
       }
     },
 
@@ -180,124 +90,511 @@
       "isEnd": true,
       "prompt": {
         "english": "[EN] Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
-        "acholi": "[ACH] Apwoyo. Lakwat lee otiŋ ki bino, en biter kwede i namba mamegi i cawa 24.\n\nEnyana Health — gwoko lee mamegi."
+        "acholi":  "[ACH] Apwoyo. Lakwat lee otiŋ ki bino, en biter kwede i namba mamegi i cawa 24.\n\nEnyana Health — gwoko lee mamegi."
       }
     },
 
-    "cow_triage_duration": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "How long has your cow been sick?\n\n1. Started today\n2. 2-3 days\n3. More than 3 days",
-        "runyankole": "Ente yawe yariire nk'emirundi emeka?\n1. Eyatandika erizooba\n2. Eizoba 2-3\n3. Okusinga eizoba 3",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_eating": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Is your cow still eating and drinking?\n\n1. Yes\n2. No",
-        "runyankole": "Ente yawe niyo nywa n'okurya?\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_s1": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Does the milk look different in color?\n\n1. Yes\n2. No",
-        "runyankole": "Amate nigahinduka omu ndebeka?\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_s2": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Are the teats swollen or tender?\n(wounds or cracks)\n1. Yes\n2. No",
-        "runyankole": "Okuzimba amabere n'omuhako?\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_s3": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Does your cow resist being milked?\n\n1. Yes\n2. No",
-        "runyankole": "Okuhaya okwanga kukamwa?\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_s4": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Is the udder hot, swollen or hard?\n\n1. Yes\n2. No",
-        "runyankole": "[PLACEHOLDER]\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_s5": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Is only one teat showing signs?\n\n1. Yes\n2. No",
-        "runyankole": "Ibeere rimwe niryo rikworeka obubonero?\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_s6": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Is the udder turning dark blue or black?\n\n1. Yes\n2. No",
-        "runyankole": "[PLACEHOLDER]\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_low": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Your cow seems stable for now.\n[PLACEHOLDER - home care advice]\n\nWould you like to contact a vet anyway?\n1. Yes, send my case to a vet\n2. No, thank you",
-        "runyankole": "[PLACEHOLDER]\n1. Ego, tuma omushaho obubaka\n2. Ngaha, webale",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_medium": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Your cow may need attention soon.\n[PLACEHOLDER - home care advice]\n\nWe recommend speaking to a vet.\n1. Yes, send my case to a vet\n2. No, thank you",
-        "runyankole": "[PLACEHOLDER]\n1. Ego, tuma omushaho obubaka\n2. Ngaha, webale",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
-      }
-    },
-
-    "cow_triage_high": {
+    "triage_outcome_high": {
       "isEnd": true,
       "prompt": {
-        "english":    "Your cow is showing serious symptoms\nand needs urgent attention. We are\nalerting a vet who will contact you\nshortly.",
-        "runyankole": "Ente yawe neyerekeza obubonero\nobukomeire. Tukusindikira omushaho\nobubaka mangu.",
-        "acholi":     "[PLACEHOLDER]"
+        "english": "Your animal is showing serious symptoms\nthat need urgent attention. We are\nalerting a vet who will contact you\nshortly.",
+        "acholi":  "[PLACEHOLDER]"
       }
     },
 
-    "cow_triage_vet_sent": {
-      "isEnd": true,
+    "triage_outcome_medium": {
+      "isEnd": false,
       "prompt": {
-        "english":    "Thank you. A vet has been alerted\nand will contact you shortly.\n\nEnyana Health — protecting your animals.",
-        "runyankole": "[PLACEHOLDER]",
-        "acholi":     "[PLACEHOLDER]"
+        "english": "Your animal may need attention soon.\nWe recommend speaking to a vet.\n\n1. Send my case to a vet\n2. No thank you",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
 
-    "cow_triage_no_vet": {
+    "triage_outcome_low": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Your animal seems stable for now.\nMonitor closely over the next 24 hours.\n\nWould you like to contact a vet anyway?\n1. Yes, send my case to a vet\n2. No thank you",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "triage_vet_sent": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you. If your cow's condition\nworsens, please dial back and we\nwill help you.\n\nEnyana Health — protecting your animals.",
-        "runyankole": "[PLACEHOLDER]",
-        "acholi":     "[PLACEHOLDER]"
+        "english": "Thank you. A vet has been alerted\nand will contact you shortly.\n\nEnyana Health — protecting your animals.",
+        "acholi":  "[PLACEHOLDER]"
+      }
+    },
+
+    "triage_no_vet": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Thank you. If your animal's condition\nworsens, please dial back and we\nwill help you.\n\nEnyana Health — protecting your animals.",
+        "acholi":  "[PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does your cow have a very high fever?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Has your cow stopped eating or become\nvery weak quickly?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is your cow having difficulty breathing?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there swollen lumps on the neck,\nchest or legs?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q5": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the milk look different —\nwatery, lumpy or bloody?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q6": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the udder hot, swollen or hard?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q7": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does your cow kick or refuse\nto be milked?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q8": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there cracks, wounds or darkening\non the teats?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q9": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there sores or blisters in the mouth\n— is the cow drooling heavily?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q10": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the cow limping badly or refusing\nto stand?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q11": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Has your cow lost a calf early or given\nbirth to a dead or weak calf?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q12": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Has your cow failed to get pregnant\nagain after giving birth?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cattle_q13": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the bull have swollen testicles?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Have any birds died suddenly with\nno warning?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are the head, face or wattles swollen\nand dark purple?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Have birds stopped eating or laying eggs?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Do birds have watery or bloody diarrhea?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q5": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are birds gasping for air, coughing or\nmaking gurgling sounds?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q6": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are any birds twisting their neck or\nwalking in circles?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q7": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the diarrhea bright green in color?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q8": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Has egg production dropped suddenly?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q9": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Do birds look hunched, fluffed up\nand dull?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q10": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are chicks not growing and losing\nweight fast?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "poultry_q11": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are birds drinking a lot but refusing\nto eat?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Have any pigs died suddenly —\nspreading through the herd fast?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the pig have a high fever and\nrefuse to move?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there red or purple patches\non the skin?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the pig have diarrhea with blood?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q5": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Has the sow given birth to dead or\nvery weak piglets?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q6": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Did piglets die within days of birth?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q7": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the pig coughing or struggling\nto breathe?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q8": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are the ears turning bluish or purple?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q9": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there sores in the mouth — is the\npig drooling and refusing to eat?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q10": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the pig limping or refusing to walk?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q11": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there blisters on the snout or\nbetween the hooves?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q12": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the pig passing watery diarrhea\nwith blood and mucus?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q13": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the pig losing weight rapidly?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q14": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the pig have a swollen belly —\nespecially young pigs?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q15": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are worms visible in the pig's feces?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "pigs_q16": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there diamond-shaped red patches\non the skin?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Was the rabbit found dead with no\nprior signs of illness?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Was there bleeding from the nose\nor mouth?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Did the rabbit show sudden extreme\nweakness or seizures?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Has the rabbit stopped eating and\ndrinking completely?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q5": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there watery or bloody droppings?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q6": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the rabbit have a swollen\npot-belly?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q7": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the rabbit hunched in a corner\nand not moving?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q8": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is there thick white or yellow discharge\nfrom the nose?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q9": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the rabbit sneezing constantly?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q10": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are the front paws wet and matted?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q11": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are the eyes watery or crusty?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q12": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is there puffy swelling around the\neyes, ears or nose?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q13": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Are there fluid-filled lumps under\nthe skin?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q14": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the rabbit constantly shaking its\nhead or scratching its ears?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q15": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is there brown crusty discharge inside\nthe ears?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q16": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the rabbit's head tilting to\none side?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q17": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Does the rabbit's abdomen feel\nhard or bloated?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "rabbit_q18": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Is the rabbit grinding its teeth?\n\n1. Yes\n2. No",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     }
 

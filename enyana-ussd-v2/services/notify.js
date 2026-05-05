@@ -57,7 +57,8 @@ async function sendVetAlert(phoneNumber, animal, problem) {
  * Send a structured triage case file to the vet via WhatsApp.
  * Called automatically for HIGH-risk outcomes, or on farmer request for LOW/MEDIUM.
  *
- * @param {object} session - The full session object after triage is complete
+ * @param {object} session - Full session after triage: must have animal, symptoms,
+ *                           diseaseScores, highestRiskLevel
  */
 async function sendTriageVetAlert(session) {
   const sid   = process.env.TWILIO_ACCOUNT_SID;
@@ -65,26 +66,36 @@ async function sendTriageVetAlert(session) {
   const from  = process.env.WHATSAPP_FROM;
   const to    = process.env.WHATSAPP_TO;
 
+  const TRIAGE_CONFIG = require('../config/triage');
+  const config   = TRIAGE_CONFIG[session.animal] || {};
+  const symptoms = session.symptoms || {};
+  const scores   = session.diseaseScores || {};
+
+  // Diseases flagged (MEDIUM or HIGH only)
+  const flaggedLines = Object.entries(scores)
+    .filter(([, d]) => d.level !== 'LOW')
+    .map(([name, d]) => `${name}: ${d.score}/${d.maxPossible} — ${d.level}`);
+
+  // Symptom list in question order
   const sym = val => (val ? '✅' : '❌');
-  const s   = session.symptoms || {};
+  const symptomLines = (config.questions || []).map(qId => {
+    const label = (config.labels || {})[qId] || qId;
+    return `${sym(symptoms[qId])} ${label}`;
+  });
+
   const message = [
     '🐄 Enyana Health Alert',
     `Farmer: ${session.name || 'Unknown'}`,
     `Phone: ${session.phoneNumber}`,
     `Community: ${session.community || 'Unknown'}`,
-    'Animal: Cow',
-    `Duration: ${session.duration || 'Unknown'}`,
-    `Still eating/drinking: ${session.stillEating ? 'Yes' : 'No'}`,
-    `Risk Level: ${session.triageLevel}`,
-    `Score: ${session.triageScore}/7`,
+    `Animal: ${session.animal}`,
+    `Risk Level: ${session.highestRiskLevel}`,
+    '',
+    'Diseases flagged:',
+    ...(flaggedLines.length ? flaggedLines : ['None above LOW']),
     '',
     'Symptoms reported:',
-    `${sym(s.milkColor)} Milk different color`,
-    `${sym(s.teatsSwollen)} Swollen/tender teats`,
-    `${sym(s.resistsMilking)} Resists being milked`,
-    `${sym(s.udderHot)} Udder hot/swollen/hard`,
-    `${sym(s.oneTeat)} Only one teat affected`,
-    `${sym(s.udderDark)} Udder dark blue/black`,
+    ...symptomLines,
   ].join('\n');
 
   if (!sid || !token || sid === 'your_twilio_sid' || token === 'your_twilio_token') {
