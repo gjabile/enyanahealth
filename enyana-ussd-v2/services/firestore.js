@@ -126,6 +126,51 @@ async function updateReturningFarmer(phoneNumber) {
   }
 }
 
+/**
+ * Save a completed triage session to Firestore and update the farmer record.
+ * Called fire-and-forget — never throws, logs on error.
+ *
+ * @param {object} session - The full session object after triage completes
+ */
+async function saveTriageSession(session) {
+  if (!db) {
+    console.warn('[firestore] Firestore disabled — skipping triage session save');
+    return false;
+  }
+
+  try {
+    const now = new Date();
+    await db.collection('sessions').add({
+      language:    session.language,
+      community:   session.community,
+      phoneNumber: session.phoneNumber,
+      name:        session.name,
+      animal:      session.animal,
+      duration:    session.duration,
+      stillEating: session.stillEating,
+      symptoms:    session.symptoms || {},
+      triageScore: session.triageScore,
+      triageLevel: session.triageLevel,
+      outcome:     session.outcome,
+      timestamp:   now,
+    });
+
+    if (session.phoneNumber) {
+      const admin = require('firebase-admin');
+      await db.collection('farmers').doc(session.phoneNumber).update({
+        lastSeen:      now,
+        totalSessions: admin.firestore.FieldValue.increment(1),
+      });
+    }
+
+    console.log(`[firestore] Triage session saved for ${session.phoneNumber}`);
+    return true;
+  } catch (err) {
+    console.error(`[firestore] Error saving triage session: ${err.message}`);
+    return false;
+  }
+}
+
 // Initialize on require
 initializeFirebase();
 
@@ -133,4 +178,5 @@ module.exports = {
   getFarmer,
   createFarmer,
   updateReturningFarmer,
+  saveTriageSession,
 };

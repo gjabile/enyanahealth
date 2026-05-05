@@ -23,8 +23,8 @@ const path = require('path');
 const fs   = require('fs');
 
 const { getSession, setSession, clearSession } = require('../services/session');
-const { sendVetAlert }                          = require('../services/notify');
-const { getFarmer, createFarmer, updateReturningFarmer } = require('../services/firestore');
+const { sendVetAlert, sendTriageVetAlert }       = require('../services/notify');
+const { getFarmer, createFarmer, updateReturningFarmer, saveTriageSession } = require('../services/firestore');
 
 // ---------------------------------------------------------------------------
 // Load the flow JSON once at startup — restart the server to pick up changes
@@ -230,10 +230,19 @@ async function handleUSSD(req, res) {
     // ── Main menu ────────────────────────────────────────────────────────────
     case 'mainMenu':
       if (input === '1') {
-        nextState = 'describeVetProblem';
+        nextState = 'selectAnimal';
+      } else if (input === '2') {
+        nextState = 'informationMenu';
+      } else if (input === '3') {
+        nextState = 'connectVet';
       } else {
         return reshowCurrent(res, 'mainMenu', session.language, session);
       }
+      break;
+
+    // ── Information menu placeholder ─────────────────────────────────────────
+    case 'informationMenu':
+      nextState = 'mainMenu';
       break;
 
     // ── Vet contact — farmer describes their problem ──────────────────────────
@@ -250,10 +259,200 @@ async function handleUSSD(req, res) {
 
     // ── Animal selection ────────────────────────────────────────────────────
     case 'selectAnimal':
-      if      (input === '1') { session.animal = 'cattle';  nextState = 'selectTopic'; }
-      else if (input === '2') { session.animal = 'poultry'; nextState = 'selectTopic'; }
-      else if (input === '3') { session.animal = 'pigs';    nextState = 'selectTopic'; }
-      else { return reshowCurrent(res, 'selectAnimal', session.language, session); }
+      if (input === '1') {
+        session.animal      = 'cow';
+        session.triageScore = 0;
+        session.symptoms    = {};
+        nextState = 'cow_triage_duration';
+      } else if (input === '2') {
+        session.animal = 'goat';
+        nextState = 'animalComingSoon';
+      } else if (input === '3') {
+        session.animal = 'pig';
+        nextState = 'animalComingSoon';
+      } else if (input === '4') {
+        session.animal = 'chicken';
+        nextState = 'animalComingSoon';
+      } else {
+        return reshowCurrent(res, 'selectAnimal', session.language, session);
+      }
+      break;
+
+    // ── Animal coming soon placeholder ───────────────────────────────────────
+    case 'animalComingSoon':
+      if (input === '1') {
+        nextState = 'connectVet';
+      } else {
+        return reshowCurrent(res, 'animalComingSoon', session.language, session);
+      }
+      break;
+
+    // ── Cow triage Q1: Duration ──────────────────────────────────────────────
+    case 'cow_triage_duration':
+      if (input === '1') {
+        session.duration = 'Started today';
+      } else if (input === '2') {
+        session.duration = '2-3 days';
+      } else if (input === '3') {
+        session.duration = 'More than 3 days';
+      } else {
+        return reshowCurrent(res, 'cow_triage_duration', session.language, session);
+      }
+      nextState = 'cow_triage_eating';
+      break;
+
+    // ── Cow triage Q2: Eating/drinking ───────────────────────────────────────
+    case 'cow_triage_eating':
+      if (input === '1') {
+        session.stillEating = true;
+      } else if (input === '2') {
+        session.stillEating = false;
+        session.triageScore += 1;
+      } else {
+        return reshowCurrent(res, 'cow_triage_eating', session.language, session);
+      }
+      nextState = 'cow_triage_s1';
+      break;
+
+    // ── Cow triage symptom 1: Milk color ─────────────────────────────────────
+    case 'cow_triage_s1':
+      if (input === '1') {
+        session.symptoms.milkColor = true;
+        session.triageScore += 1;
+      } else if (input === '2') {
+        session.symptoms.milkColor = false;
+      } else {
+        return reshowCurrent(res, 'cow_triage_s1', session.language, session);
+      }
+      nextState = 'cow_triage_s2';
+      break;
+
+    // ── Cow triage symptom 2: Teats swollen/tender ───────────────────────────
+    case 'cow_triage_s2':
+      if (input === '1') {
+        session.symptoms.teatsSwollen = true;
+        session.triageScore += 1;
+      } else if (input === '2') {
+        session.symptoms.teatsSwollen = false;
+      } else {
+        return reshowCurrent(res, 'cow_triage_s2', session.language, session);
+      }
+      nextState = 'cow_triage_s3';
+      break;
+
+    // ── Cow triage symptom 3: Resists milking ────────────────────────────────
+    case 'cow_triage_s3':
+      if (input === '1') {
+        session.symptoms.resistsMilking = true;
+        session.triageScore += 1;
+      } else if (input === '2') {
+        session.symptoms.resistsMilking = false;
+      } else {
+        return reshowCurrent(res, 'cow_triage_s3', session.language, session);
+      }
+      nextState = 'cow_triage_s4';
+      break;
+
+    // ── Cow triage symptom 4: Udder hot/swollen/hard ─────────────────────────
+    case 'cow_triage_s4':
+      if (input === '1') {
+        session.symptoms.udderHot = true;
+        session.triageScore += 1;
+      } else if (input === '2') {
+        session.symptoms.udderHot = false;
+      } else {
+        return reshowCurrent(res, 'cow_triage_s4', session.language, session);
+      }
+      nextState = 'cow_triage_s5';
+      break;
+
+    // ── Cow triage symptom 5: Only one teat ──────────────────────────────────
+    case 'cow_triage_s5':
+      if (input === '1') {
+        session.symptoms.oneTeat = true;
+        session.triageScore += 1;
+      } else if (input === '2') {
+        session.symptoms.oneTeat = false;
+      } else {
+        return reshowCurrent(res, 'cow_triage_s5', session.language, session);
+      }
+      nextState = 'cow_triage_s6';
+      break;
+
+    // ── Cow triage symptom 6: Udder dark — then calculate outcome ────────────
+    case 'cow_triage_s6': {
+      if (input === '1') {
+        session.symptoms.udderDark = true;
+        session.triageScore += 1;
+      } else if (input === '2') {
+        session.symptoms.udderDark = false;
+      } else {
+        return reshowCurrent(res, 'cow_triage_s6', session.language, session);
+      }
+
+      const score = session.triageScore;
+      if (score >= 5) {
+        session.triageLevel = 'HIGH';
+        session.outcome = 'vet_referral';
+        sendTriageVetAlert(session).catch(err => {
+          console.error('[ussd] Triage vet alert failed:', err.message);
+        });
+        saveTriageSession(session).catch(err => {
+          console.error('[ussd] Triage session save failed:', err.message);
+        });
+        nextState = 'cow_triage_high';
+      } else if (score >= 3) {
+        session.triageLevel = 'MEDIUM';
+        nextState = 'cow_triage_medium';
+      } else {
+        session.triageLevel = 'LOW';
+        nextState = 'cow_triage_low';
+      }
+      break;
+    }
+
+    // ── Cow triage outcome: LOW ──────────────────────────────────────────────
+    case 'cow_triage_low':
+      if (input === '1') {
+        session.outcome = 'vet_referral';
+        sendTriageVetAlert(session).catch(err => {
+          console.error('[ussd] Triage vet alert failed:', err.message);
+        });
+        saveTriageSession(session).catch(err => {
+          console.error('[ussd] Triage session save failed:', err.message);
+        });
+        nextState = 'cow_triage_vet_sent';
+      } else if (input === '2') {
+        session.outcome = 'advice';
+        saveTriageSession(session).catch(err => {
+          console.error('[ussd] Triage session save failed:', err.message);
+        });
+        nextState = 'cow_triage_no_vet';
+      } else {
+        return reshowCurrent(res, 'cow_triage_low', session.language, session);
+      }
+      break;
+
+    // ── Cow triage outcome: MEDIUM ───────────────────────────────────────────
+    case 'cow_triage_medium':
+      if (input === '1') {
+        session.outcome = 'vet_referral';
+        sendTriageVetAlert(session).catch(err => {
+          console.error('[ussd] Triage vet alert failed:', err.message);
+        });
+        saveTriageSession(session).catch(err => {
+          console.error('[ussd] Triage session save failed:', err.message);
+        });
+        nextState = 'cow_triage_vet_sent';
+      } else if (input === '2') {
+        session.outcome = 'advice';
+        saveTriageSession(session).catch(err => {
+          console.error('[ussd] Triage session save failed:', err.message);
+        });
+        nextState = 'cow_triage_no_vet';
+      } else {
+        return reshowCurrent(res, 'cow_triage_medium', session.language, session);
+      }
       break;
 
     // ── Topic selection ─────────────────────────────────────────────────────

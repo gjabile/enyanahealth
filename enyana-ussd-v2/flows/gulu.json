@@ -50,9 +50,9 @@
     "mainMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "What do you need help with today?\n\n1. Contact a vet",
-        "runyankole": "Tukuyambe omuki erizooba?\n\n1. Sindiikira omushaho obubaka",
-        "acholi":     "Iyet kony ki ngo tin?\n\n1. Kube ki daktari"
+        "english":    "What do you need help with today?\n\n1. My animal is sick\n2. I have a question\n3. Contact a vet",
+        "runyankole": "Tukuyambe omuki erizooba?\n1. Oruhwire rwawe nirwire\n2. Niine ekiboozo\n3. Sindiikira omushaho obubaka",
+        "acholi":     "Iyet kony ki ngo tin?\n1. Lee mera two\n2. Tye lapeny\n3. Kube ki daktari"
       }
     },
 
@@ -76,8 +76,27 @@
 
     "selectAnimal": {
       "prompt": {
-        "english": "[EN] Which animal do you need help with?\n\n1. Cattle\n2. Poultry\n3. Pigs",
-        "acholi": "[ACH] Lee aŋo ma imaro kony me?\n\n1. Dyaŋ (Cattle)\n2. Winyo (Poultry)\n3. Meo (Pigs)"
+        "english":    "Which animal is sick?\n\n1. Cow\n2. Goat\n3. Pig\n4. Chicken",
+        "runyankole": "Kiki oruhwire rurwire?\n1. Ente\n2. Embuzi\n3. Nguruwe\n4. Enkoko",
+        "acholi":     "Lee mene ma two?\n1. Dyel\n2. Dyel ŋom\n3. Meo\n4. Cak"
+      }
+    },
+
+    "informationMenu": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "[Information menu coming soon]",
+        "runyankole": "[Information menu coming soon]",
+        "acholi":     "[Information menu coming soon]"
+      }
+    },
+
+    "animalComingSoon": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Coming soon. Please contact a vet\ndirectly for help with this animal.\n\n1. Contact a vet",
+        "runyankole": "Coming soon. Please contact a vet\ndirectly for help with this animal.\n\n1. Contact a vet",
+        "acholi":     "Coming soon. Please contact a vet\ndirectly for help with this animal.\n\n1. Contact a vet"
       }
     },
 
@@ -173,6 +192,123 @@
       "prompt": {
         "english": "[EN] Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
         "acholi": "[ACH] Apwoyo. Lakwat lee otiŋ ki bino, en biter kwede i namba mamegi i cawa 24.\n\nEnyana Health — gwoko lee mamegi."
+      }
+    },
+
+    "cow_triage_duration": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "How long has your cow been sick?\n\n1. Started today\n2. 2-3 days\n3. More than 3 days",
+        "runyankole": "Ente yawe yariire nk'emirundi emeka?\n1. Eyatandika erizooba\n2. Eizoba 2-3\n3. Okusinga eizoba 3",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_eating": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Is your cow still eating and drinking?\n\n1. Yes\n2. No",
+        "runyankole": "Ente yawe niyo nywa n'okurya?\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_s1": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Does the milk look different in color?\n\n1. Yes\n2. No",
+        "runyankole": "Amate nigahinduka omu ndebeka?\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_s2": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Are the teats swollen or tender?\n(wounds or cracks)\n1. Yes\n2. No",
+        "runyankole": "Okuzimba amabere n'omuhako?\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_s3": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Does your cow resist being milked?\n\n1. Yes\n2. No",
+        "runyankole": "Okuhaya okwanga kukamwa?\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_s4": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Is the udder hot, swollen or hard?\n\n1. Yes\n2. No",
+        "runyankole": "[PLACEHOLDER]\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_s5": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Is only one teat showing signs?\n\n1. Yes\n2. No",
+        "runyankole": "Ibeere rimwe niryo rikworeka obubonero?\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_s6": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Is the udder turning dark blue or black?\n\n1. Yes\n2. No",
+        "runyankole": "[PLACEHOLDER]\n1. Ego\n2. Ngaha",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_low": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Your cow seems stable for now.\n[PLACEHOLDER - home care advice]\n\nWould you like to contact a vet anyway?\n1. Yes, send my case to a vet\n2. No, thank you",
+        "runyankole": "[PLACEHOLDER]\n1. Ego, tuma omushaho obubaka\n2. Ngaha, webale",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_medium": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Your cow may need attention soon.\n[PLACEHOLDER - home care advice]\n\nWe recommend speaking to a vet.\n1. Yes, send my case to a vet\n2. No, thank you",
+        "runyankole": "[PLACEHOLDER]\n1. Ego, tuma omushaho obubaka\n2. Ngaha, webale",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_high": {
+      "isEnd": true,
+      "prompt": {
+        "english":    "Your cow is showing serious symptoms\nand needs urgent attention. We are\nalerting a vet who will contact you\nshortly.",
+        "runyankole": "Ente yawe neyerekeza obubonero\nobukomeire. Tukusindikira omushaho\nobubaka mangu.",
+        "acholi":     "[PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_vet_sent": {
+      "isEnd": true,
+      "prompt": {
+        "english":    "Thank you. A vet has been alerted\nand will contact you shortly.\n\nEnyana Health — protecting your animals.",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi":     "[PLACEHOLDER]"
+      }
+    },
+
+    "cow_triage_no_vet": {
+      "isEnd": true,
+      "prompt": {
+        "english":    "Thank you. If your cow's condition\nworsens, please dial back and we\nwill help you.\n\nEnyana Health — protecting your animals.",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi":     "[PLACEHOLDER]"
       }
     }
 
