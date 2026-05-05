@@ -46,11 +46,14 @@ try {
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Return the localised prompt for a state, falling back to English. */
+/** Return the localised prompt for a state, falling back to English.
+ *  Uses promptReturning when the farmer is returning and that key exists. */
 function getPrompt(stateName, language, session) {
   const state = flow.states[stateName];
   if (!state) return `[Error: state "${stateName}" not found in flow]`;
-  let prompt = state.prompt[language] || state.prompt.english;
+  const isReturning = session && session.isReturningFarmer;
+  const promptObj   = (isReturning && state.promptReturning) ? state.promptReturning : state.prompt;
+  let prompt = promptObj[language] || promptObj.english;
   if (session && session.name) prompt = prompt.replace(/\{\{name\}\}/g, session.name);
   return prompt;
 }
@@ -165,7 +168,7 @@ async function handleUSSD(req, res) {
           updateReturningFarmer(phoneNumber).catch(err => {
             console.error('[ussd] Failed to update returning farmer:', err.message);
           });
-          nextState = 'welcomeReturning';
+          nextState = 'mainMenu';
         } else {
           // New farmer
           session.isReturningFarmer = false;
@@ -202,29 +205,7 @@ async function handleUSSD(req, res) {
       createFarmer(phoneNumber, session.name, session.community, session.language).catch(err => {
         console.error('[ussd] Failed to create farmer:', err.message);
       });
-      nextState = 'welcomeNewFarmer';
-      break;
-
-    // ── Welcome screen for new farmers ───────────────────────────────────────
-    case 'welcomeNewFarmer':
-      if (input === '1') {
-        nextState = 'mainMenu';
-      } else if (input === '2') {
-        nextState = 'mainMenu';
-      } else {
-        return reshowCurrent(res, 'welcomeNewFarmer', session.language, session);
-      }
-      break;
-
-    // ── Welcome screen for returning farmers ─────────────────────────────────
-    case 'welcomeReturning':
-      if (input === '1') {
-        nextState = 'mainMenu';
-      } else if (input === '2') {
-        nextState = 'mainMenu';
-      } else {
-        return reshowCurrent(res, 'welcomeReturning', session.language, session);
-      }
+      nextState = 'mainMenu';
       break;
 
     // ── Main menu ────────────────────────────────────────────────────────────

@@ -31,28 +31,17 @@
       }
     },
 
-    "welcomeNewFarmer": {
-      "isEnd": false,
-      "prompt": {
-        "english": "Welcome to Enyana Health, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
-        "acholi": "[ACH] Wanongo i Enyana Health, {{name}}!\nIyet kony ki ngo tin?\n\n1. Lee mera two\n2. Tye lapeny"
-      }
-    },
-
-    "welcomeReturning": {
-      "isEnd": false,
-      "prompt": {
-        "english": "Welcome back, {{name}}!\nWhat do you need help with today?\n\n1. My animal is sick\n2. I have a question",
-        "acholi": "[ACH] Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n\n1. Lee mera two\n2. Tye lapeny"
-      }
-    },
-
     "mainMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "What do you need help with today?\n\n1. My animal is sick\n2. I have a question\n3. Contact a vet",
-        "runyankole": "Tukuyambe omuki erizooba?\n1. Oruhwire rwawe nirwire\n2. Niine ekiboozo\n3. Sindiikira omushaho obubaka",
-        "acholi":     "Iyet kony ki ngo tin?\n1. Lee mera two\n2. Tye lapeny\n3. Kube ki daktari"
+        "english":    "Welcome, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet",
+        "runyankole": "Tukwakiira, {{name}}!\nTukuyambe omuki erizooba?\n1. Oruhwire rwawe nirwire\n2. Orutindo rw'oruhwire rwawe\n3. Sindiikira omushaho obubaka",
+        "acholi":     "Wanongo, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari"
+      },
+      "promptReturning": {
+        "english":    "Welcome back, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet",
+        "runyankole": "Tukwakiira enjura, {{name}}!\nTukuyambe omuki erizooba?\n1. Oruhwire rwawe nirwire\n2. Orutindo rw'oruhwire rwawe\n3. Sindiikira omushaho obubaka",
+        "acholi":     "Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari"
       }
     },
 
