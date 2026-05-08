@@ -133,14 +133,14 @@ async function handleUSSD(req, res) {
       animal:            null,
       inputs:            [],
     };
-    setSession(sessionId, freshSession);
+    await setSession(sessionId, freshSession);
     return res.send(`CON ${getPrompt('selectLanguage', 'english')}`);
   }
 
   // -------------------------------------------------------------------------
   // RETURNING SESSION — look it up (may have expired after 5 min of inactivity)
   // -------------------------------------------------------------------------
-  let session = getSession(sessionId);
+  let session = await getSession(sessionId);
 
   if (!session) {
     // Session expired — restart cleanly rather than returning a bare error
@@ -154,7 +154,7 @@ async function handleUSSD(req, res) {
       animal:            null,
       inputs:            [],
     };
-    setSession(sessionId, freshSession);
+    await setSession(sessionId, freshSession);
     return res.send(
       `CON Your session expired. Starting over...\n\n${getPrompt('selectLanguage', 'english')}`
     );
@@ -391,7 +391,7 @@ async function handleUSSD(req, res) {
       // about (e.g. a stale session from an old code version). Reset gracefully.
       default:
         console.error(`[ussd] Unknown state "${currentState}" for session ${sessionId}`);
-        clearSession(sessionId);
+        await clearSession(sessionId);
         return res.send('END Something went wrong. Please dial again.');
     }
   }
@@ -400,19 +400,19 @@ async function handleUSSD(req, res) {
   // Advance session and build response
   // -------------------------------------------------------------------------
   session.state = nextState;
-  setSession(sessionId, session);
+  await setSession(sessionId, session);
 
   const stateData = flow.states[nextState];
   if (!stateData) {
     console.error(`[ussd] State "${nextState}" not found in ${PILOT}.json`);
-    clearSession(sessionId);
+    await clearSession(sessionId);
     return res.send('END State not found. Please dial again.');
   }
 
   const prompt = getPrompt(nextState, session.language, session);
 
   if (stateData.isEnd) {
-    clearSession(sessionId);
+    await clearSession(sessionId);
     return res.send(`END ${prompt}`);
   }
 
