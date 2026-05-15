@@ -4,7 +4,8 @@
       "Bash(node -e \"require\\('./handlers/ussd.js'\\); console.log\\('handler OK'\\)\")",
       "Bash(git commit -m ' *)",
       "Bash(node -e \"const f=require\\('./flows/nyakayojo.json'\\); console.log\\(Object.keys\\(f.states\\).join\\(', '\\)\\)\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const f = require\\('./flows/nyakayojo.json'\\); console.log\\('Valid JSON. States:', Object.keys\\(f.states\\).length\\);\")"
     ]
   }
 }
