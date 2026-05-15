@@ -1,12 +1,667 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Enyana Health Dashboard</title>
+  <script>
+    tailwind.config = {
+      safelist: [
+        'bg-green-100','text-green-800','bg-green-600',
+        'bg-yellow-100','text-yellow-800',
+        'bg-red-100','text-red-800','border-red-500',
+        'bg-blue-100','text-blue-800',
+        'bg-gray-100','text-gray-600',
+        'text-red-600','text-gray-900',
+        'animate-pulse','border-l-4',
+      ],
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    .pb-safe { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+    .fade-in  { animation: fadeIn .15s ease-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+  </style>
 </head>
-<body>
-  <h1>Enyana Health Dashboard</h1>
-  <p>Coming soon</p>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- LOGIN ----------------------------------------------------------------- -->
+<div id="login-screen" class="fixed inset-0 z-50 bg-[#2d6a2d] flex items-center justify-center p-6">
+  <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-xl">
+    <div class="text-center mb-8">
+      <div class="text-5xl mb-3">🌿</div>
+      <h1 class="text-2xl font-bold text-[#2d6a2d]">Enyana Health</h1>
+      <p class="text-gray-400 text-sm mt-1">Operations Dashboard</p>
+    </div>
+    <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3 mb-4 text-center">
+      Incorrect password
+    </div>
+    <input type="password" id="pw-input" placeholder="Enter password"
+      class="w-full border border-gray-300 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-[#2d6a2d] mb-4" />
+    <button id="login-btn" class="w-full bg-[#2d6a2d] text-white rounded-xl py-3 font-semibold text-base disabled:opacity-60">
+      Enter
+    </button>
+  </div>
+</div>
+
+<!-- APP -------------------------------------------------------------------- -->
+<div id="app" class="hidden flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-[#2d6a2d] text-white px-4 py-3 flex items-center justify-between shadow">
+    <div class="flex items-center gap-2">
+      <span class="text-xl">🌿</span>
+      <span class="font-bold">Enyana Health</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="last-updated" class="text-xs text-white/60"></span>
+      <button id="refresh-btn" class="p-2 rounded-full hover:bg-white/20">
+        <i class="fas fa-rotate-right text-sm"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="flex-1 overflow-auto pb-20">
+
+    <!-- OVERVIEW ----------------------------------------------------------- -->
+    <div id="tab-overview" class="tab-panel">
+      <div class="grid grid-cols-2 gap-3 p-4">
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+          <div class="text-2xl font-bold" id="stat-farmers">–</div>
+          <div class="text-xs text-gray-500 mt-1">Total Farmers</div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+          <div class="text-2xl font-bold" id="stat-sessions">–</div>
+          <div class="text-xs text-gray-500 mt-1">Total Sessions</div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+          <div class="text-2xl font-bold text-gray-900" id="stat-pending">–</div>
+          <div class="text-xs text-gray-500 mt-1">Pending Referrals</div>
+        </div>
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+          <div class="text-2xl font-bold" id="stat-highrisk">–</div>
+          <div class="text-xs text-gray-500 mt-1">High Risk</div>
+        </div>
+      </div>
+
+      <div class="px-4 mb-2">
+        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending Referrals</h2>
+      </div>
+      <div id="pending-section" class="px-4 mb-4">
+        <div class="flex justify-center py-8"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>
+      </div>
+
+      <div class="px-4 mb-2">
+        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Recent Sessions</h2>
+      </div>
+      <div id="recent-sessions" class="px-4 pb-4">
+        <div class="flex justify-center py-8"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>
+      </div>
+    </div>
+
+    <!-- FARMERS ------------------------------------------------------------ -->
+    <div id="tab-farmers" class="tab-panel hidden">
+      <div class="p-4">
+        <div class="relative mb-4">
+          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input type="search" id="farmer-search" placeholder="Search name or phone…"
+            class="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2d6a2d] bg-white" />
+        </div>
+        <div id="farmer-list">
+          <div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VETS --------------------------------------------------------------- -->
+    <div id="tab-vets" class="tab-panel hidden">
+      <div class="p-4">
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-4">
+          <h2 class="font-semibold text-gray-900 mb-3">Add Vet</h2>
+          <div class="space-y-3">
+            <input type="text"  id="vet-name"   placeholder="Name"   class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#2d6a2d]" />
+            <input type="tel"   id="vet-phone"  placeholder="Phone"  class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#2d6a2d]" />
+            <input type="text"  id="vet-region" placeholder="Region" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#2d6a2d]" />
+            <div>
+              <p class="text-xs text-gray-500 mb-2">Animals</p>
+              <div class="flex flex-wrap gap-4">
+                <label class="flex items-center gap-1.5 text-sm cursor-pointer"><input type="checkbox" name="vet-animals" value="cattle"  class="w-4 h-4 accent-[#2d6a2d]" /> 🐄 Cattle</label>
+                <label class="flex items-center gap-1.5 text-sm cursor-pointer"><input type="checkbox" name="vet-animals" value="poultry" class="w-4 h-4 accent-[#2d6a2d]" /> 🐓 Poultry</label>
+                <label class="flex items-center gap-1.5 text-sm cursor-pointer"><input type="checkbox" name="vet-animals" value="pigs"    class="w-4 h-4 accent-[#2d6a2d]" /> 🐷 Pigs</label>
+                <label class="flex items-center gap-1.5 text-sm cursor-pointer"><input type="checkbox" name="vet-animals" value="rabbit"  class="w-4 h-4 accent-[#2d6a2d]" /> 🐇 Rabbit</label>
+              </div>
+            </div>
+            <button id="add-vet-btn" class="w-full bg-[#2d6a2d] text-white rounded-xl py-2.5 font-semibold text-sm disabled:opacity-60">
+              Add Vet
+            </button>
+          </div>
+        </div>
+        <div id="vet-list">
+          <div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-30 pb-safe">
+    <div class="flex">
+      <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-[#2d6a2d]" data-tab="overview">
+        <i class="fas fa-chart-bar text-lg"></i>
+        <span class="text-xs">Overview</span>
+      </button>
+      <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-gray-400" data-tab="farmers">
+        <i class="fas fa-users text-lg"></i>
+        <span class="text-xs">Farmers</span>
+      </button>
+      <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-gray-400" data-tab="vets">
+        <i class="fas fa-stethoscope text-lg"></i>
+        <span class="text-xs">Vets</span>
+      </button>
+    </div>
+  </nav>
+</div><!-- /#app -->
+
+<!-- Toast -->
+<div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full text-sm font-medium shadow-lg text-white pointer-events-none" style="transition:opacity .3s"></div>
+
+<script>
+'use strict';
+
+// ── Constants ────────────────────────────────────────────────────────────────
+
+const SYMPTOM_LABELS = {
+  cattle: {
+    c1:'Very high fever', c2:'Stopped eating or became very weak quickly',
+    c3:'Difficulty breathing', c4:'Swollen lumps on neck, chest or legs',
+    c5:'Milk looks different — watery, lumpy or bloody', c6:'Udder hot, swollen or hard',
+    c7:'Kicks or refuses to be milked', c8:'Cracks, wounds or darkening on teats',
+    c9:'Sores or blisters in mouth, drooling heavily', c10:'Limping badly or refusing to stand',
+    c11:'Lost calf early, or dead/weak calf at birth', c12:'Failed to get pregnant again after giving birth',
+    c13:'Bull has swollen testicles',
+  },
+  poultry: {
+    p1:'Birds died suddenly with no warning', p2:'Head, face or wattles swollen and dark purple',
+    p3:'Birds stopped eating or laying eggs', p4:'Watery or bloody diarrhea',
+    p5:'Gasping for air, coughing or gurgling sounds', p6:'Twisting neck or walking in circles',
+    p7:'Diarrhea bright green in color', p8:'Egg production dropped suddenly',
+    p9:'Birds look hunched, fluffed up and dull', p10:'Chicks not growing and losing weight fast',
+    p11:'Birds drinking a lot but refusing to eat',
+  },
+  pigs: {
+    pg1:'Pigs died suddenly, spreading through the herd fast', pg2:'High fever and refuses to move',
+    pg3:'Red or purple patches on skin', pg4:'Diarrhea with blood',
+    pg5:'Sow gave birth to dead or very weak piglets', pg6:'Piglets died within days of birth',
+    pg7:'Coughing or struggling to breathe', pg8:'Ears turning bluish or purple',
+    pg9:'Sores in mouth, drooling and refusing to eat', pg10:'Limping or refusing to walk',
+    pg11:'Blisters on snout or between hooves', pg12:'Watery diarrhea with blood and mucus',
+    pg13:'Losing weight rapidly', pg14:'Swollen belly, especially in young pigs',
+    pg15:'Worms visible in feces', pg16:'Diamond-shaped red patches on skin',
+  },
+  rabbit: {
+    r1:'Rabbit found dead with no prior signs of illness', r2:'Bleeding from the nose or mouth',
+    r3:'Sudden extreme weakness or seizures', r4:'Stopped eating and drinking completely',
+    r5:'Watery or bloody droppings', r6:'Swollen pot-belly',
+    r7:'Hunched in a corner and not moving', r8:'Thick white or yellow discharge from nose',
+    r9:'Sneezing constantly', r10:'Front paws wet and matted',
+    r11:'Eyes watery or crusty', r12:'Puffy swelling around eyes, ears or nose',
+    r13:'Fluid-filled lumps under the skin', r14:'Shaking head or scratching ears constantly',
+    r15:'Brown crusty discharge inside the ears', r16:'Head tilting to one side',
+    r17:'Abdomen feels hard or bloated', r18:'Grinding teeth',
+  },
+};
+
+const ANIMAL_EMOJI = { cattle:'🐄', poultry:'🐓', pigs:'🐷', rabbit:'🐇' };
+const ANIMAL_NAME  = { cattle:'Cattle', poultry:'Poultry', pigs:'Pigs', rabbit:'Rabbit' };
+
+// ── State ────────────────────────────────────────────────────────────────────
+
+let authPw          = localStorage.getItem('dashboard_auth') || '';
+let activeTab       = 'overview';
+let vets            = [];
+let allFarmers      = [];
+let filteredFarmers = [];
+let farmerCache     = {};
+let expandedFarmer  = null;
+let prevPending     = 0;
+let pollingTimer    = null;
+
+// ── Utilities ────────────────────────────────────────────────────────────────
+
+function esc(v) {
+  return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function timeAgo(ts) {
+  if (!ts) return '–';
+  const s = Math.floor((Date.now() - new Date(ts)) / 1000);
+  if (s < 60)    return `${s}s ago`;
+  if (s < 3600)  return `${Math.floor(s/60)} min ago`;
+  if (s < 86400) return `${Math.floor(s/3600)} hr ago`;
+  const d = Math.floor(s/86400); return `${d} day${d>1?'s':''} ago`;
+}
+
+function riskBadge(level) {
+  const cls = { LOW:'bg-green-100 text-green-800', MEDIUM:'bg-yellow-100 text-yellow-800', HIGH:'bg-red-100 text-red-800' };
+  return `<span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold ${cls[level]||'bg-gray-100 text-gray-600'}">${esc(level||'–')}</span>`;
+}
+
+function statusBadge(s) {
+  const cls   = { pending:'bg-yellow-100 text-yellow-800', forwarded:'bg-blue-100 text-blue-800', resolved:'bg-green-100 text-green-800' };
+  const label = { pending:'Pending', forwarded:'Forwarded', resolved:'Resolved' };
+  return `<span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cls[s]||'bg-gray-100 text-gray-600'}">${label[s]||esc(s||'–')}</span>`;
+}
+
+function outcomeLabel(o) {
+  return o === 'vet_referral' ? 'Vet Referral' : o === 'advice' ? 'Advice' : (o || '–');
+}
+
+function spin() {
+  return `<div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>`;
+}
+
+function toast(msg, err) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full text-sm font-medium shadow-lg text-white pointer-events-none ${err ? 'bg-red-600' : 'bg-[#2d6a2d]'}`;
+  el.style.opacity = '1';
+  setTimeout(() => { el.style.opacity = '0'; }, 2400);
+}
+
+function setLastUpdated() {
+  const now = new Date();
+  document.getElementById('last-updated').textContent =
+    `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+}
+
+// ── API ──────────────────────────────────────────────────────────────────────
+
+function api(path, opts = {}) {
+  return fetch(path, {
+    ...opts,
+    headers: { 'x-dashboard-password': authPw, 'Content-Type': 'application/json', ...(opts.headers||{}) },
+  });
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+async function tryLogin() {
+  const pw  = document.getElementById('pw-input').value.trim();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  if (!pw) return;
+  btn.disabled = true; btn.textContent = 'Checking…'; err.classList.add('hidden');
+  try {
+    const r = await fetch('/api/stats', { headers: { 'x-dashboard-password': pw } });
+    if (r.ok) {
+      authPw = pw; localStorage.setItem('dashboard_auth', pw);
+      showApp(); init();
+    } else {
+      err.textContent = 'Incorrect password'; err.classList.remove('hidden');
+      document.getElementById('pw-input').value = '';
+    }
+  } catch {
+    err.textContent = 'Cannot reach server'; err.classList.remove('hidden');
+  } finally { btn.disabled = false; btn.textContent = 'Enter'; }
+}
+
+function showApp() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+}
+
+function notify(title, body) {
+  if ('Notification' in window && Notification.permission === 'granted') new Notification(title, { body });
+}
+
+// ── Overview ─────────────────────────────────────────────────────────────────
+
+async function loadOverview() {
+  const [sR, pR, rR, vR] = await Promise.all([
+    api('/api/stats').catch(()=>null),
+    api('/api/sessions/pending').catch(()=>null),
+    api('/api/sessions').catch(()=>null),
+    api('/api/vets').catch(()=>null),
+  ]);
+
+  if (sR && sR.ok) renderStats(await sR.json()); else renderStats(null);
+  if (vR && vR.ok) vets = await vR.json();
+  if (pR && pR.ok) { const p = await pR.json(); renderPending(p); prevPending = p.length; }
+  else document.getElementById('pending-section').innerHTML = errMsg();
+  if (rR && rR.ok) renderRecent((await rR.json()).slice(0, 20));
+  else document.getElementById('recent-sessions').innerHTML = errMsg();
+  setLastUpdated();
+}
+
+function renderStats(s) {
+  const p = s ? s.pendingReferrals : 0;
+  document.getElementById('stat-farmers').textContent  = s ? s.totalFarmers      : '–';
+  document.getElementById('stat-sessions').textContent = s ? s.totalSessions     : '–';
+  document.getElementById('stat-highrisk').textContent = s ? s.highRiskSessions  : '–';
+  const el = document.getElementById('stat-pending');
+  el.textContent = s ? p : '–';
+  el.className = `text-2xl font-bold ${p > 0 ? 'text-red-600' : 'text-gray-900'}`;
+}
+
+function errMsg() { return `<p class="text-sm text-red-400 text-center py-4">Could not load data</p>`; }
+
+function renderPending(list) {
+  const el = document.getElementById('pending-section');
+  if (!list || !list.length) {
+    el.innerHTML = `<div class="bg-white rounded-xl p-5 text-center shadow-sm text-sm text-gray-500"><i class="fas fa-circle-check text-green-500 mr-1"></i>✅ No pending referrals</div>`;
+    return;
+  }
+  el.innerHTML = list.map(pendingCard).join('');
+  el.onclick = e => {
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const sid = btn.dataset.sid;
+    if (btn.dataset.act === 'fwd') {
+      const sel = document.getElementById(`vs-${sid}`);
+      forwardSession(sid, sel ? sel.value : '');
+    } else if (btn.dataset.act === 'res') {
+      resolveSession(sid);
+    }
+  };
+}
+
+function pendingCard(s) {
+  const labels    = SYMPTOM_LABELS[s.animal] || {};
+  const positives = Object.entries(s.symptoms || {}).filter(([,v])=>v).map(([id])=>labels[id]).filter(Boolean);
+  const vetOpts   = vets.map(v => `<option value="${esc(v.id)}">${esc(v.name)} — ${esc(v.region)} (${v.activeCases??0} active)</option>`).join('');
+
+  return `
+  <div class="bg-white rounded-xl p-4 shadow-sm border-l-4 border-red-500 mb-3 fade-in" id="card-${esc(s.id)}">
+    <div class="flex items-start justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0 mt-0.5"></span>
+        <span class="font-semibold text-sm truncate">${esc(s.name||'Unknown')}</span>
+        <span class="text-gray-400 text-xs flex-shrink-0">${esc(s.phoneNumber)}</span>
+      </div>
+      <span class="text-xs text-gray-400 flex-shrink-0">${timeAgo(s.timestamp)}</span>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-3 ml-4">
+      <span class="text-sm">${ANIMAL_EMOJI[s.animal]||'🐾'} ${esc(ANIMAL_NAME[s.animal]||s.animal)}</span>
+      ${riskBadge(s.highestRiskLevel)}
+    </div>
+    ${positives.length ? `
+      <div class="ml-4 mb-3">
+        <p class="text-xs font-medium text-gray-500 mb-1">Symptoms:</p>
+        <ul class="space-y-0.5">${positives.map(l=>`<li class="text-xs text-gray-700 flex gap-1"><span class="text-red-400 flex-shrink-0">•</span>${esc(l)}</li>`).join('')}</ul>
+      </div>` : ''}
+    <div class="flex flex-col gap-2">
+      ${vets.length ? `
+        <div class="flex gap-2">
+          <select id="vs-${esc(s.id)}" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#2d6a2d]">
+            <option value="">Forward to vet…</option>${vetOpts}
+          </select>
+          <button data-act="fwd" data-sid="${esc(s.id)}"
+            class="bg-[#2d6a2d] text-white rounded-lg px-4 py-2 text-xs font-semibold whitespace-nowrap active:opacity-70">
+            <i class="fas fa-paper-plane mr-1"></i>Send
+          </button>
+        </div>` :
+        `<p class="text-xs text-gray-400 italic">No vets registered — add one in the Vets tab</p>`}
+      <button data-act="res" data-sid="${esc(s.id)}"
+        class="border border-gray-200 text-gray-600 rounded-lg py-2 text-xs font-medium active:opacity-70">
+        <i class="fas fa-check mr-1"></i>Mark Resolved
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderRecent(list) {
+  const el = document.getElementById('recent-sessions');
+  if (!list || !list.length) {
+    el.innerHTML = `<div class="bg-white rounded-xl p-5 text-center shadow-sm"><p class="text-sm text-gray-400">No sessions yet</p></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="bg-white rounded-xl shadow-sm divide-y divide-gray-100 overflow-hidden">
+    ${list.map(s => `
+    <div class="flex items-center px-4 py-3 gap-3">
+      <span class="text-lg flex-shrink-0">${ANIMAL_EMOJI[s.animal]||'🐾'}</span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-sm font-medium truncate">${esc(s.name||'Unknown')}</span>
+          <span class="text-xs text-gray-400">${esc(s.community||'')}</span>
+        </div>
+        <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+          ${riskBadge(s.highestRiskLevel)}
+          <span class="text-xs text-gray-500">${esc(outcomeLabel(s.outcome))}</span>
+        </div>
+      </div>
+      <span class="text-xs text-gray-400 flex-shrink-0">${timeAgo(s.timestamp)}</span>
+    </div>`).join('')}
+  </div>`;
+}
+
+async function forwardSession(sid, vetId) {
+  if (!vetId) { toast('Select a vet first', true); return; }
+  const card = document.getElementById(`card-${sid}`);
+  if (card) card.style.opacity = '0.4';
+  try {
+    const r = await api(`/api/sessions/${sid}`, { method:'PATCH', body: JSON.stringify({ status:'forwarded', vetId }) });
+    if (r.ok) { if (card) card.remove(); toast('Forwarded ✓'); refreshStats(); checkEmptyPending(); }
+    else       { if (card) card.style.opacity='1'; toast('Failed to forward', true); }
+  } catch { if (card) card.style.opacity='1'; toast('Network error', true); }
+}
+
+async function resolveSession(sid) {
+  const card = document.getElementById(`card-${sid}`);
+  if (card) card.style.opacity = '0.4';
+  try {
+    const r = await api(`/api/sessions/${sid}`, { method:'PATCH', body: JSON.stringify({ status:'resolved' }) });
+    if (r.ok) { if (card) card.remove(); toast('Resolved ✓'); refreshStats(); checkEmptyPending(); }
+    else       { if (card) card.style.opacity='1'; toast('Failed to resolve', true); }
+  } catch { if (card) card.style.opacity='1'; toast('Network error', true); }
+}
+
+function checkEmptyPending() {
+  if (!document.querySelectorAll('#pending-section [id^="card-"]').length) renderPending([]);
+}
+
+async function refreshStats() {
+  try {
+    const r = await api('/api/stats');
+    if (r.ok) { const s = await r.json(); renderStats(s); prevPending = s.pendingReferrals; }
+  } catch {}
+}
+
+// ── Farmers ──────────────────────────────────────────────────────────────────
+
+async function loadFarmers() {
+  document.getElementById('farmer-list').innerHTML = spin();
+  try {
+    const r = await api('/api/farmers');
+    if (!r.ok) throw 0;
+    allFarmers = await r.json();
+    filteredFarmers = [...allFarmers];
+    expandedFarmer = null;
+    renderFarmerList();
+  } catch { document.getElementById('farmer-list').innerHTML = errMsg(); }
+}
+
+function renderFarmerList() {
+  const el = document.getElementById('farmer-list');
+  if (!filteredFarmers.length) {
+    el.innerHTML = `<div class="bg-white rounded-xl p-6 text-center shadow-sm text-sm text-gray-400">${allFarmers.length ? 'No results' : 'No farmers registered yet'}</div>`;
+    return;
+  }
+  el.innerHTML = filteredFarmers.map(farmerCard).join('');
+  el.onclick = e => {
+    const card = e.target.closest('[data-fid]');
+    if (!card || e.target.closest('.sh-inner')) return;
+    toggleFarmer(card.dataset.fid);
+  };
+}
+
+function farmerCard(f) {
+  const open = expandedFarmer === f.id;
+  return `
+  <div class="bg-white rounded-xl shadow-sm mb-3 overflow-hidden cursor-pointer" data-fid="${esc(f.id)}">
+    <div class="p-4 flex items-start justify-between gap-2">
+      <div>
+        <p class="font-semibold">${esc(f.name||'Unknown')}</p>
+        <p class="text-xs text-gray-500 mt-0.5">${esc(f.phoneNumber)} · ${esc(f.community||'')} · ${esc(f.language||'')}</p>
+        <p class="text-xs text-gray-400 mt-1">${f.totalSessions??0} session${f.totalSessions!==1?'s':''} · Last call: ${timeAgo(f.lastSeen)}</p>
+      </div>
+      <i class="fas fa-chevron-${open?'up':'down'} text-gray-400 text-sm mt-1 flex-shrink-0"></i>
+    </div>
+    ${open ? `<div class="border-t border-gray-100 sh-inner" id="sh-${esc(f.id)}">${spin()}</div>` : ''}
+  </div>`;
+}
+
+async function toggleFarmer(fid) {
+  if (expandedFarmer === fid) { expandedFarmer = null; renderFarmerList(); return; }
+  expandedFarmer = fid; renderFarmerList();
+  if (!farmerCache[fid]) {
+    try { const r = await api(`/api/farmers/${encodeURIComponent(fid)}`); if (r.ok) farmerCache[fid] = await r.json(); }
+    catch {}
+  }
+  const el = document.getElementById(`sh-${fid}`);
+  if (!el) return;
+  const sessions = farmerCache[fid] && farmerCache[fid].sessions || [];
+  if (!sessions.length) { el.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">No sessions</p>`; return; }
+  el.innerHTML = `<div class="divide-y divide-gray-50">${sessions.map(s=>`
+    <div class="px-4 py-2.5 flex items-center gap-2 flex-wrap">
+      <span class="text-xs text-gray-400">${s.timestamp ? new Date(s.timestamp).toLocaleDateString() : '–'}</span>
+      <span>${ANIMAL_EMOJI[s.animal]||'🐾'}</span>
+      ${riskBadge(s.highestRiskLevel)}
+      <span class="text-xs text-gray-600">${esc(outcomeLabel(s.outcome))}</span>
+      ${statusBadge(s.status)}
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── Vets ─────────────────────────────────────────────────────────────────────
+
+async function loadVets() {
+  document.getElementById('vet-list').innerHTML = spin();
+  try {
+    const r = await api('/api/vets');
+    if (!r.ok) throw 0;
+    vets = await r.json();
+    renderVetList();
+  } catch { document.getElementById('vet-list').innerHTML = errMsg(); }
+}
+
+function renderVetList() {
+  const el = document.getElementById('vet-list');
+  if (!vets.length) { el.innerHTML = `<div class="bg-white rounded-xl p-6 text-center shadow-sm text-sm text-gray-400">Add your first vet above</div>`; return; }
+  el.innerHTML = vets.map(v => `
+  <div class="bg-white rounded-xl shadow-sm p-4 mb-3">
+    <p class="font-semibold">${esc(v.name)}</p>
+    <p class="text-xs text-gray-500 mt-0.5">${esc(v.phone||'')} · ${esc(v.region||'')}</p>
+    ${v.animals&&v.animals.length ? `<p class="text-xs text-gray-500 mt-1">Animals: ${v.animals.map(a=>`${ANIMAL_EMOJI[a]||''} ${esc(ANIMAL_NAME[a]||a)}`).join(', ')}</p>` : ''}
+    <div class="mt-2">
+      <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${(v.activeCases||0)>0?'bg-yellow-100 text-yellow-800':'bg-green-100 text-green-800'}">
+        <i class="fas fa-briefcase-medical text-xs"></i> ${v.activeCases??0} active case${v.activeCases!==1?'s':''}
+      </span>
+    </div>
+  </div>`).join('');
+}
+
+async function submitAddVet() {
+  const name   = document.getElementById('vet-name').value.trim();
+  const phone  = document.getElementById('vet-phone').value.trim();
+  const region = document.getElementById('vet-region').value.trim();
+  const animals = [...document.querySelectorAll('input[name="vet-animals"]:checked')].map(cb=>cb.value);
+  if (!name||!phone||!region) { toast('Fill in name, phone, and region', true); return; }
+  const btn = document.getElementById('add-vet-btn');
+  btn.disabled=true; btn.textContent='Adding…';
+  try {
+    const r = await api('/api/vets', { method:'POST', body: JSON.stringify({name,phone,region,animals}) });
+    if (r.ok) {
+      vets.push(await r.json()); renderVetList();
+      ['vet-name','vet-phone','vet-region'].forEach(id => document.getElementById(id).value='');
+      document.querySelectorAll('input[name="vet-animals"]').forEach(cb=>cb.checked=false);
+      toast(`Vet "${name}" added ✓`);
+    } else toast('Failed to add vet', true);
+  } catch { toast('Network error', true); }
+  finally { btn.disabled=false; btn.textContent='Add Vet'; }
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+  document.getElementById(`tab-${tab}`).classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const active = btn.dataset.tab === tab;
+    btn.classList.remove('text-[#2d6a2d]', 'text-gray-400');
+    btn.classList.add(active ? 'text-[#2d6a2d]' : 'text-gray-400');
+  });
+  if (tab === 'overview') loadOverview();
+  else if (tab === 'farmers') loadFarmers();
+  else if (tab === 'vets')    loadVets();
+}
+
+// ── Polling ───────────────────────────────────────────────────────────────────
+
+async function poll() {
+  try {
+    const r = await api('/api/stats');
+    if (!r.ok) return;
+    const s = await r.json();
+    renderStats(s);
+
+    if (s.pendingReferrals > prevPending) {
+      const pr = await api('/api/sessions/pending').catch(()=>null);
+      if (pr && pr.ok) {
+        const pending = await pr.json();
+        const newCount = s.pendingReferrals - prevPending;
+        pending.slice(0, newCount).forEach(p => notify('New vet referral', `${ANIMAL_NAME[p.animal]||p.animal} — ${p.highestRiskLevel} risk`));
+        if (activeTab === 'overview') renderPending(pending);
+      }
+    } else if (activeTab === 'overview' && s.pendingReferrals === 0) {
+      renderPending([]);
+    }
+
+    prevPending = s.pendingReferrals;
+    setLastUpdated();
+  } catch {}
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+async function init() {
+  await loadOverview();
+  if (pollingTimer) clearInterval(pollingTimer);
+  pollingTimer = setInterval(poll, 30000);
+}
+
+// ── Events ────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('login-btn').addEventListener('click', tryLogin);
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key==='Enter') tryLogin(); });
+  document.getElementById('refresh-btn').addEventListener('click', () => {
+    if      (activeTab==='overview') loadOverview();
+    else if (activeTab==='farmers')  loadFarmers();
+    else if (activeTab==='vets')     loadVets();
+  });
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+  document.getElementById('add-vet-btn').addEventListener('click', submitAddVet);
+  document.getElementById('farmer-search').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    filteredFarmers = q
+      ? allFarmers.filter(f => (f.name||'').toLowerCase().includes(q) || (f.phoneNumber||'').toLowerCase().includes(q))
+      : [...allFarmers];
+    renderFarmerList();
+  });
+
+  if (authPw) {
+    api('/api/stats').then(r => {
+      if (r.ok) { showApp(); init(); }
+      else { localStorage.removeItem('dashboard_auth'); authPw = ''; }
+    }).catch(() => { showApp(); init(); });
+  }
+});
+</script>
 </body>
 </html>
