@@ -151,6 +151,10 @@ async function saveTriageSession(session) {
       highestRiskLevel: session.highestRiskLevel,
       outcome:          session.outcome,
       timestamp:        now,
+      status:           session.outcome === 'vet_referral' ? 'pending' : 'resolved',
+      assignedVet:      null,
+      forwardedAt:      null,
+      resolvedAt:       null,
     });
 
     if (session.phoneNumber) {
