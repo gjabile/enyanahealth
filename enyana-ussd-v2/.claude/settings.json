@@ -8,7 +8,8 @@
       "Bash(node -e \"const f = require\\('./flows/nyakayojo.json'\\); console.log\\('Valid JSON. States:', Object.keys\\(f.states\\).length\\);\")",
       "Bash(node --check index.js)",
       "Bash(node --check services/db.js)",
-      "Bash(node --check services/firestore.js)"
+      "Bash(node --check services/firestore.js)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const h=fs.readFileSync\\('public/dashboard.html','utf8'\\); console.log\\('Lines:', h.split\\('\\\\n'\\).length\\); const scripts = \\(h.match\\(/<script/g\\)||[]\\).length; const endScripts = \\(h.match\\(/<\\\\/script>/g\\)||[]\\).length; console.log\\('script tags open/close:', scripts, endScripts\\); const opens = \\(h.match\\(/<div/g\\)||[]\\).length; const closes = \\(h.match\\(/<\\\\/div>/g\\)||[]\\).length; console.log\\('div open/close:', opens, closes\\);\")"
     ]
   }
 }
