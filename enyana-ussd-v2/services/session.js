@@ -2,13 +2,14 @@
 
 /**
  * services/session.js
- * Firestore-backed USSD session store.
+ * Firestore-backed USSD session store — NOT used by handlers/ussd.js.
  *
- * Stores sessions in the `ussd_sessions` collection so they survive
- * across Vercel serverless invocations. Sessions expire after 5 minutes
- * of inactivity (same as Africa's Talking's own timeout).
+ * The main handler is stateless: it derives the current state by replaying
+ * the full "*"-delimited text string that Africa's Talking sends on every
+ * request, so no cross-request session storage is needed.
  *
- * Requires firebase-admin to already be initialized (done by services/firestore.js).
+ * This file is retained for local simulator tooling or future use cases that
+ * require explicit session state (e.g. rate limiting, mid-session admin flags).
  */
 
 const SESSION_TTL_MS = 5 * 60 * 1000;
