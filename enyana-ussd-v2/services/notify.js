@@ -8,8 +8,12 @@
  *   without it installed. Run `npm install twilio` only when you need live alerts.
  * - If credentials are missing or look like placeholders, a warning is logged
  *   and the function returns silently — keeping local testing crash-free.
- * - The caller should fire-and-forget (no await) so the farmer is not made to
- *   wait for Twilio's HTTP round-trip before seeing the confirmation screen.
+ * - Twilio timeout is passed at constructor time via RequestClient — post-construction
+ *   property assignment is ignored by the SDK.
+ * - Promise.race with a 500 ms drain resolves this function quickly so Vercel
+ *   serverless does not hold the invocation open waiting for Twilio's HTTP round-trip.
+ *   The Firestore save (always awaited first) guarantees dashboard visibility even
+ *   if Vercel freezes the process before Twilio completes.
  */
 
 'use strict';
@@ -37,6 +41,13 @@ async function sendVetAlert(session, problem) {
     `Problem: ${problem}`,
   ].join('\n');
 
+  // Persist to Firestore first — dashboard shows the referral even if Twilio
+  // fails or Vercel freezes the function before the WhatsApp call completes.
+  const { saveVetContactSession } = require('./firestore');
+  await saveVetContactSession(session, problem).catch(err =>
+    console.error('[notify] Firestore save failed:', err.message)
+  );
+
   // Guard: skip if credentials are missing or still set to placeholder values
   if (!sid || !token || sid === 'your_twilio_sid' || token === 'your_twilio_token') {
     console.warn('[notify] Twilio credentials not configured — skipping WhatsApp alert.');
@@ -53,10 +64,19 @@ async function sendVetAlert(session, problem) {
     return;
   }
 
-  const client = twilio(sid, token);
-  client.httpClient.timeout = 10000;
-  await client.messages.create({ body: message, from, to });
-  console.log(`[notify] WhatsApp alert sent to vet at ${to}`);
+  // Pass timeout at construction time — assigning client.httpClient.timeout after
+  // construction is ignored by the SDK (the Axios instance is already configured).
+  const client = twilio(sid, token, {
+    httpClient: new twilio.RequestClient({ timeout: 10000 }),
+  });
+
+  // Promise.race: the 500 ms drain resolves this async function quickly so Vercel
+  // does not hold the invocation open for the full Twilio round-trip.
+  // The Twilio call continues in the background; the Firestore record above
+  // ensures the dashboard always reflects the referral regardless of outcome.
+  const call = client.messages.create({ body: message, from, to })
+    .then(() => console.log(`[notify] WhatsApp alert sent to vet at ${to}`));
+  await Promise.race([call, new Promise(resolve => setTimeout(resolve, 500))]);
 }
 
 /**
@@ -118,10 +138,13 @@ async function sendTriageVetAlert(session) {
     return;
   }
 
-  const client = twilio(sid, token);
-  client.httpClient.timeout = 10000;
-  await client.messages.create({ body: message, from, to });
-  console.log(`[notify] Triage WhatsApp alert sent to vet at ${to}`);
+  const client = twilio(sid, token, {
+    httpClient: new twilio.RequestClient({ timeout: 10000 }),
+  });
+
+  const call = client.messages.create({ body: message, from, to })
+    .then(() => console.log(`[notify] Triage WhatsApp alert sent to vet at ${to}`));
+  await Promise.race([call, new Promise(resolve => setTimeout(resolve, 500))]);
 }
 
 module.exports = { sendVetAlert, sendTriageVetAlert };

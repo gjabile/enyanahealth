@@ -173,6 +173,44 @@ async function saveTriageSession(session) {
   }
 }
 
+/**
+ * Save a direct vet-contact session (non-triage) to Firestore.
+ * Called from notify.js before the Twilio call so the dashboard shows
+ * the referral even if Twilio fails or Vercel freezes the function.
+ *
+ * @param {object} session - Session object with phoneNumber, name, community, vetAnimal
+ * @param {string} problem - Farmer's free-text problem description
+ */
+async function saveVetContactSession(session, problem) {
+  if (!db) {
+    console.warn('[firestore] Firestore disabled — skipping vet contact session save');
+    return false;
+  }
+
+  try {
+    const now = new Date();
+    await db.collection('sessions').add({
+      language:    session.language,
+      community:   session.community,
+      phoneNumber: session.phoneNumber,
+      name:        session.name,
+      animal:      session.vetAnimal || null,
+      problem:     problem,
+      outcome:     'vet_referral',
+      timestamp:   now,
+      status:      'pending',
+      assignedVet: null,
+      forwardedAt: null,
+      resolvedAt:  null,
+    });
+    console.log(`[firestore] Vet contact session saved for ${session.phoneNumber}`);
+    return true;
+  } catch (err) {
+    console.error(`[firestore] Error saving vet contact session: ${err.message}`);
+    return false;
+  }
+}
+
 // Initialize on require
 initializeFirebase();
 
@@ -181,4 +219,5 @@ module.exports = {
   createFarmer,
   updateReturningFarmer,
   saveTriageSession,
+  saveVetContactSession,
 };
