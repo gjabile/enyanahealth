@@ -17,7 +17,8 @@ let db = null;
 
 /**
  * Initialize Firebase Admin SDK.
- * Called once at startup if FIREBASE_CREDENTIALS_PATH is set.
+ * Guards against re-initialization on Vercel serverless cold starts by checking
+ * admin.apps.length before calling initializeApp.
  */
 function initializeFirebase() {
   const credsPath    = process.env.FIREBASE_CREDENTIALS_PATH;
@@ -28,27 +29,48 @@ function initializeFirebase() {
   try {
     const admin = require('firebase-admin');
 
-    if (credsPath) {
-      // Service account JSON file on disk
-      admin.initializeApp({ credential: admin.credential.cert(require(credsPath)) });
-    } else if (projectId && clientEmail && privateKey) {
-      // Individual env vars — private key may have literal \n from .env file
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId,
-          clientEmail,
-          privateKey: privateKey.replace(/\\n/g, '\n'),
-        }),
-      });
-    } else {
-      console.warn('[firestore] No Firebase credentials found — Firestore disabled');
-      return;
+    if (!admin.apps.length) {
+      if (credsPath) {
+        // Service account JSON file on disk
+        admin.initializeApp({ credential: admin.credential.cert(require(credsPath)) });
+      } else if (projectId && clientEmail && privateKey) {
+        // Individual env vars — private key may have literal \n from .env file
+        admin.initializeApp({
+          credential: admin.credential.cert({
+            projectId,
+            clientEmail,
+            privateKey: privateKey.replace(/\\n/g, '\n'),
+          }),
+        });
+      } else {
+        console.warn('[firestore] No Firebase credentials found — Firestore disabled');
+        return;
+      }
     }
 
     db = admin.firestore();
+    // Shorter deadline than the gRPC default (88 s on Vercel cold starts)
+    db.settings({ timeout: 10000 });
     console.log('[firestore] Firebase initialized successfully');
   } catch (err) {
     console.error(`[firestore] Failed to initialize Firebase: ${err.message}`);
+  }
+}
+
+/**
+ * Run a Firestore write; retry once after 2 s if DEADLINE_EXCEEDED.
+ * Used by saveTriageSession and saveVetContactSession.
+ */
+async function withRetry(fn, label) {
+  try {
+    return await fn();
+  } catch (err) {
+    if (err.message && err.message.includes('DEADLINE_EXCEEDED')) {
+      console.warn(`[firestore] ${label} DEADLINE_EXCEEDED — retrying in 2 s`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return await fn();
+    }
+    throw err;
   }
 }
 
@@ -128,7 +150,7 @@ async function updateReturningFarmer(phoneNumber) {
 
 /**
  * Save a completed triage session to Firestore and update the farmer record.
- * Called fire-and-forget — never throws, logs on error.
+ * Retries once on DEADLINE_EXCEEDED. Never throws — logs on error.
  *
  * @param {object} session - The full session object after triage completes
  */
@@ -140,29 +162,36 @@ async function saveTriageSession(session) {
 
   try {
     const now = new Date();
-    await db.collection('sessions').add({
-      language:         session.language,
-      community:        session.community,
-      phoneNumber:      session.phoneNumber,
-      name:             session.name,
-      animal:           session.animal,
-      symptoms:         session.symptoms || {},
-      diseaseScores:    session.diseaseScores || {},
-      highestRiskLevel: session.highestRiskLevel,
-      outcome:          session.outcome,
-      timestamp:        now,
-      status:           session.outcome === 'vet_referral' ? 'pending' : 'resolved',
-      assignedVet:      null,
-      forwardedAt:      null,
-      resolvedAt:       null,
-    });
+
+    await withRetry(
+      () => db.collection('sessions').add({
+        language:         session.language,
+        community:        session.community,
+        phoneNumber:      session.phoneNumber,
+        name:             session.name,
+        animal:           session.animal,
+        symptoms:         session.symptoms || {},
+        diseaseScores:    session.diseaseScores || {},
+        highestRiskLevel: session.highestRiskLevel,
+        outcome:          session.outcome,
+        timestamp:        now,
+        status:           session.outcome === 'vet_referral' ? 'pending' : 'resolved',
+        assignedVet:      null,
+        forwardedAt:      null,
+        resolvedAt:       null,
+      }),
+      'saveTriageSession'
+    );
 
     if (session.phoneNumber) {
       const admin = require('firebase-admin');
-      await db.collection('farmers').doc(session.phoneNumber).update({
-        lastSeen:      now,
-        totalSessions: admin.firestore.FieldValue.increment(1),
-      });
+      await withRetry(
+        () => db.collection('farmers').doc(session.phoneNumber).update({
+          lastSeen:      now,
+          totalSessions: admin.firestore.FieldValue.increment(1),
+        }),
+        'saveTriageSession farmer update'
+      );
     }
 
     console.log(`[firestore] Triage session saved for ${session.phoneNumber}`);
@@ -177,6 +206,7 @@ async function saveTriageSession(session) {
  * Save a direct vet-contact session (non-triage) to Firestore.
  * Called from notify.js before the Twilio call so the dashboard shows
  * the referral even if Twilio fails or Vercel freezes the function.
+ * Retries once on DEADLINE_EXCEEDED. Never throws — logs on error.
  *
  * @param {object} session - Session object with phoneNumber, name, community, vetAnimal
  * @param {string} problem - Farmer's free-text problem description
@@ -189,20 +219,23 @@ async function saveVetContactSession(session, problem) {
 
   try {
     const now = new Date();
-    await db.collection('sessions').add({
-      language:    session.language,
-      community:   session.community,
-      phoneNumber: session.phoneNumber,
-      name:        session.name,
-      animal:      session.vetAnimal || null,
-      problem:     problem,
-      outcome:     'vet_referral',
-      timestamp:   now,
-      status:      'pending',
-      assignedVet: null,
-      forwardedAt: null,
-      resolvedAt:  null,
-    });
+    await withRetry(
+      () => db.collection('sessions').add({
+        language:    session.language,
+        community:   session.community,
+        phoneNumber: session.phoneNumber,
+        name:        session.name,
+        animal:      session.vetAnimal || null,
+        problem:     problem,
+        outcome:     'vet_referral',
+        timestamp:   now,
+        status:      'pending',
+        assignedVet: null,
+        forwardedAt: null,
+        resolvedAt:  null,
+      }),
+      'saveVetContactSession'
+    );
     console.log(`[firestore] Vet contact session saved for ${session.phoneNumber}`);
     return true;
   } catch (err) {
