@@ -191,13 +191,8 @@ function advanceStateSilent(session, input, farmerData) {
       return next;
 
     case 'informationMenu':
+      if (input !== '1') return session;
       next.state = 'mainMenu';
-      return next;
-
-    case 'describeVetProblem':
-      if (!input || !input.trim()) return session;
-      next.problem = input.trim();
-      next.state   = 'vetAlertSent';
       return next;
 
     case 'selectAnimal':
@@ -333,6 +328,9 @@ async function handleUSSD(req, res) {
 
       sessionUpdates.language = language;
       if (farmerData) {
+        sessionUpdates.isReturningFarmer = true;
+        sessionUpdates.name              = farmerData.name;
+        sessionUpdates.community         = farmerData.community;
         updateReturningFarmer(phoneNumber).catch(err =>
           console.error('[ussd] Failed to update returning farmer:', err.message)
         );
@@ -366,15 +364,8 @@ async function handleUSSD(req, res) {
       break;
 
     case 'informationMenu':
+      if (input !== '1') return reshowCurrent(res, 'informationMenu', session.language, session);
       nextState = 'mainMenu';
-      break;
-
-    case 'describeVetProblem':
-      if (!input || !input.trim()) return reshowCurrent(res, 'describeVetProblem', session.language, session);
-      sendVetAlert(phoneNumber, null, input.trim()).catch(err =>
-        console.error('[ussd] Vet alert failed:', err.message)
-      );
-      nextState = 'vetAlertSent';
       break;
 
     case 'selectAnimal':

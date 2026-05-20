@@ -64,8 +64,8 @@
     "informationMenu": {
       "isEnd": false,
       "prompt": {
-        "english": "[Information menu coming soon]",
-        "acholi":  "[Information menu coming soon]"
+        "english": "This feature is coming soon.\n\n1. Back to main menu",
+        "acholi":  "[PLACEHOLDER]\n\n1. [PLACEHOLDER]"
       }
     },
 
