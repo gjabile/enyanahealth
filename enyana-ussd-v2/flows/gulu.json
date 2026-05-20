@@ -45,11 +45,19 @@
       }
     },
 
+    "selectVetAnimal": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Which animal do you need help with?\n\n1. Cow\n2. Poultry\n3. Pig\n4. Rabbit",
+        "acholi":  "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]\n4. [PLACEHOLDER]"
+      }
+    },
+
     "describeVetProblem": {
       "isEnd": false,
       "prompt": {
         "english": "Describe your problem and we will\nalert a vet right away.",
-        "acholi":  "[ACH] Pyer tam mamegi, wabiok daktari\nmapwod."
+        "acholi":  "[PLACEHOLDER]"
       }
     },
 
@@ -78,13 +86,6 @@
       }
     },
 
-    "connectVet": {
-      "isEnd": false,
-      "prompt": {
-        "english": "[EN] Describe your animal's problem in a few words.\nA vet will be alerted on WhatsApp.\n\nType your message and press Send:",
-        "acholi":  "[ACH] Nyut tam me lee madit mo mapol me gin acel.\nLakwat lee bibedo ni myero okwony.\n\nCor lok mamegi ki i olo Send:"
-      }
-    },
 
     "vetConfirm": {
       "isEnd": true,

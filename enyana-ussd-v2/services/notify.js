@@ -19,20 +19,28 @@ require('dotenv').config();
 /**
  * Send a WhatsApp message to the vet alerting them to a new farmer case.
  *
- * @param {string} phoneNumber - Farmer's MSISDN (e.g. "+256700000000")
- * @param {string} animal      - Animal category ("cattle", "poultry", "pigs")
- * @param {string} problem     - Farmer's free-text problem description
+ * @param {object} session - Session object with phoneNumber, name, community, vetAnimal
+ * @param {string} problem - Farmer's free-text problem description
  */
-async function sendVetAlert(phoneNumber, animal, problem) {
+async function sendVetAlert(session, problem) {
   const sid   = process.env.TWILIO_ACCOUNT_SID;
   const token = process.env.TWILIO_AUTH_TOKEN;
   const from  = process.env.WHATSAPP_FROM;
   const to    = process.env.WHATSAPP_TO;
 
+  const message = [
+    '🐄 Enyana Health Alert',
+    `Farmer: ${session.name || 'Unknown'}`,
+    `Phone: ${session.phoneNumber}`,
+    `Community: ${session.community || 'Unknown'}`,
+    `Animal: ${session.vetAnimal || 'Unknown'}`,
+    `Problem: ${problem}`,
+  ].join('\n');
+
   // Guard: skip if credentials are missing or still set to placeholder values
   if (!sid || !token || sid === 'your_twilio_sid' || token === 'your_twilio_token') {
     console.warn('[notify] Twilio credentials not configured — skipping WhatsApp alert.');
-    console.log(`[notify] Alert payload — Farmer: ${phoneNumber} | Animal: ${animal} | Problem: ${problem}`);
+    console.log(`[notify] Alert payload:\n${message}`);
     return;
   }
 
@@ -45,10 +53,7 @@ async function sendVetAlert(phoneNumber, animal, problem) {
     return;
   }
 
-  const client  = twilio(sid, token);
-  const animalLine = animal ? `\nAnimal: ${animal}` : '';
-  const message = `🐄 Enyana Health Alert\nFarmer: ${phoneNumber}${animalLine}\nProblem: ${problem}`;
-
+  const client = twilio(sid, token);
   await client.messages.create({ body: message, from, to });
   console.log(`[notify] WhatsApp alert sent to vet at ${to}`);
 }

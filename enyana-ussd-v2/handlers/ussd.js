@@ -95,6 +95,7 @@ function makeEmptySession(phoneNumber) {
     name:              null,
     isReturningFarmer: false,
     animal:            null,
+    vetAnimal:         null,
     symptoms:          {},
     diseaseScores:     null,
     highestRiskLevel:  null,
@@ -186,7 +187,7 @@ function advanceStateSilent(session, input, farmerData) {
     case 'mainMenu':
       if      (input === '1') next.state = 'selectAnimal';
       else if (input === '2') next.state = 'informationMenu';
-      else if (input === '3') next.state = 'connectVet';
+      else if (input === '3') next.state = 'selectVetAnimal';
       else return session;
       return next;
 
@@ -215,7 +216,15 @@ function advanceStateSilent(session, input, farmerData) {
       else return session;
       return next;
 
-    case 'connectVet':
+    case 'selectVetAnimal':
+      if      (input === '1') { next.vetAnimal = 'cow';     next.state = 'describeVetProblem'; }
+      else if (input === '2') { next.vetAnimal = 'poultry'; next.state = 'describeVetProblem'; }
+      else if (input === '3') { next.vetAnimal = 'pig';     next.state = 'describeVetProblem'; }
+      else if (input === '4') { next.vetAnimal = 'rabbit';  next.state = 'describeVetProblem'; }
+      else return session;
+      return next;
+
+    case 'describeVetProblem':
       if (!input || !input.trim()) return session;
       next.problem = input.trim();
       next.state   = 'vetConfirm';
@@ -359,7 +368,7 @@ async function handleUSSD(req, res) {
     case 'mainMenu':
       if      (input === '1') nextState = 'selectAnimal';
       else if (input === '2') nextState = 'informationMenu';
-      else if (input === '3') nextState = 'connectVet';
+      else if (input === '3') nextState = 'selectVetAnimal';
       else return reshowCurrent(res, 'mainMenu', session.language, session);
       break;
 
@@ -396,9 +405,17 @@ async function handleUSSD(req, res) {
       break;
     }
 
-    case 'connectVet':
-      if (!input || !input.trim()) return reshowCurrent(res, 'connectVet', session.language, session);
-      sendVetAlert(phoneNumber, session.animal || 'unknown', input.trim()).catch(err =>
+    case 'selectVetAnimal':
+      if      (input === '1') { sessionUpdates.vetAnimal = 'cow';     nextState = 'describeVetProblem'; }
+      else if (input === '2') { sessionUpdates.vetAnimal = 'poultry'; nextState = 'describeVetProblem'; }
+      else if (input === '3') { sessionUpdates.vetAnimal = 'pig';     nextState = 'describeVetProblem'; }
+      else if (input === '4') { sessionUpdates.vetAnimal = 'rabbit';  nextState = 'describeVetProblem'; }
+      else return reshowCurrent(res, 'selectVetAnimal', session.language, session);
+      break;
+
+    case 'describeVetProblem':
+      if (!input || !input.trim()) return reshowCurrent(res, 'describeVetProblem', session.language, session);
+      sendVetAlert(session, input.trim()).catch(err =>
         console.error('[ussd] Vet alert failed:', err.message)
       );
       nextState = 'vetConfirm';

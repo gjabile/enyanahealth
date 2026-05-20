@@ -45,12 +45,21 @@
       }
     },
 
+    "selectVetAnimal": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "Which animal do you need help with?\n\n1. Cow\n2. Poultry\n3. Pig\n4. Rabbit",
+        "runyankole": "N'itungo ki erikwetaaga obuyambi?\n1. Ente\n2. Enkoko\n3. Nguruwe\n4. Akame",
+        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]\n4. [PLACEHOLDER]"
+      }
+    },
+
     "describeVetProblem": {
       "isEnd": false,
       "prompt": {
         "english":    "Describe your problem and we will\nalert a vet right away.",
-        "runyankole": "[RUN] Coroora enshonga yawe nitwasindikira\nomushaho obubaka.",
-        "acholi":     "[ACH] Pyer tam mamegi, wabiok daktari\nmapwod."
+        "runyankole": "Coroora enshonga yawe nitwasindikira\nomushaho obubaka.",
+        "acholi":     "[PLACEHOLDER]"
       }
     },
 
@@ -81,13 +90,6 @@
       }
     },
 
-    "connectVet": {
-      "isEnd": false,
-      "prompt": {
-        "english":    "Describe your animal's problem in a few words.\nA vet will be alerted on WhatsApp.\n\nType your message and press Send:",
-        "runyankole": "[RUN] Gamba obushobozi bw'ente yawe mu magambo mansi.\nOmusawo azabwirwa kuri WhatsApp.\n\nAndika obutumwa bwawe ushindike Send:"
-      }
-    },
 
     "vetConfirm": {
       "isEnd": true,
