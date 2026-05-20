@@ -124,6 +124,13 @@ async function sendTriageVetAlert(session) {
     ...symptomLines,
   ].join('\n');
 
+  // Persist to Firestore first — dashboard shows the referral even if Twilio
+  // is not configured or Vercel freezes the function before WhatsApp completes.
+  const { saveTriageSession } = require('./firestore');
+  await saveTriageSession(session).catch(err =>
+    console.error('[notify] Firestore triage save failed:', err.message)
+  );
+
   if (!sid || !token || sid === 'your_twilio_sid' || token === 'your_twilio_token') {
     console.warn('[notify] Twilio credentials not configured — skipping triage WhatsApp alert.');
     console.log(`[notify] Triage alert payload:\n${message}`);

@@ -297,7 +297,6 @@ async function handleUSSD(req, res) {
       const { diseaseScores } = calculateScores(animal, symptoms);
       updated   = { ...updated, diseaseScores, highestRiskLevel: 'HIGH', outcome: 'vet_referral' };
       sendTriageVetAlert(updated).catch(e => console.error('[ussd] Alert failed:', e.message));
-      saveTriageSession(updated).catch(e => console.error('[ussd] Save failed:', e.message));
       nextState = 'triage_outcome_high';
 
     } else if (qNum < config.questions.length) {
@@ -309,7 +308,6 @@ async function handleUSSD(req, res) {
       if (highestRiskLevel === 'HIGH') {
         updated   = { ...updated, outcome: 'vet_referral' };
         sendTriageVetAlert(updated).catch(e => console.error('[ussd] Alert failed:', e.message));
-        saveTriageSession(updated).catch(e => console.error('[ussd] Save failed:', e.message));
         nextState = 'triage_outcome_high';
       } else {
         nextState = highestRiskLevel === 'MEDIUM' ? 'triage_outcome_medium' : 'triage_outcome_low';
@@ -388,7 +386,7 @@ async function handleUSSD(req, res) {
       if (!outcome) return reshowCurrent(res, 'triage_outcome_medium', session.language, session);
       const saved = { ...session, outcome };
       if (outcome === 'vet_referral') sendTriageVetAlert(saved).catch(e => console.error('[ussd] Alert failed:', e.message));
-      saveTriageSession(saved).catch(e => console.error('[ussd] Save failed:', e.message));
+      else saveTriageSession(saved).catch(e => console.error('[ussd] Save failed:', e.message));
       nextState = outcome === 'vet_referral' ? 'triage_vet_sent' : 'triage_no_vet';
       break;
     }
@@ -398,7 +396,7 @@ async function handleUSSD(req, res) {
       if (!outcome) return reshowCurrent(res, 'triage_outcome_low', session.language, session);
       const saved = { ...session, outcome };
       if (outcome === 'vet_referral') sendTriageVetAlert(saved).catch(e => console.error('[ussd] Alert failed:', e.message));
-      saveTriageSession(saved).catch(e => console.error('[ussd] Save failed:', e.message));
+      else saveTriageSession(saved).catch(e => console.error('[ussd] Save failed:', e.message));
       nextState = outcome === 'vet_referral' ? 'triage_vet_sent' : 'triage_no_vet';
       break;
     }
