@@ -54,6 +54,7 @@ async function sendVetAlert(session, problem) {
   }
 
   const client = twilio(sid, token);
+  client.httpClient.timeout = 10000;
   await client.messages.create({ body: message, from, to });
   console.log(`[notify] WhatsApp alert sent to vet at ${to}`);
 }
@@ -118,6 +119,7 @@ async function sendTriageVetAlert(session) {
   }
 
   const client = twilio(sid, token);
+  client.httpClient.timeout = 10000;
   await client.messages.create({ body: message, from, to });
   console.log(`[notify] Triage WhatsApp alert sent to vet at ${to}`);
 }
