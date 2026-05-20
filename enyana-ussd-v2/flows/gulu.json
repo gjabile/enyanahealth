@@ -10,9 +10,9 @@
 
     "selectLanguage": {
       "prompt": {
-        "english":    "Welcome / Tukwakiira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi",
-        "runyankole": "Welcome / Tukwakiira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi",
-        "acholi":     "Welcome / Tukwakiira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi"
+        "english":    "Welcome / Tukwakiira\n\n1. English\n2. Runyankole",
+        "runyankole": "Welcome / Tukwakiira\n\n1. English\n2. Runyankole",
+        "acholi":     "Welcome / Tukwakiira\n\n1. English\n2. Runyankole"
       }
     },
 
