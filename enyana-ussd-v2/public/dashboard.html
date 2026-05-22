@@ -95,9 +95,33 @@
       </div>
 
       <div class="px-4 mb-2">
-        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Recent Sessions</h2>
+        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">All Sessions</h2>
       </div>
-      <div id="recent-sessions" class="px-4 pb-4">
+      <div class="px-4 mb-2">
+        <div class="flex gap-1.5 flex-wrap mb-2">
+          <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2d6a2d] text-white border border-[#2d6a2d]" data-risk="all">All</button>
+          <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300" data-risk="HIGH">HIGH</button>
+          <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300" data-risk="MEDIUM">MED</button>
+          <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300" data-risk="LOW">LOW</button>
+        </div>
+        <div class="flex gap-2">
+          <select id="sess-community" class="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#2d6a2d]">
+            <option value="all">All communities</option>
+            <option value="nyakayojo">Nyakayojo</option>
+            <option value="gulu">Gulu</option>
+            <option value="nwoya">Nwoya</option>
+            <option value="amuru">Amuru</option>
+            <option value="pader">Pader</option>
+            <option value="kitgum">Kitgum</option>
+          </select>
+          <select id="sess-outcome" class="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#2d6a2d]">
+            <option value="all">All outcomes</option>
+            <option value="vet_referral">Vet Referral</option>
+            <option value="advice">Advice</option>
+          </select>
+        </div>
+      </div>
+      <div id="all-sessions" class="px-4 pb-4">
         <div class="flex justify-center py-8"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>
       </div>
     </div>
@@ -166,6 +190,18 @@
   </nav>
 </div><!-- /#app -->
 
+<!-- Delete farmer modal -->
+<div id="delete-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+    <h2 class="font-bold text-lg text-gray-900 mb-1">Delete farmer?</h2>
+    <p id="delete-modal-msg" class="text-sm text-gray-500 mb-5">This will permanently delete the farmer and all their sessions.</p>
+    <div class="flex gap-3">
+      <button id="delete-cancel-btn" class="flex-1 border border-gray-300 text-gray-700 rounded-xl py-3 text-sm font-semibold">Cancel</button>
+      <button id="delete-confirm-btn" class="flex-1 bg-red-600 text-white rounded-xl py-3 text-sm font-semibold">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full text-sm font-medium shadow-lg text-white pointer-events-none" style="transition:opacity .3s"></div>
 
@@ -220,15 +256,21 @@ const ANIMAL_NAME  = { cattle:'Cattle', poultry:'Poultry', pigs:'Pigs', rabbit:'
 
 // ── State ────────────────────────────────────────────────────────────────────
 
-let authPw          = localStorage.getItem('dashboard_auth') || '';
-let activeTab       = 'overview';
-let vets            = [];
-let allFarmers      = [];
-let filteredFarmers = [];
-let farmerCache     = {};
-let expandedFarmer  = null;
-let prevPending     = 0;
-let pollingTimer    = null;
+let authPw           = localStorage.getItem('dashboard_auth') || '';
+let activeTab        = 'overview';
+let vets             = [];
+let allFarmers       = [];
+let filteredFarmers  = [];
+let farmerCache      = {};
+let expandedFarmer   = null;
+let prevPending      = 0;
+let pollingTimer     = null;
+let allSessions      = [];
+let filterRisk       = 'all';
+let filterCommunity  = 'all';
+let filterOutcome    = 'all';
+let expandedProblems = new Set();
+let pendingDeleteFid = null;
 
 // ── Utilities ────────────────────────────────────────────────────────────────
 
@@ -333,8 +375,8 @@ async function loadOverview() {
   if (vR && vR.ok) vets = await vR.json();
   if (pR && pR.ok) { const p = await pR.json(); renderPending(p); prevPending = p.length; }
   else document.getElementById('pending-section').innerHTML = errMsg();
-  if (rR && rR.ok) renderRecent((await rR.json()).slice(0, 20));
-  else document.getElementById('recent-sessions').innerHTML = errMsg();
+  if (rR && rR.ok) { allSessions = await rR.json(); applySessFilters(); }
+  else document.getElementById('all-sessions').innerHTML = errMsg();
   setLastUpdated();
 }
 
@@ -414,28 +456,56 @@ function pendingCard(s) {
   </div>`;
 }
 
-function renderRecent(list) {
-  const el = document.getElementById('recent-sessions');
+function applySessFilters() {
+  let list = allSessions;
+  if (filterRisk      !== 'all') list = list.filter(s => s.highestRiskLevel === filterRisk);
+  if (filterCommunity !== 'all') list = list.filter(s => (s.community||'').toLowerCase() === filterCommunity);
+  if (filterOutcome   !== 'all') list = list.filter(s => s.outcome === filterOutcome);
+  renderSessions(list);
+}
+
+function renderSessions(list) {
+  const el = document.getElementById('all-sessions');
   if (!list || !list.length) {
-    el.innerHTML = `<div class="bg-white rounded-xl p-5 text-center shadow-sm"><p class="text-sm text-gray-400">No sessions yet</p></div>`;
+    el.innerHTML = `<div class="bg-white rounded-xl p-5 text-center shadow-sm text-sm text-gray-400">No sessions match the selected filters</div>`;
     return;
   }
-  el.innerHTML = `<div class="bg-white rounded-xl shadow-sm divide-y divide-gray-100 overflow-hidden">
-    ${list.map(s => `
-    <div class="flex items-center px-4 py-3 gap-3">
-      <span class="text-lg flex-shrink-0">${ANIMAL_EMOJI[s.animal]||'🐾'}</span>
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-sm font-medium truncate">${esc(s.name||'Unknown')}</span>
-          <span class="text-xs text-gray-400">${esc(s.community||'')}</span>
-        </div>
-        <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
-          ${riskBadge(s.highestRiskLevel)}
-          <span class="text-xs text-gray-500">${esc(outcomeLabel(s.outcome))}</span>
-        </div>
-      </div>
-      <span class="text-xs text-gray-400 flex-shrink-0">${timeAgo(s.timestamp)}</span>
-    </div>`).join('')}
+  el.innerHTML = `<div class="bg-white rounded-xl shadow-sm divide-y divide-gray-100 overflow-hidden">${list.map(sessionRow).join('')}</div>`;
+  el.onclick = e => {
+    const btn = e.target.closest('[data-expand-sid]');
+    if (!btn) return;
+    const sid = btn.dataset.expandSid;
+    if (expandedProblems.has(sid)) expandedProblems.delete(sid);
+    else expandedProblems.add(sid);
+    applySessFilters();
+  };
+}
+
+function sessionRow(s) {
+  const hasProb   = s.problem && s.problem.trim();
+  const expanded  = expandedProblems.has(s.id);
+  const needsTrunc = hasProb && s.problem.length > 50;
+  return `
+  <div class="px-4 py-3">
+    <div class="flex items-center gap-2 flex-wrap mb-1">
+      <span class="text-base flex-shrink-0">${ANIMAL_EMOJI[s.animal]||'🐾'}</span>
+      <span class="text-sm font-medium">${esc(s.name||'Unknown')}</span>
+      <span class="text-xs text-gray-400">${esc(s.community||'')}</span>
+      <span class="ml-auto text-xs text-gray-400">${timeAgo(s.timestamp)}</span>
+    </div>
+    <div class="flex items-center gap-1.5 flex-wrap">
+      ${riskBadge(s.highestRiskLevel)}
+      <span class="text-xs text-gray-500">${esc(outcomeLabel(s.outcome))}</span>
+      ${statusBadge(s.status)}
+    </div>
+    ${hasProb ? `<div class="mt-1.5">
+      ${expanded
+        ? `<div class="bg-gray-50 rounded-lg px-3 py-2 text-xs text-gray-700 italic">${esc(s.problem)}</div>
+           <button data-expand-sid="${esc(s.id)}" class="text-xs text-[#2d6a2d] font-medium mt-1 underline">Show less</button>`
+        : `<span class="text-xs text-gray-600 italic">${esc(s.problem.slice(0,50))}${needsTrunc?'…':''}</span>
+           ${needsTrunc ? `<button data-expand-sid="${esc(s.id)}" class="text-xs text-[#2d6a2d] font-medium ml-1 underline">View more</button>` : ''}`
+      }
+    </div>` : ''}
   </div>`;
 }
 
@@ -493,6 +563,8 @@ function renderFarmerList() {
   }
   el.innerHTML = filteredFarmers.map(farmerCard).join('');
   el.onclick = e => {
+    const delBtn = e.target.closest('[data-del-fid]');
+    if (delBtn) { e.stopPropagation(); confirmDeleteFarmer(delBtn.dataset.delFid, delBtn.dataset.delFname); return; }
     const card = e.target.closest('[data-fid]');
     if (!card || e.target.closest('.sh-inner')) return;
     toggleFarmer(card.dataset.fid);
@@ -504,12 +576,19 @@ function farmerCard(f) {
   return `
   <div class="bg-white rounded-xl shadow-sm mb-3 overflow-hidden cursor-pointer" data-fid="${esc(f.id)}">
     <div class="p-4 flex items-start justify-between gap-2">
-      <div>
+      <div class="flex-1 min-w-0">
         <p class="font-semibold">${esc(f.name||'Unknown')}</p>
         <p class="text-xs text-gray-500 mt-0.5">${esc(f.phoneNumber)} · ${esc(f.community||'')} · ${esc(f.language||'')}</p>
         <p class="text-xs text-gray-400 mt-1">${f.totalSessions??0} session${f.totalSessions!==1?'s':''} · Last call: ${timeAgo(f.lastSeen)}</p>
       </div>
-      <i class="fas fa-chevron-${open?'up':'down'} text-gray-400 text-sm mt-1 flex-shrink-0"></i>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button data-del-fid="${esc(f.id)}" data-del-fname="${esc(f.name||'Unknown')}"
+          class="text-red-500 border border-red-200 rounded-lg px-2.5 py-1.5 text-xs font-medium active:opacity-70"
+          style="min-height:44px">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <i class="fas fa-chevron-${open?'up':'down'} text-gray-400 text-sm"></i>
+      </div>
     </div>
     ${open ? `<div class="border-t border-gray-100 sh-inner" id="sh-${esc(f.id)}">${spin()}</div>` : ''}
   </div>`;
@@ -535,6 +614,32 @@ async function toggleFarmer(fid) {
       ${statusBadge(s.status)}
     </div>`).join('')}
   </div>`;
+}
+
+function confirmDeleteFarmer(fid, fname) {
+  pendingDeleteFid = fid;
+  document.getElementById('delete-modal-msg').textContent =
+    `"${fname}" and all their sessions will be permanently deleted.`;
+  document.getElementById('delete-modal').classList.remove('hidden');
+}
+
+async function deleteFarmer(fid) {
+  document.getElementById('delete-modal').classList.add('hidden');
+  const farmer = allFarmers.find(f => f.id === fid);
+  const fname  = farmer ? (farmer.name || 'Unknown') : 'Unknown';
+  try {
+    const r = await api(`/api/farmers/${encodeURIComponent(fid)}`, { method: 'DELETE' });
+    if (r.ok) {
+      allFarmers      = allFarmers.filter(f => f.id !== fid);
+      filteredFarmers = filteredFarmers.filter(f => f.id !== fid);
+      if (expandedFarmer === fid) expandedFarmer = null;
+      delete farmerCache[fid];
+      renderFarmerList();
+      toast(`Deleted ${fname}`);
+    } else {
+      toast('Failed to delete', true);
+    }
+  } catch { toast('Network error', true); }
 }
 
 // ── Vets ─────────────────────────────────────────────────────────────────────
@@ -647,6 +752,35 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
   document.getElementById('add-vet-btn').addEventListener('click', submitAddVet);
+
+  document.getElementById('delete-cancel-btn').addEventListener('click', () => {
+    document.getElementById('delete-modal').classList.add('hidden');
+    pendingDeleteFid = null;
+  });
+  document.getElementById('delete-confirm-btn').addEventListener('click', () => {
+    if (pendingDeleteFid) deleteFarmer(pendingDeleteFid);
+    pendingDeleteFid = null;
+  });
+
+  document.querySelectorAll('.sess-risk-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterRisk = btn.dataset.risk;
+      document.querySelectorAll('.sess-risk-btn').forEach(b => {
+        const active = b.dataset.risk === filterRisk;
+        b.className = `sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold border ${active ? 'bg-[#2d6a2d] text-white border-[#2d6a2d]' : 'bg-white text-gray-600 border-gray-300'}`;
+      });
+      applySessFilters();
+    });
+  });
+  document.getElementById('sess-community').addEventListener('change', e => {
+    filterCommunity = e.target.value;
+    applySessFilters();
+  });
+  document.getElementById('sess-outcome').addEventListener('change', e => {
+    filterOutcome = e.target.value;
+    applySessFilters();
+  });
+
   document.getElementById('farmer-search').addEventListener('input', e => {
     const q = e.target.value.trim().toLowerCase();
     filteredFarmers = q

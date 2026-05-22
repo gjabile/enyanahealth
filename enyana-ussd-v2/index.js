@@ -57,7 +57,7 @@ app.use(express.json());
 // CORS for dashboard API — must come before routes
 app.use('/api', (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-dashboard-password');
   if (req.method === 'OPTIONS') return res.sendStatus(200);
   next();
@@ -141,6 +141,31 @@ app.patch('/api/sessions/:sessionId', dashboardAuth, async (req, res) => {
   }
 
   res.json({ success: true });
+});
+
+app.delete('/api/farmers/:phoneNumber', dashboardAuth, async (req, res) => {
+  try {
+    const phone = req.params.phoneNumber;
+    const db = require('firebase-admin').app().firestore();
+
+    const sessionsSnap = await db.collection('sessions')
+      .where('phoneNumber', '==', phone)
+      .get();
+
+    let sessionsRemoved = 0;
+    if (!sessionsSnap.empty) {
+      const batch = db.batch();
+      sessionsSnap.docs.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+      sessionsRemoved = sessionsSnap.size;
+    }
+
+    await db.collection('farmers').doc(phone).delete();
+    res.json({ deleted: true, sessionsRemoved });
+  } catch (err) {
+    console.error('[api] Error deleting farmer:', err.message);
+    res.status(500).json({ error: 'Could not delete farmer' });
+  }
 });
 
 app.get('/api/stats', dashboardAuth, async (req, res) => {
