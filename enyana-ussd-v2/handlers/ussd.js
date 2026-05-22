@@ -174,6 +174,10 @@ function advanceStateSilent(session, input, farmerData) {
     case 'selectCommunity':
       if      (input === '1') { next.community = 'nyakayojo'; next.state = 'enterName'; }
       else if (input === '2') { next.community = 'gulu';      next.state = 'enterName'; }
+      else if (input === '3') { next.community = 'nwoya';     next.state = 'enterName'; }
+      else if (input === '4') { next.community = 'amuru';     next.state = 'enterName'; }
+      else if (input === '5') { next.community = 'pader';     next.state = 'enterName'; }
+      else if (input === '6') { next.community = 'kitgum';    next.state = 'enterName'; }
       else return session;
       return next;
 
@@ -349,6 +353,10 @@ async function handleUSSD(req, res) {
     case 'selectCommunity':
       if      (input === '1') { sessionUpdates.community = 'nyakayojo'; nextState = 'enterName'; }
       else if (input === '2') { sessionUpdates.community = 'gulu';      nextState = 'enterName'; }
+      else if (input === '3') { sessionUpdates.community = 'nwoya';     nextState = 'enterName'; }
+      else if (input === '4') { sessionUpdates.community = 'amuru';     nextState = 'enterName'; }
+      else if (input === '5') { sessionUpdates.community = 'pader';     nextState = 'enterName'; }
+      else if (input === '6') { sessionUpdates.community = 'kitgum';    nextState = 'enterName'; }
       else return reshowCurrent(res, 'selectCommunity', session.language, session);
       break;
 

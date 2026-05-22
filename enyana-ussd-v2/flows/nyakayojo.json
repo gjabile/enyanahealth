@@ -18,8 +18,8 @@
 
     "selectCommunity": {
       "prompt": {
-        "english":    "Select your community:\n\n1. Nyakayojo\n2. Gulu",
-        "runyankole": "Ronda ekyanga kyawe:\n\n1. Nyakayojo\n2. Gulu"
+        "english":    "Select your community:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum",
+        "runyankole": "Ronda ekyanga kyawe:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum"
       }
     },
 
