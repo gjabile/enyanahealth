@@ -12,7 +12,7 @@
       "prompt": {
         "english":    "Welcome / Twakwakira\n\n1. English\n2. Runyankole\n3. Acholi",
         "runyankole": "Welcome / Twakwakira\n\n1. English\n2. Runyankole\n3. Acholi",
-        "acholi":     "[PLACEHOLDER]\n\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]"
+        "acholi":     "Wajoli\n\n1. English\n2. Runyankole\n3. Acholi"
       }
     },
 
@@ -20,7 +20,7 @@
       "prompt": {
         "english":    "Select your community:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum",
         "runyankole": "Ronda ekyanga kyawe:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum",
-        "acholi":     "[PLACEHOLDER]\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum"
+        "acholi":     "Yer kabedo ma megi:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum"
       }
     },
 
@@ -29,7 +29,7 @@
       "prompt": {
         "english":    "What is your full name?",
         "runyankole": "Eiziina ryawe niriiha?",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Nying weng anga?"
       }
     },
 
@@ -38,12 +38,12 @@
       "prompt": {
         "english":    "Welcome, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet",
         "runyankole": "Twakwakira ahaby'Amagara by'Enyana, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]"
+        "acholi":     "Wajoli, {{name}}!\nImito kony ikum ngo tin?\n1. Lee ma mega kume lit\n2. Kit me gwoko lee ma mega\n3. Kube ki dakta lee"
       },
       "promptReturning": {
         "english":    "Welcome back, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet",
         "runyankole": "Kurikayo, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]"
+        "acholi":     "Wajoli cen, {{name}}!\nImito kony ikum ngo tin?\n1. Lee ma mega kume lit\n2. Kit me gwoko lee ma mega\n3. Kube ki dakta lee"
       }
     },
 
@@ -52,7 +52,7 @@
       "prompt": {
         "english":    "Which animal do you need help with?\n\n1. Cow\n2. Poultry\n3. Pig\n4. Rabbit",
         "runyankole": "N'itungo ki erikwetaaga obuyambi?\n1. Ente\n2. Enkoko\n3. Nguruwe\n4. Akame",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]\n4. [PLACEHOLDER]"
+        "acholi":     "Imito kony ikum lee mene?\n1. Dyang\n2. Gweni\n3. Opego\n4. Apuoyo"
       }
     },
 
@@ -61,7 +61,7 @@
       "prompt": {
         "english":    "Describe your problem and we will\nalert a vet right away.",
         "runyankole": "Coroora enshonga yawe nitwasindikira\nomushaho obubaka.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Tit peko ma megi ci wan wa nyango dakta lee"
       }
     },
 
@@ -70,7 +70,7 @@
       "prompt": {
         "english":    "Thank you. A vet has been alerted\nand will contact you shortly.",
         "runyankole": "[RUN] Webale. Twasindikira omushaho\nobubaka, akugarukamu mangu.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Apwoyo. Dakta lee ki mino ngec en kube kwedi co coki."
       }
     },
 
@@ -79,7 +79,7 @@
       "prompt": {
         "english":    "This feature is coming soon.\n\n1. Back to main menu",
         "runyankole": "Eki kiija mangu.\n\n1. Kanda 1 okigarukayo omu menu enkuru",
-        "acholi":     "[PLACEHOLDER]\n\n1. [PLACEHOLDER]"
+        "acholi":     "Eni cok bino.\nDi 1 me dok cen.\n\n1. Dok cen"
       }
     },
 
@@ -88,7 +88,7 @@
       "prompt": {
         "english":    "Which animal is sick?\n\n1. Cow\n2. Poultry (chickens)\n3. Pig\n4. Rabbit",
         "runyankole": "N'itungo ki erirwaire?\n1. Ente\n2. Ebinyonyi birikutungwa omuka (enkoko)\n3. Empunu\n4. Akame",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]\n4. [PLACEHOLDER]"
+        "acholi":     "Lee mene ma kume lit?\n1. Dyang\n2. Gweni\n3. Opego\n4. Apuoyo"
       }
     },
 
@@ -98,7 +98,7 @@
       "prompt": {
         "english":    "Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
         "runyankole": "[RUN] Webare. Omusawo yabwirwa kandi azakweta kuri nomba yaawe mu masaa 24.\n\nEnyana Health — kugumya ente zawe.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Apwoyo. Dakta lee ki mino ngec en kube kwedi inamba man ikine me wang cawa 24.\n\nEnyana Health - Gwoko lee ma megi."
       }
     },
 
@@ -107,7 +107,7 @@
       "prompt": {
         "english":    "Your animal is showing serious symptoms\nthat need urgent attention. We are\nalerting a vet who will contact you\nshortly.",
         "runyankole": "Eitungo ryaawe niryoreka\nobumanyiso bwamaani oburikwetaaga obuyambi\nbw'ahonaaho. Turiyo nitumanyisa omushaho\nwamatungo arakuterere omubwaire bukye.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Lee ma megi tye ki lanyut me mito kony cut cut. Wa tye ka mino ngec bot dakta lee ma kube kwedi cut cut."
       }
     },
 
@@ -116,7 +116,7 @@
       "prompt": {
         "english":    "Your animal may need attention soon.\nWe recommend speaking to a vet.\n\n1. Send my case to a vet\n2. No thank you",
         "runyankole": "Eitungo ryaawe ryakubaire\nniryetaaga obuyambi omubwaire butari bwahare.\nNitutensa ngu ogambe n'omushaho wamatungo.\n\n1. Ebyangye mubisindikire omushaho w'amatungo\n2. Ngaaha mwebare",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Lee ma megi romo mito kony cut cut. Wa mini tam me kube ki dakta lee.\n\n1. Cwal loka bot Dakta lee\n2. Ku Apwoyo"
       }
     },
 
@@ -125,7 +125,7 @@
       "prompt": {
         "english":    "Your animal seems stable for now.\nMonitor closely over the next 24 hours.\n\nWould you like to contact a vet anyway?\n1. Yes, send my case to a vet\n2. No thank you",
         "runyankole": "Eitungo ryaawe nirirebeka\nnkeririgye hati. Guma norikyeberaho buri\nkaire omushaaha abiri n'ina ezirikwaija.\nNinga nohurira orikwenda kugamba\nn'omushaho w'amatungo hati?\n\n1. Ego, ebyangye bisindikire omushaho w'amatungo\n2. Ngaaha mwebare",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Lee ma megi nen tye maber pi kom bedi. Bed ka neno ne pi kine me wang cawa 24.\nImito kube ki dakta lee?\n1. Cwal loka bot Dakta lee\n2. Ku Apwoyo"
       }
     },
 
@@ -134,7 +134,7 @@
       "prompt": {
         "english":    "Thank you. A vet has been alerted\nand will contact you shortly.\n\nEnyana Health — protecting your animals.",
         "runyankole": "Webare. Omushaho w'amatungo\ntwamugambira kandi naija kukuterera\nomubwaire bukye.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Apwoyo. Dakta lee ki mino ngec en kube kwedi inamba man ikine me wang cawa 24.\n\nEnyana Health - Gwoko lee ma megi."
       }
     },
 
@@ -143,7 +143,7 @@
       "prompt": {
         "english":    "Thank you. If your animal's condition\nworsens, please dial back and we\nwill help you.\n\nEnyana Health — protecting your animals.",
         "runyankole": "[RUN] Webale. Niba orubaare rwake\nrweyongera, zamu utukoohe twakuyamba.\n\nEnyana Health — kugumya ente zawe.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi":     "Apwoyo. Ka two omedi ikum lee ma megi, Timber igo cim ci wan wa konyi.\n\nEnyana Health - Gwoko lee ma megi."
       }
     },
 
@@ -152,7 +152,7 @@
       "prompt": {
         "english":    "Does your cow have a very high fever?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe eine omuriro mwingi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang ma megi tye ki lyeto ma lamal?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -161,7 +161,7 @@
       "prompt": {
         "english":    "Has your cow stopped eating or become\nvery weak quickly?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe erekiiraho okurya nari ehwaire\namaani omu bwiire bukye?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang ma megi ogiko cam onyo odoko goro oyot oyot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -170,7 +170,7 @@
       "prompt": {
         "english":    "Is your cow having difficulty breathing?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe neyitsya kubi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang ma megi tye ki peko iyweyo?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -179,7 +179,7 @@
       "prompt": {
         "english":    "Are there swollen lumps on the neck,\nchest or legs?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba ahamaraka, ahakifuba\nnari ahamaguru?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gin mo ma okwot tye ingute, ikore, onyo ityene?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -188,7 +188,7 @@
       "prompt": {
         "english":    "Does the milk look different —\nwatery, lumpy or bloody?\n\n1. Yes\n2. No",
         "runyankole": "Amate nigareebeka okundi—garimu amaizi,\ngarimu ebitongo nari garimu eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Cake nen pat - bedo pii pii onyo remo remo?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -197,7 +197,7 @@
       "prompt": {
         "english":    "Is the udder hot, swollen or hard?\n\n1. Yes\n2. No",
         "runyankole": "Omuhako nigwotsya, guzimbire nari\ngugangaire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dok cak tye ma lyet, okwot onyo tek?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -206,7 +206,7 @@
       "prompt": {
         "english":    "Does your cow kick or refuse\nto be milked?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe neshamba emigyere nari\nneyanga okukamwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang ma megi gweyo onyo kwero pe ki nyete?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -215,7 +215,7 @@
       "prompt": {
         "english":    "Are there cracks, wounds or darkening\non the teats?\n\n1. Yes\n2. No",
         "runyankole": "Eminwa y'amabeere eshatagurikire, eyine\nebironda nari neyiragururwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Tye gin ma otye, bur onyo gin ma odoko col ilake?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -224,7 +224,7 @@
       "prompt": {
         "english":    "Are there sores or blisters in the mouth\n— is the cow drooling heavily?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebironda nari ebizimba omukanwa\n— ente eyine orufuzi rwingi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Onyo tye idoge - dyang tye ma goro tutwal?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -233,7 +233,7 @@
       "prompt": {
         "english":    "Is the cow limping badly or refusing\nto stand?\n\n1. Yes\n2. No",
         "runyankole": "Ente nekyokomboka munonga nari\nn'eyanga kwemerera?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang tye ka komo akoma matek onyo kwero cungu?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -242,7 +242,7 @@
       "prompt": {
         "english":    "Has your cow lost a calf early or given\nbirth to a dead or weak calf?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe efereirwe enyana nto nari\nezaire enyana efaire nari etaine maani marungi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang ma megi onywalo ladtin ma oto onyo onywalo latin ma goro?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -251,7 +251,7 @@
       "prompt": {
         "english":    "Has your cow failed to get pregnant\nagain after giving birth?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe eremairwe kugaruka kuhaka\nyaheza kuzaara?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Dyang ma megi peyo ogamo iye inge nywal?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -260,7 +260,7 @@
       "prompt": {
         "english":    "Does the bull have swollen testicles?\n\n1. Yes\n2. No",
         "runyankole": "Amagosi g'enumi gazimbire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Twon dyang tye ma mane okwot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -269,7 +269,7 @@
       "prompt": {
         "english":    "Have any birds died suddenly with\nno warning?\n\n1. Yes\n2. No",
         "runyankole": "Hariho enkoko zifiire ahonaaho\nzitaragire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweno mo oto atura labongo lanyut?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -278,7 +278,7 @@
       "prompt": {
         "english":    "Are the head, face or wattles swollen\nand dark purple?\n\n1. Yes\n2. No",
         "runyankole": "Omutwe, ahamaisho nari ebiregyeya\nbizimbire kandi byiragurirwe omu rangi\nya kakobe?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Onongo wiye, wange tye ma okwot doki ma col?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -287,7 +287,7 @@
       "prompt": {
         "english":    "Have birds stopped eating or laying eggs?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko zirekiraho kurya nari kuteera\namahuri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweno ma megi ogiko cam onyo bolo oko?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -296,7 +296,7 @@
       "prompt": {
         "english":    "Do birds have watery or bloody diarrhea?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko nizirukana amaizi nari eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweni ma megi tye ki pii pii onyo cado ma orube ki remo?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -305,7 +305,7 @@
       "prompt": {
         "english":    "Are birds gasping for air, coughing or\nmaking gurgling sounds?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko niziteganisibwa omukwitsya,\nnizikorora nari nikokorima munonga?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweno ma megi tute atuta me yweyo, tye ka ono onyo tye ki dwong ma pat atika?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -314,7 +314,7 @@
       "prompt": {
         "english":    "Are any birds twisting their neck or\nwalking in circles?\n\n1. Yes\n2. No",
         "runyankole": "Hariho enkoko ezimwe ezirikwehindura\namaraka nari zirikutambura zirikujengyerera?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweno mo kiken tye ka dolo ngut gi onyo woto ma lwore alwora?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -323,7 +323,7 @@
       "prompt": {
         "english":    "Is the diarrhea bright green in color?\n\n1. Yes\n2. No",
         "runyankole": "Ekyirukano nikishushana nkorureere\norurikutangaara omurangi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Cado ne tye alum alum?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -332,7 +332,7 @@
       "prompt": {
         "english":    "Has egg production dropped suddenly?\n\n1. Yes\n2. No",
         "runyankole": "Okushohoza amahuri kukyendeire ahonaaho?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Kit me bolo ne odok ping tutwal?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -341,7 +341,7 @@
       "prompt": {
         "english":    "Do birds look hunched, fluffed up\nand dull?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko zikondogwaize, amooya\ngazizangariire kandi zibuzirwe obusingye?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Geno kulu wiye ping, keto yece ata ma nen kume wac ata?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -350,7 +350,7 @@
       "prompt": {
         "english":    "Are chicks not growing and losing\nweight fast?\n\n1. Yes\n2. No",
         "runyankole": "Obwaana bw'enkoko tiburikukura kandi\nnibuhururuka omubwaire bukye?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweni pe tye ka dongo ki pek git ye ka dok oyot oyot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -359,7 +359,7 @@
       "prompt": {
         "english":    "Are birds drinking a lot but refusing\nto eat?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko nizinywa munonga kwonka\nzanga kurya?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Gweni tye ka mato pii ma pol ento pe tye ka yee cam?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -368,7 +368,7 @@
       "prompt": {
         "english":    "Have any pigs died suddenly —\nspreading through the herd fast?\n\n1. Yes\n2. No",
         "runyankole": "Hariho empunu ezifiire ahonaaho —\nkutururana omwitungo ahonaaho?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego mo oto atura - tye ka kube ikin gi oyot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -377,7 +377,7 @@
       "prompt": {
         "english":    "Does the pig have a high fever and\nrefuse to move?\n\n1. Yes\n2. No",
         "runyankole": "Empunu eyine omuriro mwingi kandi\nneyanga kutambura?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego ni ye ki lyeto ma lamal ki okwero wot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -386,7 +386,7 @@
       "prompt": {
         "english":    "Are there red or purple patches\non the skin?\n\n1. Yes\n2. No",
         "runyankole": "Hariho nk'ebizimba birikutukura nari\nbyakakobe ahamubiri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Kum dele oloke ma kwa?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -395,7 +395,7 @@
       "prompt": {
         "english":    "Does the pig have diarrhea with blood?\n\n1. Yes\n2. No",
         "runyankole": "Empunu neyirukana eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego nit ye ka cado remo?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -404,7 +404,7 @@
       "prompt": {
         "english":    "Has the sow given birth to dead or\nvery weak piglets?\n\n1. Yes\n2. No",
         "runyankole": "Empunu enkazi yazireho ebyaana bifiire\nnari bitine maani marungi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Min opego ni onywalo latin ma oto onyo ma goro?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -413,7 +413,7 @@
       "prompt": {
         "english":    "Did piglets die within days of birth?\n\n1. Yes\n2. No",
         "runyankole": "Ebyaana by'empunu bikafa omubiro\nbikye biherize kuzarwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Latin opego oto ikine me nino acel ma kinywalo?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -422,7 +422,7 @@
       "prompt": {
         "english":    "Is the pig coughing or struggling\nto breathe?\n\n1. Yes\n2. No",
         "runyankole": "Empunu nekorora nari neteganisibwa\nomukwitsya?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego nit ye ka ono onyo tute atuta me yweyo?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -431,7 +431,7 @@
       "prompt": {
         "english":    "Are the ears turning bluish or purple?\n\n1. Yes\n2. No",
         "runyankole": "Amatu garimu nigahinduka agabururu\nnari agakakobe omurangi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Yite tye kaloke?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -440,7 +440,7 @@
       "prompt": {
         "english":    "Are there sores in the mouth — is the\npig drooling and refusing to eat?\n\n1. Yes\n2. No",
         "runyankole": "Omukanwa harimu ebironda — empunu\neyine orufuzi rwingi kandi neyanga kurya?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Doge tye ma oonyo - la tye ka kati ki dog opego doki pe ye cam?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -449,7 +449,7 @@
       "prompt": {
         "english":    "Is the pig limping or refusing to walk?\n\n1. Yes\n2. No",
         "runyankole": "Empunu nekyokomboka nari neyanga\nkutambura?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego tye ka komo akoma onyo kwero wot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -458,7 +458,7 @@
       "prompt": {
         "english":    "Are there blisters on the snout or\nbetween the hooves?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba ahanyindo nari omunda\nn'ahagati y'ebigyere?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Tye gin mo ma okwot ikin tyene?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -467,7 +467,7 @@
       "prompt": {
         "english":    "Is the pig passing watery diarrhea\nwith blood and mucus?\n\n1. Yes\n2. No",
         "runyankole": "Empunu neyirukana amaizi garimu\neshagama n'ebihinzi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego tye ka cado pii pii ki gin ma obedo otunyu otunyu?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -476,7 +476,7 @@
       "prompt": {
         "english":    "Is the pig losing weight rapidly?\n\n1. Yes\n2. No",
         "runyankole": "Empunu nehururuka ahanaaho\nn'obwiira?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego ni tye ka rwenyo peke oyot oyot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -485,7 +485,7 @@
       "prompt": {
         "english":    "Does the pig have a swollen belly —\nespecially young pigs?\n\n1. Yes\n2. No",
         "runyankole": "Eibondo ry'empunu rizimbire —\nnamunonga omu mpunu ento?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Opego ni iye tye ma okwot - tutwale lutino opego?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -494,7 +494,7 @@
       "prompt": {
         "english":    "Are worms visible in the pig's feces?\n\n1. Yes\n2. No",
         "runyankole": "Hariho obujoka oburikureebeka\nomumazi g'empunu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Kwidi tye ma nen ki icet opego?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -503,7 +503,7 @@
       "prompt": {
         "english":    "Are there diamond-shaped red patches\non the skin?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba birikutukura\nahamubiri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Tye bur ikum opego ma bedo calo mola dimon?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -512,7 +512,7 @@
       "prompt": {
         "english":    "Was the rabbit found dead with no\nprior signs of illness?\n\n1. Yes\n2. No",
         "runyankole": "Hariho akame akashangirwe kafiire\nkandi hatakabahoga obumanyiso bwoona\nbw'oburwaire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Ki nongo apuoyo ma oto labong lanyut me two?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -521,7 +521,7 @@
       "prompt": {
         "english":    "Was there bleeding from the nose\nor mouth?\n\n1. Yes\n2. No",
         "runyankole": "Hakabaho okujweera omunyindo\nnari omukanwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "No remo tye ka kati ki ume onyo doge?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -530,7 +530,7 @@
       "prompt": {
         "english":    "Did the rabbit show sudden extreme\nweakness or seizures?\n\n1. Yes\n2. No",
         "runyankole": "Akame kakaburwaho amaani ahonaaho\nomubwiira nari kajengyerera?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo ni onyutu goro onyo jake?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -539,7 +539,7 @@
       "prompt": {
         "english":    "Has the rabbit stopped eating and\ndrinking completely?\n\n1. Yes\n2. No",
         "runyankole": "Akame karekiraaho kimwe okurya\nhamwe n'okunywa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo ogiko cam ki mato pi weng?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -548,7 +548,7 @@
       "prompt": {
         "english":    "Are there watery or bloody droppings?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ekirukano ky'amaizi nari\neky'eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Tye pii pii onyo remo remo icet tee?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -557,7 +557,7 @@
       "prompt": {
         "english":    "Does the rabbit have a swollen\npot-belly?\n\n1. Yes\n2. No",
         "runyankole": "Akame kaine akabondo kahagire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo nit ye yiye okwot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -566,7 +566,7 @@
       "prompt": {
         "english":    "Is the rabbit hunched in a corner\nand not moving?\n\n1. Yes\n2. No",
         "runyankole": "Akame kakondogwize omunshonda\nkandi tikarikutambura?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo nit ye igul mo ma pe yee wot?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -575,7 +575,7 @@
       "prompt": {
         "english":    "Is there thick white or yellow discharge\nfrom the nose?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebihinzi birikukururuka\nbirikweera nari byakinekye birikuruga\nomunyindo?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Tye gin mo ma bedo calo aburu ma pek ma taa onyo yelo ma tye kati ki iume?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -584,7 +584,7 @@
       "prompt": {
         "english":    "Is the rabbit sneezing constantly?\n\n1. Yes\n2. No",
         "runyankole": "Hariho akame akarikwetsyamura\nkatarikuhumuramu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo tye ka jiro cawa weng?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -593,7 +593,7 @@
       "prompt": {
         "english":    "Are the front paws wet and matted?\n\n1. Yes\n2. No",
         "runyankole": "Ebigyere by'omumaisho bijubire\nnari obwoya bwabyo bukwatiine?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Yec apuoyo ma anyim tye ma dyak?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -602,7 +602,7 @@
       "prompt": {
         "english":    "Are the eyes watery or crusty?\n\n1. Yes\n2. No",
         "runyankole": "Amaisho garimu amaizi nari ebihonzi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Wange ni tye ma dyak?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -611,7 +611,7 @@
       "prompt": {
         "english":    "Is there puffy swelling around the\neyes, ears or nose?\n\n1. Yes\n2. No",
         "runyankole": "Hariho nkebizimba haihi n'amaisho,\namatu nari enyindo?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Wange tye ma okwot, ite kono onyo ume?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -620,7 +620,7 @@
       "prompt": {
         "english":    "Are there fluid-filled lumps under\nthe skin?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba birimu nkotwizi\naha mubiri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Piip ii mot ye ma opongo del kume oko?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -629,7 +629,7 @@
       "prompt": {
         "english":    "Is the rabbit constantly shaking its\nhead or scratching its ears?\n\n1. Yes\n2. No",
         "runyankole": "Akame nikahindura munonga omutwe\nnari nikeyagura omumatu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo cawa weng tye ka yengo wiye onyo tye ka ngwenyo ite?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -638,7 +638,7 @@
       "prompt": {
         "english":    "Is there brown crusty discharge inside\nthe ears?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebihinzi birikuksururuka\nbiry'omurangi yakitaka omunda omumatu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Tut tut ma tye ka bino ki iyite?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -647,7 +647,7 @@
       "prompt": {
         "english":    "Is the rabbit's head tilting to\none side?\n\n1. Yes\n2. No",
         "runyankole": "Omutwe gw'akame gugodamire\norubaju rumwe?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Wii apuoyo tye kule dok tung kucel?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -656,7 +656,7 @@
       "prompt": {
         "english":    "Does the rabbit's abdomen feel\nhard or bloated?\n\n1. Yes\n2. No",
         "runyankole": "Eibondo ryakame rigumire nari\nryaijwire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Pi iyi apuoyo tye ma tek ka igudu?\n\n1. Ee\n2. Ku"
       }
     },
 
@@ -665,7 +665,7 @@
       "prompt": {
         "english":    "Is the rabbit grinding its teeth?\n\n1. Yes\n2. No",
         "runyankole": "Akame nikeruma amaino?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi":     "Apuoyo tye ka mwodo lake?\n\n1. Ee\n2. Ku"
       }
     }
 
