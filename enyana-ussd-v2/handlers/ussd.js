@@ -159,6 +159,7 @@ function advanceStateSilent(session, input, farmerData) {
     case 'selectLanguage': {
       if      (input === '1') next.language = 'english';
       else if (input === '2') next.language = 'runyankole';
+      else if (input === '3') next.language = 'acholi';
       else return session;
       if (farmerData) {
         next.isReturningFarmer = true;
@@ -333,6 +334,7 @@ async function handleUSSD(req, res) {
       let language;
       if      (input === '1') language = 'english';
       else if (input === '2') language = 'runyankole';
+      else if (input === '3') language = 'acholi';
       else return reshowCurrent(res, 'selectLanguage', session.language, session);
 
       sessionUpdates.language = language;
