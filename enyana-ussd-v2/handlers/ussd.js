@@ -363,9 +363,11 @@ async function handleUSSD(req, res) {
     case 'enterName':
       if (!input || !input.trim()) return reshowCurrent(res, 'enterName', session.language, session);
       sessionUpdates.name = input.trim();
-      createFarmer(phoneNumber, input.trim(), session.community, session.language).catch(err =>
-        console.error('[ussd] Failed to create farmer:', err.message)
-      );
+      try {
+        await createFarmer(phoneNumber, input.trim(), session.community, session.language);
+      } catch (err) {
+        console.error('[ussd] Failed to create farmer:', err.message);
+      }
       nextState = 'mainMenu';
       break;
 
