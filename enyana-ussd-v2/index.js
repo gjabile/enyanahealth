@@ -91,7 +91,8 @@ app.get('/api/sessions', dashboardAuth, async (req, res) => {
 });
 
 app.get('/api/sessions/pending', dashboardAuth, async (req, res) => {
-  res.json(await getPendingSessions());
+  const sessions = await getPendingSessions();
+  res.json(sessions.filter(s => !s.isVet && !s.isTest));
 });
 
 app.get('/api/farmers', dashboardAuth, async (req, res) => {

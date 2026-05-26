@@ -795,6 +795,7 @@ async function deleteFarmer(fid) {
       delete farmerCache[fid];
       renderFarmerList();
       toast(`Deleted ${fname}`);
+      api('/api/sessions').then(r => r.ok && r.json()).then(data => { if (data) { allSessions = data; applySessFilters(); } }).catch(() => {});
     } else {
       toast('Failed to delete', true);
     }

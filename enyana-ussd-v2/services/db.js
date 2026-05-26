@@ -157,9 +157,25 @@ async function getPendingSessions() {
   if (!db) return [];
   try {
     const snap = await db.collection('sessions').where('status', '==', 'pending').get();
+    if (snap.empty) return [];
     const docs = snap.docs.map(d => serializeDoc(d.id, d.data()));
-    // Sort in memory to avoid requiring a composite Firestore index
-    return docs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+    // Fetch farmer flags for unique phone numbers so callers can filter vet/test
+    const phones = [...new Set(docs.map(d => d.phoneNumber).filter(Boolean))];
+    const farmerMap = {};
+    await Promise.all(phones.map(async phone => {
+      try {
+        const doc = await db.collection('farmers').doc(phone).get();
+        if (doc.exists) {
+          const fd = doc.data();
+          farmerMap[phone] = { isVet: fd.isVet || false, isTest: fd.isTest || false };
+        }
+      } catch {}
+    }));
+
+    return docs
+      .map(s => ({ ...s, isVet: (farmerMap[s.phoneNumber] || {}).isVet || false, isTest: (farmerMap[s.phoneNumber] || {}).isTest || false }))
+      .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
   } catch (err) {
     console.error('[db] getPendingSessions error:', err.message);
     return [];
