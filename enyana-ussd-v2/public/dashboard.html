@@ -571,7 +571,7 @@ async function refreshStats() {
 function formatCaseFile(s) {
   const labels = SYMPTOM_LABELS[s.animal] || {};
   if (s.problem) {
-    return `📋 Enyana Health — Vet Request\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nProblem: ${s.problem}`;
+    return `📋 Enyana Health — Direct Vet Request\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nProblem: ${s.problem}`;
   }
   const sympLines = Object.entries(s.symptoms||{})
     .map(([id,v]) => `${v?'✅':'❌'} ${labels[id]||id}`)
@@ -582,7 +582,7 @@ function formatCaseFile(s) {
       return `${d}: ${sc}`;
     })
     .join('\n');
-  return `${ANIMAL_EMOJI[s.animal]||'🐾'} Enyana Health Alert\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nRisk Level: ${s.highestRiskLevel||'–'}\n\nSymptoms reported:\n${sympLines||'None recorded'}\n\nDisease scores:\n${scoreLines||'None recorded'}`;
+  return `🐄 Enyana Health — Triage Alert\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nRisk Level: ${s.highestRiskLevel||'–'}\n\nSymptoms reported:\n${sympLines||'None recorded'}\n\nDisease scores:\n${scoreLines||'None recorded'}`;
 }
 
 function caseFileBlock(s, uid) {
