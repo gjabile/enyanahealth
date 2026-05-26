@@ -283,6 +283,7 @@ let filterCommunity         = 'all';
 let filterOutcome           = 'all';
 let filterHideVetSessions   = true;
 let filterHideTestSessions  = true;
+let pendingList       = [];
 let expandedProblems  = new Set();
 let expandedCaseFiles = new Set();
 let pendingDeleteFid  = null;
@@ -420,6 +421,7 @@ function renderPending(list) {
     el.innerHTML = `<div class="bg-white rounded-xl p-5 text-center shadow-sm text-sm text-gray-500"><i class="fas fa-circle-check text-green-500 mr-1"></i>✅ No pending referrals</div>`;
     return;
   }
+  pendingList = list;
   el.innerHTML = list.map(pendingCard).join('');
   el.onclick = e => {
     const btn = e.target.closest('[data-act]');
@@ -484,6 +486,16 @@ function pendingCard(s) {
       </button>
     </div>
     <div id="cf-block-${esc(s.id)}" class="hidden">${caseFileBlock(s, 'p-'+s.id)}</div>
+    <div class="flex gap-2 mt-2">
+      <button onclick="copyFarmerMsg('${esc(s.id)}')"
+        class="flex-1 border border-gray-200 text-gray-600 rounded-lg py-2 text-xs font-medium active:opacity-70">
+        📱 Copy Farmer Message
+      </button>
+      <button onclick="copyVetMsg('${esc(s.id)}')"
+        class="flex-1 border border-gray-200 text-gray-600 rounded-lg py-2 text-xs font-medium active:opacity-70">
+        🐄 Copy Vet Message
+      </button>
+    </div>
   </div>`;
 }
 
@@ -632,6 +644,26 @@ function fallbackCopy(text) {
   ta.select();
   try { document.execCommand('copy'); toast('Copied ✓'); } catch { toast('Copy failed', true); }
   document.body.removeChild(ta);
+}
+
+function copyFarmerMsg(sid) {
+  const s = pendingList.find(s => s.id === sid);
+  if (!s) return;
+  const animal = ANIMAL_NAME[s.animal] || s.animal || 'animal';
+  const text = `Hello ${s.name||'Farmer'}, this is Enyana Health.\nWe received a report that your ${animal} may need urgent attention.\n\nCan you confirm — do you still need help with your ${animal}?\n\nReply YES if you need a vet, or NO if you were just testing the system.\n\n- Enyana Health Team`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => toast('Farmer message copied ✓')).catch(() => { fallbackCopy(text); toast('Farmer message copied ✓'); });
+  } else { fallbackCopy(text); toast('Farmer message copied ✓'); }
+}
+
+function copyVetMsg(sid) {
+  const s = pendingList.find(s => s.id === sid);
+  if (!s) return;
+  const caseFile = formatCaseFile(s);
+  const text = `${caseFile}\n\nCan you follow up with this farmer within 24 hours? Please reply to confirm you will respond.\n\n- Enyana Health Team`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => toast('Vet message copied ✓')).catch(() => { fallbackCopy(text); toast('Vet message copied ✓'); });
+  } else { fallbackCopy(text); toast('Vet message copied ✓'); }
 }
 
 // ── Farmers ──────────────────────────────────────────────────────────────────
