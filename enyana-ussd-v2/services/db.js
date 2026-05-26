@@ -141,11 +141,13 @@ async function getAllSessions() {
       const fd = d.data();
       farmerMap[d.id] = { name: fd.name, isTest: fd.isTest || false, isVet: fd.isVet || false };
     });
-    return sessionsSnap.docs.map(d => {
-      const data = d.data();
-      const fm   = farmerMap[data.phoneNumber] || {};
-      return { ...serializeDoc(d.id, data), farmerName: fm.name || data.name || null, isTest: fm.isTest || false, isVet: fm.isVet || false };
-    });
+    return sessionsSnap.docs
+      .filter(d => farmerMap[d.data().phoneNumber] !== undefined)
+      .map(d => {
+        const data = d.data();
+        const fm   = farmerMap[data.phoneNumber];
+        return { ...serializeDoc(d.id, data), farmerName: fm.name || data.name || null, isTest: fm.isTest, isVet: fm.isVet };
+      });
   } catch (err) {
     console.error('[db] getAllSessions error:', err.message);
     return [];
