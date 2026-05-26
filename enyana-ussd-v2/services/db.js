@@ -139,12 +139,12 @@ async function getAllSessions() {
     const farmerMap = {};
     farmersSnap.docs.forEach(d => {
       const fd = d.data();
-      farmerMap[d.id] = { name: fd.name, isTest: fd.isTest || false };
+      farmerMap[d.id] = { name: fd.name, isTest: fd.isTest || false, isVet: fd.isVet || false };
     });
     return sessionsSnap.docs.map(d => {
       const data = d.data();
       const fm   = farmerMap[data.phoneNumber] || {};
-      return { ...serializeDoc(d.id, data), farmerName: fm.name || data.name || null, isTest: fm.isTest || false };
+      return { ...serializeDoc(d.id, data), farmerName: fm.name || data.name || null, isTest: fm.isTest || false, isVet: fm.isVet || false };
     });
   } catch (err) {
     console.error('[db] getAllSessions error:', err.message);
@@ -223,11 +223,21 @@ async function getStats() {
       db.collection('sessions').get(),
     ]);
 
-    const stats = { ...defaultStats(), totalFarmers: farmersSnap.size, totalSessions: sessionsSnap.size };
+    const excludedPhones = new Set();
+    let realFarmerCount = 0;
+    farmersSnap.docs.forEach(d => {
+      const fd = d.data();
+      if (fd.isVet || fd.isTest) excludedPhones.add(d.id);
+      else realFarmerCount++;
+    });
+
+    const stats = { ...defaultStats(), totalFarmers: realFarmerCount, totalSessions: 0 };
     const animalMap = { cattle: 'cow', poultry: 'poultry', pigs: 'pig', rabbit: 'rabbit' };
 
     sessionsSnap.docs.forEach(d => {
       const s = d.data();
+      if (excludedPhones.has(s.phoneNumber)) return;
+      stats.totalSessions++;
       if (s.status === 'pending')         stats.pendingReferrals++;
       if (s.highestRiskLevel === 'HIGH')  stats.highRiskSessions++;
 

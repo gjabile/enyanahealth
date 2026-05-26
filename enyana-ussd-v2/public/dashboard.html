@@ -103,6 +103,8 @@
           <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300" data-risk="HIGH">HIGH</button>
           <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300" data-risk="MEDIUM">MED</button>
           <button class="sess-risk-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300" data-risk="LOW">LOW</button>
+          <button id="show-vet-sess-btn" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300">✓ Show vets</button>
+          <button id="show-test-sess-btn" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300">🧪 Show tests</button>
         </div>
         <div class="flex gap-2">
           <select id="sess-community" class="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#2d6a2d]">
@@ -276,9 +278,11 @@ let expandedFarmer   = null;
 let prevPending      = 0;
 let pollingTimer     = null;
 let allSessions      = [];
-let filterRisk       = 'all';
-let filterCommunity  = 'all';
-let filterOutcome    = 'all';
+let filterRisk              = 'all';
+let filterCommunity         = 'all';
+let filterOutcome           = 'all';
+let filterHideVetSessions   = true;
+let filterHideTestSessions  = true;
 let expandedProblems  = new Set();
 let expandedCaseFiles = new Set();
 let pendingDeleteFid  = null;
@@ -485,6 +489,8 @@ function pendingCard(s) {
 
 function applySessFilters() {
   let list = allSessions;
+  if (filterHideVetSessions)  list = list.filter(s => !s.isVet);
+  if (filterHideTestSessions) list = list.filter(s => !s.isTest);
   if (filterRisk      !== 'all') list = list.filter(s => s.highestRiskLevel === filterRisk);
   if (filterCommunity !== 'all') list = list.filter(s => (s.community||'').toLowerCase() === filterCommunity);
   if (filterOutcome   !== 'all') list = list.filter(s => s.outcome === filterOutcome);
@@ -952,6 +958,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('sess-outcome').addEventListener('change', e => {
     filterOutcome = e.target.value;
+    applySessFilters();
+  });
+
+  document.getElementById('show-vet-sess-btn').addEventListener('click', () => {
+    filterHideVetSessions = !filterHideVetSessions;
+    const btn = document.getElementById('show-vet-sess-btn');
+    btn.className = !filterHideVetSessions
+      ? 'px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2d6a2d] text-white border border-[#2d6a2d]'
+      : 'px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300';
+    applySessFilters();
+  });
+
+  document.getElementById('show-test-sess-btn').addEventListener('click', () => {
+    filterHideTestSessions = !filterHideTestSessions;
+    const btn = document.getElementById('show-test-sess-btn');
+    btn.className = !filterHideTestSessions
+      ? 'px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-500 text-white border border-orange-500'
+      : 'px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300';
     applySessFilters();
   });
 
