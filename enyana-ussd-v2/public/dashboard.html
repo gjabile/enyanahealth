@@ -310,6 +310,11 @@ function outcomeLabel(o) {
   return o === 'vet_referral' ? 'Vet Referral' : o === 'advice' ? 'Advice' : (o || '–');
 }
 
+function sessionTypeLabel(s) {
+  if (s.outcome !== 'vet_referral') return outcomeLabel(s.outcome);
+  return (s.symptoms || s.diseaseScores) ? 'System Vet Referral' : 'Direct Vet Contact';
+}
+
 function spin() {
   return `<div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>`;
 }
@@ -441,6 +446,7 @@ function pendingCard(s) {
     <div class="flex flex-wrap gap-2 mb-3 ml-4">
       <span class="text-sm">${ANIMAL_EMOJI[s.animal]||'🐾'} ${esc(ANIMAL_NAME[s.animal]||s.animal)}</span>
       ${riskBadge(s.highestRiskLevel)}
+      <span class="text-xs text-gray-500">${esc(sessionTypeLabel(s))}</span>
     </div>
     ${positives.length ? `
       <div class="ml-4 mb-3">
@@ -518,7 +524,7 @@ function sessionRow(s) {
     </div>
     <div class="flex items-center gap-1.5 flex-wrap">
       ${riskBadge(s.highestRiskLevel)}
-      <span class="text-xs text-gray-500">${esc(outcomeLabel(s.outcome))}</span>
+      <span class="text-xs text-gray-500">${esc(sessionTypeLabel(s))}</span>
       ${statusBadge(s.status)}
       ${isReferral ? `<button data-expand-sid="${esc(s.id)}" data-cf="1" class="text-xs text-[#2d6a2d] font-medium underline">${cfExpanded?'Hide Case File':'Case File'}</button>` : ''}
     </div>
@@ -571,7 +577,7 @@ async function refreshStats() {
 function formatCaseFile(s) {
   const labels = SYMPTOM_LABELS[s.animal] || {};
   if (s.problem) {
-    return `📋 Enyana Health — Direct Vet Request\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nProblem: ${s.problem}`;
+    return `📋 Enyana Health — Direct Vet Contact\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nProblem: ${s.problem}`;
   }
   const sympLines = Object.entries(s.symptoms||{})
     .map(([id,v]) => `${v?'✅':'❌'} ${labels[id]||id}`)
@@ -582,7 +588,7 @@ function formatCaseFile(s) {
       return `${d}: ${sc}`;
     })
     .join('\n');
-  return `🐄 Enyana Health — Triage Alert\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nRisk Level: ${s.highestRiskLevel||'–'}\n\nSymptoms reported:\n${sympLines||'None recorded'}\n\nDisease scores:\n${scoreLines||'None recorded'}`;
+  return `🐄 Enyana Health — System Vet Referral\nFarmer: ${s.name||'Unknown'}\nPhone: ${s.phoneNumber||'–'}\nCommunity: ${s.community||'–'}\nAnimal: ${ANIMAL_NAME[s.animal]||s.animal||'–'}\nRisk Level: ${s.highestRiskLevel||'–'}\n\nSymptoms reported:\n${sympLines||'None recorded'}\n\nDisease scores:\n${scoreLines||'None recorded'}`;
 }
 
 function caseFileBlock(s, uid) {
