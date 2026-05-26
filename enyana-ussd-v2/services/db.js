@@ -174,7 +174,8 @@ async function getPendingSessions() {
     }));
 
     return docs
-      .map(s => ({ ...s, isVet: (farmerMap[s.phoneNumber] || {}).isVet || false, isTest: (farmerMap[s.phoneNumber] || {}).isTest || false }))
+      .filter(s => farmerMap[s.phoneNumber] !== undefined)
+      .map(s => ({ ...s, isVet: farmerMap[s.phoneNumber].isVet, isTest: farmerMap[s.phoneNumber].isTest }))
       .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
   } catch (err) {
     console.error('[db] getPendingSessions error:', err.message);
