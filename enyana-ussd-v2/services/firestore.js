@@ -236,6 +236,14 @@ async function saveVetContactSession(session, problem) {
       }),
       'saveVetContactSession'
     );
+    if (session.phoneNumber) {
+      const admin = require('firebase-admin');
+      db.collection('farmers').doc(session.phoneNumber).update({
+        lastSeen:      now,
+        totalSessions: admin.firestore.FieldValue.increment(1),
+      }).catch(err => console.error(`[firestore] saveVetContactSession farmer update failed: ${err.message}`));
+    }
+
     console.log(`[firestore] Vet contact session saved for ${session.phoneNumber}`);
     return true;
   } catch (err) {

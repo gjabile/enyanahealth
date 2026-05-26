@@ -87,28 +87,21 @@ app.get('/', (req, res) => {
 // ---------------------------------------------------------------------------
 
 app.get('/api/sessions', dashboardAuth, async (req, res) => {
-  const sessions = await getAllSessions();
-  res.json(sessions.map(s => ({ ...s, phoneNumber: maskPhone(s.phoneNumber) })));
+  res.json(await getAllSessions());
 });
 
 app.get('/api/sessions/pending', dashboardAuth, async (req, res) => {
-  const sessions = await getPendingSessions();
-  res.json(sessions.map(s => ({ ...s, phoneNumber: maskPhone(s.phoneNumber) })));
+  res.json(await getPendingSessions());
 });
 
 app.get('/api/farmers', dashboardAuth, async (req, res) => {
-  const farmers = await getAllFarmers();
-  res.json(farmers.map(f => ({ ...f, phoneNumber: maskPhone(f.phoneNumber) })));
+  res.json(await getAllFarmers());
 });
 
 app.get('/api/farmers/:phoneNumber', dashboardAuth, async (req, res) => {
   const farmer = await getFarmerById(req.params.phoneNumber);
   if (!farmer) return res.status(404).json({ error: 'Not found' });
-  res.json({
-    ...farmer,
-    phoneNumber: maskPhone(farmer.phoneNumber),
-    sessions: (farmer.sessions || []).map(s => ({ ...s, phoneNumber: maskPhone(s.phoneNumber) })),
-  });
+  res.json(farmer);
 });
 
 app.get('/api/vets', dashboardAuth, async (req, res) => {
@@ -141,6 +134,19 @@ app.patch('/api/sessions/:sessionId', dashboardAuth, async (req, res) => {
   }
 
   res.json({ success: true });
+});
+
+app.patch('/api/farmers/:phoneNumber/vet', dashboardAuth, async (req, res) => {
+  try {
+    const phone  = req.params.phoneNumber;
+    const isVet  = Boolean(req.body.isVet);
+    const db = require('firebase-admin').app().firestore();
+    await db.collection('farmers').doc(phone).update({ isVet });
+    res.json({ updated: true });
+  } catch (err) {
+    console.error('[api] Error updating vet status:', err.message);
+    res.status(500).json({ error: 'Could not update vet status' });
+  }
 });
 
 app.delete('/api/farmers/:phoneNumber', dashboardAuth, async (req, res) => {

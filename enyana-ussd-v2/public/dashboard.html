@@ -129,6 +129,12 @@
     <!-- FARMERS ------------------------------------------------------------ -->
     <div id="tab-farmers" class="tab-panel hidden">
       <div class="p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <button id="vets-only-btn"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300">
+            <i class="fas fa-stethoscope mr-1"></i>Vets only
+          </button>
+        </div>
         <div class="relative mb-4">
           <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
           <input type="search" id="farmer-search" placeholder="Search name or phone…"
@@ -269,8 +275,10 @@ let allSessions      = [];
 let filterRisk       = 'all';
 let filterCommunity  = 'all';
 let filterOutcome    = 'all';
-let expandedProblems = new Set();
-let pendingDeleteFid = null;
+let expandedProblems  = new Set();
+let expandedCaseFiles = new Set();
+let pendingDeleteFid  = null;
+let filterVetsOnly    = false;
 
 // ── Utilities ────────────────────────────────────────────────────────────────
 
@@ -408,6 +416,9 @@ function renderPending(list) {
       forwardSession(sid, sel ? sel.value : '');
     } else if (btn.dataset.act === 'res') {
       resolveSession(sid);
+    } else if (btn.dataset.act === 'cf') {
+      const block = document.getElementById(`cf-block-${sid}`);
+      if (block) block.classList.toggle('hidden');
     }
   };
 }
@@ -452,7 +463,12 @@ function pendingCard(s) {
         class="border border-gray-200 text-gray-600 rounded-lg py-2 text-xs font-medium active:opacity-70">
         <i class="fas fa-check mr-1"></i>Mark Resolved
       </button>
+      <button data-act="cf" data-sid="${esc(s.id)}"
+        class="border border-gray-200 text-gray-600 rounded-lg py-2 text-xs font-medium active:opacity-70">
+        <i class="fas fa-file-alt mr-1"></i>View Case File
+      </button>
     </div>
+    <div id="cf-block-${esc(s.id)}" class="hidden">${caseFileBlock(s, 'p-'+s.id)}</div>
   </div>`;
 }
 
@@ -475,16 +491,23 @@ function renderSessions(list) {
     const btn = e.target.closest('[data-expand-sid]');
     if (!btn) return;
     const sid = btn.dataset.expandSid;
-    if (expandedProblems.has(sid)) expandedProblems.delete(sid);
-    else expandedProblems.add(sid);
+    if (btn.dataset.cf) {
+      if (expandedCaseFiles.has(sid)) expandedCaseFiles.delete(sid);
+      else expandedCaseFiles.add(sid);
+    } else {
+      if (expandedProblems.has(sid)) expandedProblems.delete(sid);
+      else expandedProblems.add(sid);
+    }
     applySessFilters();
   };
 }
 
 function sessionRow(s) {
-  const hasProb   = s.problem && s.problem.trim();
-  const expanded  = expandedProblems.has(s.id);
+  const hasProb    = s.problem && s.problem.trim();
+  const expanded   = expandedProblems.has(s.id);
+  const cfExpanded = expandedCaseFiles.has(s.id);
   const needsTrunc = hasProb && s.problem.length > 50;
+  const isReferral = s.outcome === 'vet_referral';
   return `
   <div class="px-4 py-3">
     <div class="flex items-center gap-2 flex-wrap mb-1">
@@ -497,6 +520,7 @@ function sessionRow(s) {
       ${riskBadge(s.highestRiskLevel)}
       <span class="text-xs text-gray-500">${esc(outcomeLabel(s.outcome))}</span>
       ${statusBadge(s.status)}
+      ${isReferral ? `<button data-expand-sid="${esc(s.id)}" data-cf="1" class="text-xs text-[#2d6a2d] font-medium underline">${cfExpanded?'Hide Case File':'Case File'}</button>` : ''}
     </div>
     ${hasProb ? `<div class="mt-1.5">
       ${expanded
@@ -506,6 +530,7 @@ function sessionRow(s) {
            ${needsTrunc ? `<button data-expand-sid="${esc(s.id)}" class="text-xs text-[#2d6a2d] font-medium ml-1 underline">View more</button>` : ''}`
       }
     </div>` : ''}
+    ${isReferral && cfExpanded ? caseFileBlock(s, 's-'+s.id) : ''}
   </div>`;
 }
 
@@ -599,10 +624,39 @@ async function loadFarmers() {
     const r = await api('/api/farmers');
     if (!r.ok) throw 0;
     allFarmers = await r.json();
-    filteredFarmers = [...allFarmers];
     expandedFarmer = null;
-    renderFarmerList();
+    applyFarmerFilters();
   } catch { document.getElementById('farmer-list').innerHTML = errMsg(); }
+}
+
+function applyFarmerFilters() {
+  const q = (document.getElementById('farmer-search')?.value || '').trim().toLowerCase();
+  filteredFarmers = allFarmers.filter(f => {
+    if (filterVetsOnly && !f.isVet) return false;
+    if (q && !(f.name||'').toLowerCase().includes(q) && !(f.phoneNumber||'').toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderFarmerList();
+}
+
+async function markAsVet(fid, isVet) {
+  try {
+    const r = await api(`/api/farmers/${encodeURIComponent(fid)}/vet`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isVet }),
+    });
+    if (r.ok) {
+      [allFarmers, filteredFarmers].forEach(arr => {
+        const f = arr.find(f => f.id === fid);
+        if (f) f.isVet = isVet;
+      });
+      delete farmerCache[fid];
+      applyFarmerFilters();
+      toast(isVet ? 'Marked as Vet ✓' : 'Vet status removed');
+    } else {
+      toast('Failed to update', true);
+    }
+  } catch { toast('Network error', true); }
 }
 
 function renderFarmerList() {
@@ -615,6 +669,8 @@ function renderFarmerList() {
   el.onclick = e => {
     const delBtn = e.target.closest('[data-del-fid]');
     if (delBtn) { e.stopPropagation(); confirmDeleteFarmer(delBtn.dataset.delFid, delBtn.dataset.delFname); return; }
+    const vetBtn = e.target.closest('[data-vet-fid]');
+    if (vetBtn) { e.stopPropagation(); markAsVet(vetBtn.dataset.vetFid, vetBtn.dataset.vetAction === 'true'); return; }
     const card = e.target.closest('[data-fid]');
     if (!card || e.target.closest('.sh-inner')) return;
     toggleFarmer(card.dataset.fid);
@@ -632,6 +688,12 @@ function farmerCard(f) {
         <p class="text-xs text-gray-400 mt-1">${f.totalSessions??0} session${f.totalSessions!==1?'s':''} · Last call: ${timeAgo(f.lastSeen)}</p>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
+        ${f.isVet ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">✓ Vet</span>` : ''}
+        <button data-vet-fid="${esc(f.id)}" data-vet-action="${!f.isVet}"
+          class="${f.isVet ? 'text-gray-500 border-gray-200' : 'text-[#2d6a2d] border-[#2d6a2d]'} border rounded-lg px-2.5 py-1.5 text-xs font-medium active:opacity-70"
+          style="min-height:44px">
+          ${f.isVet ? 'Remove Vet' : 'Mark as Vet'}
+        </button>
         <button data-del-fid="${esc(f.id)}" data-del-fname="${esc(f.name||'Unknown')}"
           class="text-red-500 border border-red-200 rounded-lg px-2.5 py-1.5 text-xs font-medium active:opacity-70"
           style="min-height:44px">
@@ -831,12 +893,15 @@ document.addEventListener('DOMContentLoaded', () => {
     applySessFilters();
   });
 
-  document.getElementById('farmer-search').addEventListener('input', e => {
-    const q = e.target.value.trim().toLowerCase();
-    filteredFarmers = q
-      ? allFarmers.filter(f => (f.name||'').toLowerCase().includes(q) || (f.phoneNumber||'').toLowerCase().includes(q))
-      : [...allFarmers];
-    renderFarmerList();
+  document.getElementById('farmer-search').addEventListener('input', applyFarmerFilters);
+
+  document.getElementById('vets-only-btn').addEventListener('click', () => {
+    filterVetsOnly = !filterVetsOnly;
+    const btn = document.getElementById('vets-only-btn');
+    btn.className = filterVetsOnly
+      ? 'px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2d6a2d] text-white border border-[#2d6a2d]'
+      : 'px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300';
+    applyFarmerFilters();
   });
 
   if (authPw) {
