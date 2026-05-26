@@ -134,6 +134,10 @@
             class="px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300">
             <i class="fas fa-stethoscope mr-1"></i>Show vets
           </button>
+          <button id="hide-tests-btn"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-500 text-white border border-orange-500">
+            🧪 Hide test accounts
+          </button>
         </div>
         <div class="relative mb-4">
           <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
@@ -279,6 +283,7 @@ let expandedProblems  = new Set();
 let expandedCaseFiles = new Set();
 let pendingDeleteFid  = null;
 let filterVetsOnly    = false;
+let filterHideTests   = true;
 
 // ── Utilities ────────────────────────────────────────────────────────────────
 
@@ -526,6 +531,7 @@ function sessionRow(s) {
       ${riskBadge(s.highestRiskLevel)}
       <span class="text-xs text-gray-500">${esc(sessionTypeLabel(s))}</span>
       ${statusBadge(s.status)}
+      ${s.isTest ? `<span class="text-xs text-orange-500" title="Test account">🧪</span>` : ''}
       ${isReferral ? `<button data-expand-sid="${esc(s.id)}" data-cf="1" class="text-xs text-[#2d6a2d] font-medium underline">${cfExpanded?'Hide Case File':'Case File'}</button>` : ''}
     </div>
     ${hasProb ? `<div class="mt-1.5">
@@ -639,6 +645,7 @@ function applyFarmerFilters() {
   const q = (document.getElementById('farmer-search')?.value || '').trim().toLowerCase();
   filteredFarmers = allFarmers.filter(f => {
     if (filterVetsOnly ? !f.isVet : f.isVet) return false;
+    if (filterHideTests && f.isTest) return false;
     if (q && !(f.name||'').toLowerCase().includes(q) && !(f.phoneNumber||'').toLowerCase().includes(q)) return false;
     return true;
   });
@@ -665,6 +672,26 @@ async function markAsVet(fid, isVet) {
   } catch { toast('Network error', true); }
 }
 
+async function markAsTest(fid, isTest) {
+  try {
+    const r = await api(`/api/farmers/${encodeURIComponent(fid)}/test`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isTest }),
+    });
+    if (r.ok) {
+      [allFarmers, filteredFarmers].forEach(arr => {
+        const f = arr.find(f => f.id === fid);
+        if (f) f.isTest = isTest;
+      });
+      delete farmerCache[fid];
+      applyFarmerFilters();
+      toast(isTest ? 'Marked as Test ✓' : 'Test mark removed');
+    } else {
+      toast('Failed to update', true);
+    }
+  } catch { toast('Network error', true); }
+}
+
 function renderFarmerList() {
   const el = document.getElementById('farmer-list');
   if (!filteredFarmers.length) {
@@ -677,6 +704,8 @@ function renderFarmerList() {
     if (delBtn) { e.stopPropagation(); confirmDeleteFarmer(delBtn.dataset.delFid, delBtn.dataset.delFname); return; }
     const vetBtn = e.target.closest('[data-vet-fid]');
     if (vetBtn) { e.stopPropagation(); markAsVet(vetBtn.dataset.vetFid, vetBtn.dataset.vetAction === 'true'); return; }
+    const testBtn = e.target.closest('[data-test-fid]');
+    if (testBtn) { e.stopPropagation(); markAsTest(testBtn.dataset.testFid, testBtn.dataset.testAction === 'true'); return; }
     const card = e.target.closest('[data-fid]');
     if (!card || e.target.closest('.sh-inner')) return;
     toggleFarmer(card.dataset.fid);
@@ -699,6 +728,12 @@ function farmerCard(f) {
           class="${f.isVet ? 'text-gray-500 border-gray-200' : 'text-[#2d6a2d] border-[#2d6a2d]'} border rounded-lg px-2.5 py-1.5 text-xs font-medium active:opacity-70"
           style="min-height:44px">
           ${f.isVet ? 'Remove Vet' : 'Mark as Vet'}
+        </button>
+        ${f.isTest ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">🧪 Test</span>` : ''}
+        <button data-test-fid="${esc(f.id)}" data-test-action="${!f.isTest}"
+          class="${f.isTest ? 'text-gray-500 border-gray-200' : 'text-orange-600 border-orange-300'} border rounded-lg px-2.5 py-1.5 text-xs font-medium active:opacity-70"
+          style="min-height:44px">
+          ${f.isTest ? 'Remove Test' : 'Mark as Test'}
         </button>
         <button data-del-fid="${esc(f.id)}" data-del-fname="${esc(f.name||'Unknown')}"
           class="text-red-500 border border-red-200 rounded-lg px-2.5 py-1.5 text-xs font-medium active:opacity-70"
@@ -927,6 +962,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('vets-only-btn');
     btn.className = filterVetsOnly
       ? 'px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2d6a2d] text-white border border-[#2d6a2d]'
+      : 'px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300';
+    applyFarmerFilters();
+  });
+
+  document.getElementById('hide-tests-btn').addEventListener('click', () => {
+    filterHideTests = !filterHideTests;
+    const btn = document.getElementById('hide-tests-btn');
+    btn.className = filterHideTests
+      ? 'px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-500 text-white border border-orange-500'
       : 'px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-300';
     applyFarmerFilters();
   });

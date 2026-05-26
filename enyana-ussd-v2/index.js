@@ -149,6 +149,19 @@ app.patch('/api/farmers/:phoneNumber/vet', dashboardAuth, async (req, res) => {
   }
 });
 
+app.patch('/api/farmers/:phoneNumber/test', dashboardAuth, async (req, res) => {
+  try {
+    const phone  = req.params.phoneNumber;
+    const isTest = Boolean(req.body.isTest);
+    const db = require('firebase-admin').app().firestore();
+    await db.collection('farmers').doc(phone).update({ isTest });
+    res.json({ updated: true });
+  } catch (err) {
+    console.error('[api] Error updating test status:', err.message);
+    res.status(500).json({ error: 'Could not update test status' });
+  }
+});
+
 app.delete('/api/farmers/:phoneNumber', dashboardAuth, async (req, res) => {
   try {
     const phone = req.params.phoneNumber;

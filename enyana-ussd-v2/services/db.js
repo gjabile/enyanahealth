@@ -136,11 +136,15 @@ async function getAllSessions() {
       db.collection('sessions').orderBy('timestamp', 'desc').get(),
       db.collection('farmers').get(),
     ]);
-    const farmerNames = {};
-    farmersSnap.docs.forEach(d => { farmerNames[d.id] = d.data().name; });
+    const farmerMap = {};
+    farmersSnap.docs.forEach(d => {
+      const fd = d.data();
+      farmerMap[d.id] = { name: fd.name, isTest: fd.isTest || false };
+    });
     return sessionsSnap.docs.map(d => {
       const data = d.data();
-      return { ...serializeDoc(d.id, data), farmerName: farmerNames[data.phoneNumber] || data.name || null };
+      const fm   = farmerMap[data.phoneNumber] || {};
+      return { ...serializeDoc(d.id, data), farmerName: fm.name || data.name || null, isTest: fm.isTest || false };
     });
   } catch (err) {
     console.error('[db] getAllSessions error:', err.message);
