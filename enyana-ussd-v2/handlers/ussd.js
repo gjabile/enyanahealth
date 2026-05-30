@@ -120,10 +120,14 @@ function sendStateResponse(res, stateName, session) {
 // Used to replay inputs[0..n-2] and rebuild the current session state from
 // the full text string AT sends on every request. No Firestore writes, no
 // alerts. farmerData is the pre-fetched getFarmer() result (null = new farmer).
+// totalPriorInputs is the full length of the priorInputs array being replayed —
+// used to distinguish a returning farmer's fresh dial (1 input) from a new
+// farmer mid-registration (3 inputs), so the selectLanguage shortcut only fires
+// when it is safe to do so.
 //
 // Returns the new session, or the original session if the input is invalid.
 // ---------------------------------------------------------------------------
-function advanceStateSilent(session, input, farmerData) {
+function advanceStateSilent(session, input, farmerData, totalPriorInputs) {
   const currentState = session.state;
 
   // Triage question states  {animal}_q{N}
@@ -161,7 +165,13 @@ function advanceStateSilent(session, input, farmerData) {
       else if (input === '2') next.language = 'runyankole';
       else if (input === '3') next.language = 'acholi';
       else return session;
-      if (farmerData) {
+      // Only take the returning-farmer shortcut when the farmer completed
+      // registration in a prior session. A prior-session returning farmer
+      // dials fresh and has exactly 1 prior input (their language choice).
+      // A new farmer mid-registration has 3 prior inputs (language +
+      // community + name), so farmerData being non-null here means the
+      // record was just written this session — treat them as new.
+      if (farmerData && totalPriorInputs === 1) {
         next.isReturningFarmer = true;
         next.name              = farmerData.name;
         next.community         = farmerData.community;
@@ -245,8 +255,9 @@ function advanceStateSilent(session, input, farmerData) {
 // ---------------------------------------------------------------------------
 function deriveSession(priorInputs, phoneNumber, farmerData) {
   let session = makeEmptySession(phoneNumber);
+  const total = priorInputs.length;
   for (const input of priorInputs) {
-    session = advanceStateSilent(session, input, farmerData);
+    session = advanceStateSilent(session, input, farmerData, total);
   }
   return session;
 }
