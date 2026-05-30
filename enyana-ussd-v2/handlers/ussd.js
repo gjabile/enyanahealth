@@ -166,12 +166,12 @@ function advanceStateSilent(session, input, farmerData, totalPriorInputs) {
       else if (input === '3') next.language = 'acholi';
       else return session;
       // Only take the returning-farmer shortcut when the farmer completed
-      // registration in a prior session. A prior-session returning farmer
-      // dials fresh and has exactly 1 prior input (their language choice).
-      // A new farmer mid-registration has 3 prior inputs (language +
-      // community + name), so farmerData being non-null here means the
-      // record was just written this session — treat them as new.
-      if (farmerData && totalPriorInputs === 1) {
+      // registration in a prior session. A new farmer's record is created
+      // at the enterName step (their 4th request), so farmerData can only
+      // be non-null for a genuinely returning farmer when totalPriorInputs
+      // is 1 or 2. At 3+ the new-farmer case becomes possible (language +
+      // community + name already replayed), so block the shortcut there.
+      if (farmerData && totalPriorInputs <= 2) {
         next.isReturningFarmer = true;
         next.name              = farmerData.name;
         next.community         = farmerData.community;
