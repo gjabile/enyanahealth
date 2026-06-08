@@ -45,6 +45,11 @@ try {
   process.exit(1);
 }
 
+// Tracks AT sessionIds that started registration in this process lifetime.
+// Prevents the returning-farmer shortcut from firing mid-registration when
+// Firestore already has a record for this phone (created at enterName).
+const registrationSessions = new Set();
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -120,14 +125,10 @@ function sendStateResponse(res, stateName, session) {
 // Used to replay inputs[0..n-2] and rebuild the current session state from
 // the full text string AT sends on every request. No Firestore writes, no
 // alerts. farmerData is the pre-fetched getFarmer() result (null = new farmer).
-// totalPriorInputs is the full length of the priorInputs array being replayed —
-// used to distinguish a returning farmer's fresh dial (1 input) from a new
-// farmer mid-registration (3 inputs), so the selectLanguage shortcut only fires
-// when it is safe to do so.
 //
 // Returns the new session, or the original session if the input is invalid.
 // ---------------------------------------------------------------------------
-function advanceStateSilent(session, input, farmerData, totalPriorInputs) {
+function advanceStateSilent(session, input, farmerData) {
   const currentState = session.state;
 
   // Triage question states  {animal}_q{N}
@@ -165,13 +166,7 @@ function advanceStateSilent(session, input, farmerData, totalPriorInputs) {
       else if (input === '2') next.language = 'runyankole';
       else if (input === '3') next.language = 'acholi';
       else return session;
-      // Only take the returning-farmer shortcut when the farmer completed
-      // registration in a prior session. A new farmer's record is created
-      // at the enterName step (their 4th request), so farmerData can only
-      // be non-null for a genuinely returning farmer when totalPriorInputs
-      // is 1 or 2. At 3+ the new-farmer case becomes possible (language +
-      // community + name already replayed), so block the shortcut there.
-      if (farmerData && totalPriorInputs <= 2) {
+      if (farmerData) {
         next.isReturningFarmer = true;
         next.name              = farmerData.name;
         next.community         = farmerData.community;
@@ -255,9 +250,8 @@ function advanceStateSilent(session, input, farmerData, totalPriorInputs) {
 // ---------------------------------------------------------------------------
 function deriveSession(priorInputs, phoneNumber, farmerData) {
   let session = makeEmptySession(phoneNumber);
-  const total = priorInputs.length;
   for (const input of priorInputs) {
-    session = advanceStateSilent(session, input, farmerData, total);
+    session = advanceStateSilent(session, input, farmerData);
   }
   return session;
 }
@@ -267,7 +261,7 @@ function deriveSession(priorInputs, phoneNumber, farmerData) {
 // ---------------------------------------------------------------------------
 
 async function handleUSSD(req, res) {
-  const { phoneNumber, text = '' } = req.body;
+  const { sessionId, phoneNumber, text = '' } = req.body;
 
   const inputs = text ? text.split('*') : [];
 
@@ -284,8 +278,14 @@ async function handleUSSD(req, res) {
     console.error('[ussd] getFarmer failed:', err.message);
   }
 
+  // If this AT session started registration (createFarmer was called), suppress
+  // the returning-farmer shortcut during replay so mid-registration inputs are
+  // not mistakenly treated as a returning farmer's fresh dial.
+  const isRegistrationSession = registrationSessions.has(sessionId);
+  const replayFarmerData      = isRegistrationSession ? null : farmerData;
+
   // Replay all prior inputs to determine the current session state
-  const session      = deriveSession(inputs.slice(0, -1), phoneNumber, farmerData);
+  const session      = deriveSession(inputs.slice(0, -1), phoneNumber, replayFarmerData);
   const currentState = session.state;
   const input        = inputs[inputs.length - 1];
 
@@ -378,6 +378,7 @@ async function handleUSSD(req, res) {
       sessionUpdates.name = input.trim();
       try {
         await createFarmer(phoneNumber, input.trim(), session.community, session.language);
+        registrationSessions.add(sessionId);
       } catch (err) {
         console.error('[ussd] Failed to create farmer:', err.message);
       }
