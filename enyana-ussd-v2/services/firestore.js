@@ -252,6 +252,28 @@ async function saveVetContactSession(session, problem) {
   }
 }
 
+/**
+ * Save a feedback submission to Firestore.
+ * Fire-and-forget — never throws, farmer always sees the thank-you screen.
+ *
+ * @param {object} session - Current session object
+ * @param {string} message - Farmer's feedback text
+ */
+function saveFeedback(session, message) {
+  if (!db) {
+    console.warn('[firestore] Firestore disabled — skipping feedback save');
+    return;
+  }
+  db.collection('feedback').add({
+    phoneNumber: session.phoneNumber,
+    name:        session.name,
+    community:   session.community,
+    language:    session.language,
+    message:     message,
+    timestamp:   new Date(),
+  }).catch(err => console.error(`[firestore] Feedback save failed: ${err.message}`));
+}
+
 // Initialize on require
 initializeFirebase();
 
@@ -261,4 +283,5 @@ module.exports = {
   updateReturningFarmer,
   saveTriageSession,
   saveVetContactSession,
+  saveFeedback,
 };

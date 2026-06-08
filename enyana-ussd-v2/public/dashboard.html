@@ -152,6 +152,27 @@
       </div>
     </div>
 
+    <!-- FEEDBACK ----------------------------------------------------------- -->
+    <div id="tab-feedback" class="tab-panel hidden">
+      <div class="p-4">
+        <div class="flex items-center justify-between mb-3">
+          <div id="feedback-count" class="text-sm text-gray-500"></div>
+          <select id="feedback-community" class="border border-gray-300 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#2d6a2d]">
+            <option value="all">All communities</option>
+            <option value="nyakayojo">Nyakayojo</option>
+            <option value="gulu">Gulu</option>
+            <option value="nwoya">Nwoya</option>
+            <option value="amuru">Amuru</option>
+            <option value="pader">Pader</option>
+            <option value="kitgum">Kitgum</option>
+          </select>
+        </div>
+        <div id="feedback-list">
+          <div class="flex justify-center py-10"><i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i></div>
+        </div>
+      </div>
+    </div>
+
     <!-- VETS --------------------------------------------------------------- -->
     <div id="tab-vets" class="tab-panel hidden">
       <div class="p-4">
@@ -197,6 +218,10 @@
       <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-gray-400" data-tab="vets">
         <i class="fas fa-stethoscope text-lg"></i>
         <span class="text-xs">Vets</span>
+      </button>
+      <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-gray-400" data-tab="feedback">
+        <i class="fas fa-comment-dots text-lg"></i>
+        <span class="text-xs">Feedback</span>
       </button>
     </div>
   </nav>
@@ -903,6 +928,47 @@ async function submitAddVet() {
   finally { btn.disabled=false; btn.textContent='Add Vet'; }
 }
 
+// ── Feedback ─────────────────────────────────────────────────────────────────
+
+let allFeedback         = [];
+let filterFeedbackComm  = 'all';
+
+async function loadFeedback() {
+  document.getElementById('feedback-list').innerHTML = spin();
+  document.getElementById('feedback-count').textContent = '';
+  try {
+    const r = await api('/api/feedback');
+    if (!r.ok) throw 0;
+    allFeedback = await r.json();
+    applyFeedbackFilters();
+  } catch { document.getElementById('feedback-list').innerHTML = errMsg(); }
+}
+
+function applyFeedbackFilters() {
+  let list = allFeedback;
+  if (filterFeedbackComm !== 'all') list = list.filter(f => (f.community || '').toLowerCase() === filterFeedbackComm);
+  renderFeedbackList(list);
+}
+
+function renderFeedbackList(list) {
+  const countEl = document.getElementById('feedback-count');
+  countEl.textContent = `${allFeedback.length} total`;
+  const el = document.getElementById('feedback-list');
+  if (!list || !list.length) {
+    el.innerHTML = `<div class="bg-white rounded-xl p-6 text-center shadow-sm text-sm text-gray-400">No feedback yet</div>`;
+    return;
+  }
+  el.innerHTML = list.map(f => `
+  <div class="bg-white rounded-xl shadow-sm p-4 mb-3 fade-in">
+    <div class="flex items-center justify-between gap-2 mb-1">
+      <span class="font-semibold text-sm">${esc(f.name || 'Unknown')}</span>
+      <span class="text-xs text-gray-400">${timeAgo(f.timestamp)}</span>
+    </div>
+    <p class="text-xs text-gray-500 mb-2">${esc(f.community || '–')} · ${esc(f.language || '–')}</p>
+    <p class="text-sm text-gray-800 italic">"${esc(f.message || '')}"</p>
+  </div>`).join('');
+}
+
 // ── Navigation ────────────────────────────────────────────────────────────────
 
 function switchTab(tab) {
@@ -915,8 +981,9 @@ function switchTab(tab) {
     btn.classList.add(active ? 'text-[#2d6a2d]' : 'text-gray-400');
   });
   if (tab === 'overview') loadOverview();
-  else if (tab === 'farmers') loadFarmers();
-  else if (tab === 'vets')    loadVets();
+  else if (tab === 'farmers')  loadFarmers();
+  else if (tab === 'vets')     loadVets();
+  else if (tab === 'feedback') loadFeedback();
 }
 
 // ── Polling ───────────────────────────────────────────────────────────────────
@@ -1013,6 +1080,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('farmer-search').addEventListener('input', applyFarmerFilters);
+  document.getElementById('feedback-community').addEventListener('change', e => {
+    filterFeedbackComm = e.target.value;
+    applyFeedbackFilters();
+  });
 
   document.getElementById('vets-only-btn').addEventListener('click', () => {
     filterVetsOnly = !filterVetsOnly;

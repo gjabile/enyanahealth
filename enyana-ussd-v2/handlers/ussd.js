@@ -26,7 +26,7 @@ const path = require('path');
 const fs   = require('fs');
 
 const { sendVetAlert, sendTriageVetAlert }                                  = require('../services/notify');
-const { getFarmer, createFarmer, updateReturningFarmer, saveTriageSession } = require('../services/firestore');
+const { getFarmer, createFarmer, updateReturningFarmer, saveTriageSession, saveFeedback } = require('../services/firestore');
 const TRIAGE_CONFIG                                                         = require('../config/triage');
 
 // ---------------------------------------------------------------------------
@@ -197,7 +197,15 @@ function advanceStateSilent(session, input, farmerData) {
       if      (input === '1') next.state = 'selectAnimal';
       else if (input === '2') next.state = 'informationMenu';
       else if (input === '3') next.state = 'selectVetAnimal';
+      else if (input === '4') next.state = 'giveFeedback';
       else return session;
+      return next;
+
+    case 'giveFeedback':
+      if (input && input.trim()) {
+        next.feedback = input.trim();
+        next.state    = 'feedbackConfirm';
+      }
       return next;
 
     case 'informationMenu':
@@ -389,7 +397,14 @@ async function handleUSSD(req, res) {
       if      (input === '1') nextState = 'selectAnimal';
       else if (input === '2') nextState = 'informationMenu';
       else if (input === '3') nextState = 'selectVetAnimal';
+      else if (input === '4') nextState = 'giveFeedback';
       else return reshowCurrent(res, 'mainMenu', session.language, session);
+      break;
+
+    case 'giveFeedback':
+      if (!input || !input.trim()) return reshowCurrent(res, 'giveFeedback', session.language, session);
+      saveFeedback(session, input.trim());
+      nextState = 'feedbackConfirm';
       break;
 
     case 'informationMenu':

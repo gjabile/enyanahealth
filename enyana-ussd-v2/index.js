@@ -192,6 +192,29 @@ app.get('/api/stats', dashboardAuth, async (req, res) => {
   res.json(await getStats());
 });
 
+app.get('/api/feedback', dashboardAuth, async (req, res) => {
+  try {
+    const db   = require('firebase-admin').app().firestore();
+    const snap = await db.collection('feedback').orderBy('timestamp', 'desc').get();
+    const docs = snap.docs.map(doc => {
+      const d = doc.data();
+      return {
+        id:          doc.id,
+        phoneNumber: d.phoneNumber,
+        name:        d.name,
+        community:   d.community,
+        language:    d.language,
+        message:     d.message,
+        timestamp:   d.timestamp ? d.timestamp.toDate().toISOString() : null,
+      };
+    });
+    res.json(docs);
+  } catch (err) {
+    console.error('[api] Error fetching feedback:', err.message);
+    res.status(500).json({ error: 'Could not fetch feedback' });
+  }
+});
+
 // ---------------------------------------------------------------------------
 // Dashboard UI
 // ---------------------------------------------------------------------------

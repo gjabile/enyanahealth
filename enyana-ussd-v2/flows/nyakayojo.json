@@ -34,14 +34,14 @@
     "mainMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "Welcome, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet",
-        "runyankole": "Twakwakira ahaby'Amagara by'Enyana, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo",
-        "acholi":     "Wanongo, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari"
+        "english":    "Welcome, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet\n4. Give feedback",
+        "runyankole": "Twakwakira ahaby'Amagara by'Enyana, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo\n4. Tuhire ebirowoozo byaawe",
+        "acholi":     "Wanongo, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari\n4. Mii tam mamegi"
       },
       "promptReturning": {
-        "english":    "Welcome back, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet",
-        "runyankole": "Kurikayo, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo",
-        "acholi":     "Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari"
+        "english":    "Welcome back, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet\n4. Give feedback",
+        "runyankole": "Kurikayo, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo\n4. Tuhire ebirowoozo byaawe",
+        "acholi":     "Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari\n4. Mii tam mamegi"
       }
     },
 
@@ -663,6 +663,24 @@
         "english":    "Is the rabbit grinding its teeth?\n\n1. Yes\n2. No",
         "runyankole": "Akame nikeruma amaino?\n\n1. Ego\n2. Ngaha",
         "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+      }
+    },
+
+    "giveFeedback": {
+      "isEnd": false,
+      "prompt": {
+        "english":    "What do you think of Enyana Health?\nShare anything — good or bad.",
+        "runyankole": "Orowooze ota ku Enyana Health?\nTuhwire ekintu kyona — ekirungi nari ekibi.",
+        "acholi":     "Itamo ango ikum Enyana Health?\nNyut gin mo weng — maber onyo marac."
+      }
+    },
+
+    "feedbackConfirm": {
+      "isEnd": true,
+      "prompt": {
+        "english":    "Thank you! Your feedback helps us\nimprove Enyana Health.",
+        "runyankole": "Webale! Ebirowoozo byaawe bituyamba\nokwongera Enyana Health.",
+        "acholi":     "Apwoyo! Tam mamegi konyo wa\nkwero Enyana Health."
       }
     }
 
