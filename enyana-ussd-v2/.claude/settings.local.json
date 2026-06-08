@@ -4,7 +4,15 @@
       "Bash(npx kill-port *)",
       "Bash(curl -s http://localhost:3000/)",
       "Bash(npm run *)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\(JSON.stringify\\(p.scripts, null, 2\\)\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(npm test *)",
+      "Bash(git commit -m ' *)",
+      "Bash(node -e \"console.log\\(process.version\\)\")",
+      "Bash(node -e \"const t = require\\('node:test'\\); console.log\\(Object.keys\\(t\\)\\)\")",
+      "Bash(node -e \"const n = require\\('./services/notify'\\); console.log\\(Object.keys\\(n\\)\\)\")",
+      "Bash(not exist *)"
     ]
   }
 }
