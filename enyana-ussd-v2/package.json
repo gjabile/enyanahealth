@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "node --test tests/ussd.test.js"
+    "test": "node --test tests/ussd.test.js tests/analytics.test.js"
   },
   "dependencies": {
     "dotenv": "^16.0.3",

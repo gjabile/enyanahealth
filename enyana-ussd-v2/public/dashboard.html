@@ -202,6 +202,84 @@
       </div>
     </div>
 
+    <!-- ANALYTICS ---------------------------------------------------------- -->
+    <div id="tab-analytics" class="tab-panel hidden">
+
+      <!-- Loading -->
+      <div id="analytics-spinner" class="flex justify-center py-16">
+        <i class="fas fa-circle-notch fa-spin text-[#2d6a2d] text-xl"></i>
+      </div>
+
+      <!-- Empty state -->
+      <div id="analytics-empty" class="hidden p-10 text-center text-sm text-gray-400">
+        Not enough data yet
+      </div>
+
+      <!-- Content -->
+      <div id="analytics-content" class="hidden p-4 space-y-4 pb-6">
+
+        <!-- Row 1: Big numbers -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="text-2xl font-bold text-[#2d6a2d]" id="an-calls-today">–</div>
+            <div class="text-xs text-gray-500 mt-1">Calls Today</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="text-2xl font-bold" id="an-total-calls">–</div>
+            <div class="text-xs text-gray-500 mt-1">Total Calls</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="text-2xl font-bold" id="an-farmers">–</div>
+            <div class="text-xs text-gray-500 mt-1">Unique Farmers</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="text-2xl font-bold text-red-600" id="an-referral-rate">–</div>
+            <div class="text-xs text-gray-500 mt-1">Vet Referral Rate</div>
+          </div>
+        </div>
+
+        <!-- Row 2: Calls per day -->
+        <div class="bg-white rounded-xl shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Calls Per Day — Last 30 Days</h2>
+            <select id="an-community" class="border border-gray-300 rounded-lg px-2 py-1 text-xs bg-white focus:outline-none focus:border-[#2d6a2d]">
+              <option value="all">All Communities</option>
+              <option value="nyakayojo">Nyakayojo</option>
+              <option value="gulu">Gulu</option>
+              <option value="nwoya">Nwoya</option>
+              <option value="amuru">Amuru</option>
+              <option value="pader">Pader</option>
+              <option value="kitgum">Kitgum</option>
+            </select>
+          </div>
+          <div id="an-line-chart"></div>
+        </div>
+
+        <!-- Row 3: Animal bars + Outcome donut -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">By Animal</h2>
+            <div id="an-animal-bars"></div>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Outcome</h2>
+            <div id="an-donut"></div>
+          </div>
+        </div>
+
+        <!-- Row 4: Risk + Status breakdowns -->
+        <div class="bg-white rounded-xl shadow-sm p-4">
+          <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Risk Level</h2>
+          <div class="flex gap-2" id="an-risk-breakdown"></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-4">
+          <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Status</h2>
+          <div class="flex gap-2" id="an-status-breakdown"></div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 
   <!-- Bottom nav -->
@@ -222,6 +300,10 @@
       <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-gray-400" data-tab="feedback">
         <i class="fas fa-comment-dots text-lg"></i>
         <span class="text-xs">Feedback</span>
+      </button>
+      <button class="nav-btn flex-1 flex flex-col items-center py-3 gap-0.5 text-gray-400" data-tab="analytics">
+        <i class="fas fa-chart-line text-lg"></i>
+        <span class="text-xs">Analytics</span>
       </button>
     </div>
   </nav>
@@ -969,6 +1051,225 @@ function renderFeedbackList(list) {
   </div>`).join('');
 }
 
+// ── Analytics — pure aggregation (mirrors public/analytics.js) ───────────────
+
+function groupByDate(sessions) {
+  const counts = {};
+  for (const s of sessions) {
+    if (!s.timestamp) continue;
+    const date = new Date(s.timestamp).toISOString().slice(0, 10);
+    counts[date] = (counts[date] || 0) + 1;
+  }
+  return counts;
+}
+
+function animalCount(sessions) {
+  const counts = { cattle: 0, poultry: 0, pigs: 0, rabbit: 0 };
+  for (const s of sessions) {
+    const a = (s.animal || '').toLowerCase();
+    if      (a === 'cattle' || a === 'cow') counts.cattle++;
+    else if (a === 'poultry')               counts.poultry++;
+    else if (a === 'pigs')                  counts.pigs++;
+    else if (a === 'rabbit')                counts.rabbit++;
+  }
+  return counts;
+}
+
+function vetReferralRate(sessions) {
+  if (!sessions.length) return 0;
+  const n = sessions.filter(s => s.outcome === 'vet_referral').length;
+  return Math.round((n / sessions.length) * 100);
+}
+
+function callsToday(sessions) {
+  const today = new Date().toISOString().slice(0, 10);
+  return sessions.filter(s =>
+    s.timestamp && new Date(s.timestamp).toISOString().slice(0, 10) === today
+  ).length;
+}
+
+// ── Analytics — chart renderers ───────────────────────────────────────────────
+
+let analyticsSessions      = [];
+let analyticsLineCommunity = 'all';
+
+function renderLineChart(sessions, community) {
+  const filtered = community === 'all'
+    ? sessions
+    : sessions.filter(s => (s.community || '').toLowerCase() === community);
+
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() - i);
+    days.push(d.toISOString().slice(0, 10));
+  }
+
+  const byDate = groupByDate(filtered);
+  const values = days.map(d => byDate[d] || 0);
+  const maxVal = Math.max(...values, 1);
+
+  const PL = 26, PT = 8, W = 288, H = 72, TOTAL_H = 108;
+  const xOf = i  => PL + (i / 29) * W;
+  const yOf = v  => PT + (1 - v / maxVal) * H;
+
+  const pts    = values.map((v, i) => `${xOf(i).toFixed(1)},${yOf(v).toFixed(1)}`).join(' ');
+  const areaD  = [`M ${xOf(0).toFixed(1)},${(PT + H).toFixed(1)}`,
+                  ...values.map((v, i) => `L ${xOf(i).toFixed(1)},${yOf(v).toFixed(1)}`),
+                  `L ${xOf(29).toFixed(1)},${(PT + H).toFixed(1)} Z`].join(' ');
+
+  const labelIdxs = [0, 7, 14, 21, 29];
+  const xLabels = labelIdxs.map(i =>
+    `<text x="${xOf(i).toFixed(1)}" y="${(PT + H + 17).toFixed(1)}" text-anchor="middle" font-size="8" fill="#9ca3af">${days[i].slice(5)}</text>`
+  ).join('');
+
+  const gridLines = [0, 0.5, 1].map(f => {
+    const y = yOf(maxVal * f).toFixed(1);
+    return `<line x1="${PL}" y1="${y}" x2="${PL + W}" y2="${y}" stroke="#f3f4f6" stroke-width="1"/>
+            <text x="${PL - 3}" y="${(parseFloat(y) + 3).toFixed(1)}" text-anchor="end" font-size="8" fill="#d1d5db">${Math.round(maxVal * f)}</text>`;
+  }).join('');
+
+  const dots = values.map((v, i) =>
+    `<circle cx="${xOf(i).toFixed(1)}" cy="${yOf(v).toFixed(1)}" r="2.2" fill="#2d6a2d" fill-opacity="0.75"/>`
+  ).join('');
+
+  return `<svg viewBox="0 0 ${PL + W + 4} ${TOTAL_H}" class="w-full">
+    ${gridLines}
+    <path d="${areaD}" fill="#2d6a2d" fill-opacity="0.07"/>
+    <polyline points="${pts}" fill="none" stroke="#2d6a2d" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}
+    ${xLabels}
+    <line x1="${PL}" y1="${PT}" x2="${PL}" y2="${PT + H}" stroke="#e5e7eb" stroke-width="0.5"/>
+    <line x1="${PL}" y1="${(PT + H).toFixed(1)}" x2="${PL + W}" y2="${(PT + H).toFixed(1)}" stroke="#e5e7eb" stroke-width="0.5"/>
+  </svg>`;
+}
+
+function renderAnimalBars(sessions) {
+  const counts = animalCount(sessions);
+  const maxC   = Math.max(...Object.values(counts), 1);
+  return [
+    { key: 'cattle',  label: '🐄 Cattle / Cow', color: '#2d6a2d' },
+    { key: 'poultry', label: '🐓 Poultry',       color: '#15803d' },
+    { key: 'pigs',    label: '🐷 Pigs',           color: '#4d7c0f' },
+    { key: 'rabbit',  label: '🐇 Rabbit',         color: '#92400e' },
+  ].map(({ key, label, color }) => {
+    const pct = ((counts[key] / maxC) * 100).toFixed(1);
+    return `<div class="mb-3">
+      <div class="flex justify-between items-baseline mb-1">
+        <span class="text-xs text-gray-700">${label}</span>
+        <span class="text-xs font-bold text-gray-900">${counts[key]}</span>
+      </div>
+      <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+        <div class="h-full rounded-full" style="width:${pct}%;background:${color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDonut(sessions) {
+  const advice   = sessions.filter(s => s.outcome === 'advice').length;
+  const referral = sessions.filter(s => s.outcome === 'vet_referral').length;
+  const total    = advice + referral;
+
+  if (!total) return `<p class="text-xs text-gray-400 text-center py-4">No data</p>`;
+
+  const cx = 60, cy = 55, r = 38;
+  const circ      = 2 * Math.PI * r;
+  const adviceArc = (advice   / total) * circ;
+  const refArc    = (referral / total) * circ;
+  const adviceDeg = (advice   / total) * 360;
+
+  const seg1 = advice > 0
+    ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#2d6a2d" stroke-width="20"
+        stroke-dasharray="${adviceArc.toFixed(2)} ${circ.toFixed(2)}"
+        transform="rotate(-90 ${cx} ${cy})"/>`
+    : '';
+  const seg2 = referral > 0
+    ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#dc2626" stroke-width="20"
+        stroke-dasharray="${refArc.toFixed(2)} ${circ.toFixed(2)}"
+        transform="rotate(${(-90 + adviceDeg).toFixed(2)} ${cx} ${cy})"/>`
+    : '';
+
+  return `<svg viewBox="0 0 120 110" class="w-full max-w-[130px] mx-auto block">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f3f4f6" stroke-width="20"/>
+    ${seg1}${seg2}
+    <text x="${cx}" y="${cy - 5}" text-anchor="middle" font-size="14" font-weight="bold" fill="#111827">${total}</text>
+    <text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="8" fill="#6b7280">sessions</text>
+  </svg>
+  <div class="flex justify-center gap-3 mt-1">
+    <span class="flex items-center gap-1 text-xs text-gray-600"><span class="inline-block w-2 h-2 rounded-full bg-[#2d6a2d]"></span>Advice ${advice}</span>
+    <span class="flex items-center gap-1 text-xs text-gray-600"><span class="inline-block w-2 h-2 rounded-full bg-red-600"></span>Referral ${referral}</span>
+  </div>`;
+}
+
+function renderAnalytics(stats, sessions) {
+  // Row 1
+  document.getElementById('an-calls-today').textContent   = callsToday(sessions);
+  document.getElementById('an-total-calls').textContent   = stats ? stats.totalSessions : sessions.length;
+  document.getElementById('an-farmers').textContent       = stats ? stats.totalFarmers  : '–';
+  document.getElementById('an-referral-rate').textContent = vetReferralRate(sessions) + '%';
+
+  // Row 2
+  document.getElementById('an-line-chart').innerHTML = renderLineChart(sessions, analyticsLineCommunity);
+
+  // Row 3
+  document.getElementById('an-animal-bars').innerHTML = renderAnimalBars(sessions);
+  document.getElementById('an-donut').innerHTML       = renderDonut(sessions);
+
+  // Row 4
+  const riskC   = { HIGH: 0, MEDIUM: 0, LOW: 0 };
+  const statusC = { pending: 0, forwarded: 0, resolved: 0 };
+  for (const s of sessions) {
+    if (riskC[s.highestRiskLevel]   !== undefined) riskC[s.highestRiskLevel]++;
+    if (statusC[s.status]           !== undefined) statusC[s.status]++;
+  }
+
+  const riskCol   = { HIGH:'text-red-700 bg-red-50', MEDIUM:'text-yellow-700 bg-yellow-50', LOW:'text-green-700 bg-green-50' };
+  const statusCol = { pending:'text-yellow-700 bg-yellow-50', forwarded:'text-blue-700 bg-blue-50', resolved:'text-green-700 bg-green-50' };
+
+  document.getElementById('an-risk-breakdown').innerHTML = Object.entries(riskC).map(([k, v]) =>
+    `<div class="flex-1 text-center py-2 rounded-lg ${riskCol[k]}">
+      <div class="text-lg font-bold">${v}</div>
+      <div class="text-xs uppercase tracking-wide">${k}</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('an-status-breakdown').innerHTML = Object.entries(statusC).map(([k, v]) =>
+    `<div class="flex-1 text-center py-2 rounded-lg ${statusCol[k]}">
+      <div class="text-lg font-bold">${v}</div>
+      <div class="text-xs capitalize">${k}</div>
+    </div>`
+  ).join('');
+}
+
+async function loadAnalytics() {
+  document.getElementById('analytics-spinner').classList.remove('hidden');
+  document.getElementById('analytics-empty').classList.add('hidden');
+  document.getElementById('analytics-content').classList.add('hidden');
+
+  try {
+    const [sR, rR] = await Promise.all([
+      api('/api/stats').catch(() => null),
+      api('/api/sessions').catch(() => null),
+    ]);
+    const stats    = sR && sR.ok ? await sR.json() : null;
+    const sessions = rR && rR.ok ? await rR.json() : [];
+    analyticsSessions = sessions;
+
+    document.getElementById('analytics-spinner').classList.add('hidden');
+    if (sessions.length < 5) {
+      document.getElementById('analytics-empty').classList.remove('hidden');
+      return;
+    }
+    renderAnalytics(stats, sessions);
+    document.getElementById('analytics-content').classList.remove('hidden');
+  } catch {
+    document.getElementById('analytics-spinner').classList.add('hidden');
+    document.getElementById('analytics-content').innerHTML = errMsg();
+    document.getElementById('analytics-content').classList.remove('hidden');
+  }
+}
+
 // ── Navigation ────────────────────────────────────────────────────────────────
 
 function switchTab(tab) {
@@ -981,9 +1282,10 @@ function switchTab(tab) {
     btn.classList.add(active ? 'text-[#2d6a2d]' : 'text-gray-400');
   });
   if (tab === 'overview') loadOverview();
-  else if (tab === 'farmers')  loadFarmers();
-  else if (tab === 'vets')     loadVets();
-  else if (tab === 'feedback') loadFeedback();
+  else if (tab === 'farmers')   loadFarmers();
+  else if (tab === 'vets')      loadVets();
+  else if (tab === 'feedback')  loadFeedback();
+  else if (tab === 'analytics') loadAnalytics();
 }
 
 // ── Polling ───────────────────────────────────────────────────────────────────
@@ -1026,9 +1328,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-btn').addEventListener('click', tryLogin);
   document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key==='Enter') tryLogin(); });
   document.getElementById('refresh-btn').addEventListener('click', () => {
-    if      (activeTab==='overview') loadOverview();
-    else if (activeTab==='farmers')  loadFarmers();
-    else if (activeTab==='vets')     loadVets();
+    if      (activeTab==='overview')   loadOverview();
+    else if (activeTab==='farmers')    loadFarmers();
+    else if (activeTab==='vets')       loadVets();
+    else if (activeTab==='feedback')   loadFeedback();
+    else if (activeTab==='analytics')  loadAnalytics();
   });
   document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
   document.getElementById('add-vet-btn').addEventListener('click', submitAddVet);
@@ -1083,6 +1387,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('feedback-community').addEventListener('change', e => {
     filterFeedbackComm = e.target.value;
     applyFeedbackFilters();
+  });
+
+  document.getElementById('an-community').addEventListener('change', e => {
+    analyticsLineCommunity = e.target.value;
+    document.getElementById('an-line-chart').innerHTML = renderLineChart(analyticsSessions, analyticsLineCommunity);
   });
 
   document.getElementById('vets-only-btn').addEventListener('click', () => {
