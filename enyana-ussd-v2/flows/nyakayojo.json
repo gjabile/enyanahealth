@@ -72,14 +72,6 @@
         "acholi": "[ACH] Apwoyo. Daktari omako lok mamegi,\nbicwiny boti weng."
       }
     },
-    "informationMenu": {
-      "isEnd": false,
-      "prompt": {
-        "english": "This feature is coming soon.\n\n1. Back to main menu",
-        "runyankole": "Eki kiija mangu.\n\n1. Kanda 1 okigarukayo omu menu enkuru",
-        "acholi": "[PLACEHOLDER]\n\n1. [PLACEHOLDER]"
-      }
-    },
     "selectAnimal": {
       "isEnd": false,
       "prompt": {

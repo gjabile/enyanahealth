@@ -147,3 +147,84 @@ describe('Feedback flow', () => {
     }
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Animal care info flow
+// All tests use a returning farmer so that input '1' goes straight to mainMenu.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('Animal care info flow', () => {
+  beforeEach(() => {
+    feedbackCalls = [];
+    getFarmerImpl = async () => ({ name: 'Alice', community: 'nyakayojo' });
+  });
+
+  test('1. mainMenu option 2 → infoSelectAnimal', async () => {
+    const res = makeRes();
+    await handleUSSD(makeReq('1*2'), res);
+    assert.match(res._sent, /^CON /, 'should be CON');
+    assert.ok(
+      res._sent.includes('Which animal do you need help with'),
+      `should show infoSelectAnimal prompt, got: ${res._sent}`
+    );
+  });
+
+  test('2. infoSelectAnimal option 1 → infoSelectTopic_cattle', async () => {
+    const res = makeRes();
+    await handleUSSD(makeReq('1*2*1'), res);
+    assert.match(res._sent, /^CON /, 'should be CON');
+    assert.ok(
+      res._sent.includes('Cattle'),
+      `should show cattle topic menu, got: ${res._sent}`
+    );
+  });
+
+  test('3. infoSelectTopic_cattle option 1 → info_cattle_nutrition_1', async () => {
+    const res = makeRes();
+    await handleUSSD(makeReq('1*2*1*1'), res);
+    assert.match(res._sent, /^CON /, 'should be CON');
+    assert.ok(
+      res._sent.includes('Cattle Feed (1/5)'),
+      `should show nutrition page 1, got: ${res._sent}`
+    );
+  });
+
+  test('4. info_cattle_nutrition_1 option 1 → info_cattle_nutrition_2 (Next)', async () => {
+    const res = makeRes();
+    await handleUSSD(makeReq('1*2*1*1*1'), res);
+    assert.match(res._sent, /^CON /, 'should be CON');
+    assert.ok(
+      res._sent.includes('Cattle Feed (2/5)'),
+      `should show nutrition page 2, got: ${res._sent}`
+    );
+  });
+
+  test('5. info_cattle_nutrition_1 option 2 → infoSelectTopic_cattle (Back)', async () => {
+    const res = makeRes();
+    await handleUSSD(makeReq('1*2*1*1*2'), res);
+    assert.match(res._sent, /^CON /, 'should be CON');
+    assert.ok(
+      res._sent.includes('Cattle'),
+      `should return to cattle topic menu, got: ${res._sent}`
+    );
+    assert.ok(
+      !res._sent.includes('Cattle Feed'),
+      `should NOT show a feed slide, got: ${res._sent}`
+    );
+  });
+
+  test('6. info_cattle_nutrition_5 option 1 → infoSelectTopic_cattle (Final screen back)', async () => {
+    // Navigate: language(1) → infoSelectAnimal(2) → cattle(1) → nutrition(1) → Next×4 → final Back(1)
+    const res = makeRes();
+    await handleUSSD(makeReq('1*2*1*1*1*1*1*1*1'), res);
+    assert.match(res._sent, /^CON /, 'final slide back should return to CON topic menu');
+    assert.ok(
+      res._sent.includes('Cattle'),
+      `should return to cattle topic menu, got: ${res._sent}`
+    );
+    assert.ok(
+      !res._sent.includes('Cattle Feed'),
+      `should NOT show a feed slide, got: ${res._sent}`
+    );
+  });
+});

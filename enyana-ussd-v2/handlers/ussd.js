@@ -91,6 +91,19 @@ function calculateScores(animal, symptoms) {
   return { diseaseScores, highestRiskLevel };
 }
 
+function getParentTopicSelector(base) {
+  const animal = base.split('_')[1];
+  return {
+    cattle:  'infoSelectTopic_cattle',
+    poultry: 'infoSelectTopic_poultry',
+    pigs:    'infoSelectTopic_pigs',
+    rabbit:  'infoSelectTopic_rabbit',
+    goat:    'infoSelectTopic_goat',
+    sheep:   'infoSelectTopic_sheep',
+    dog:     'infoSelectTopic_dog',
+  }[animal] || 'infoSelectAnimal';
+}
+
 function makeEmptySession(phoneNumber) {
   return {
     state:             'selectLanguage',
@@ -130,6 +143,21 @@ function sendStateResponse(res, stateName, session) {
 // ---------------------------------------------------------------------------
 function advanceStateSilent(session, input, farmerData) {
   const currentState = session.state;
+
+  // Info care content — paginated navigation
+  const infoMatch = currentState.match(/^(info_.+)_(\d+)$/);
+  if (infoMatch) {
+    const base      = infoMatch[1];
+    const num       = parseInt(infoMatch[2], 10);
+    const stateData = flow.states[currentState];
+    if (stateData && stateData.isEnd) {
+      if (input === '1') return { ...session, state: getParentTopicSelector(base) };
+      return session;
+    }
+    if      (input === '1') return { ...session, state: `${base}_${num + 1}` };
+    else if (input === '2') return { ...session, state: getParentTopicSelector(base) };
+    return session;
+  }
 
   // Triage question states  {animal}_q{N}
   const triageMatch = currentState.match(/^(cattle|poultry|pigs|rabbit)_q(\d+)$/);
@@ -195,7 +223,7 @@ function advanceStateSilent(session, input, farmerData) {
 
     case 'mainMenu':
       if      (input === '1') next.state = 'selectAnimal';
-      else if (input === '2') next.state = 'informationMenu';
+      else if (input === '2') next.state = 'infoSelectAnimal';
       else if (input === '3') next.state = 'selectVetAnimal';
       else if (input === '4') next.state = 'giveFeedback';
       else return session;
@@ -208,9 +236,69 @@ function advanceStateSilent(session, input, farmerData) {
       }
       return next;
 
-    case 'informationMenu':
-      if (input !== '1') return session;
-      next.state = 'mainMenu';
+    case 'infoSelectAnimal':
+      if      (input === '1') next.state = 'infoSelectTopic_cattle';
+      else if (input === '2') next.state = 'infoSelectTopic_poultry';
+      else if (input === '3') next.state = 'infoSelectTopic_pigs';
+      else if (input === '4') next.state = 'infoSelectTopic_rabbit';
+      else if (input === '5') next.state = 'infoSelectTopic_goat';
+      else if (input === '6') next.state = 'infoSelectTopic_sheep';
+      else if (input === '7') next.state = 'infoSelectTopic_dog';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_cattle':
+      if      (input === '1') next.state = 'info_cattle_nutrition_1';
+      else if (input === '2') next.state = 'info_cattle_prevention_1';
+      else if (input === '3') next.state = 'info_cattle_ticks_1';
+      else if (input === '4') next.state = 'info_cattle_breeding_1';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_poultry':
+      if      (input === '1') next.state = 'info_poultry_nutrition_1';
+      else if (input === '2') next.state = 'info_poultry_care_1';
+      else if (input === '3') next.state = 'info_poultry_breeds_1';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_pigs':
+      if      (input === '1') next.state = 'info_pigs_nutrition_1';
+      else if (input === '2') next.state = 'info_pigs_prevention_1';
+      else if (input === '3') next.state = 'info_pigs_breeding_1';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_rabbit':
+      if      (input === '1') next.state = 'info_rabbit_nutrition_1';
+      else if (input === '2') next.state = 'info_rabbit_prevention_1';
+      else if (input === '3') next.state = 'info_rabbit_breeds_1';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_goat':
+      if      (input === '1') next.state = 'info_goat_nutrition_1';
+      else if (input === '2') next.state = 'info_goat_care_1';
+      else if (input === '3') next.state = 'info_goat_prevention_1';
+      else if (input === '4') next.state = 'info_goat_ticks_1';
+      else if (input === '5') next.state = 'info_goat_breeding_1';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_sheep':
+      if      (input === '1') next.state = 'info_sheep_nutrition_1';
+      else if (input === '2') next.state = 'info_sheep_care_1';
+      else if (input === '3') next.state = 'info_sheep_prevention_1';
+      else if (input === '4') next.state = 'info_sheep_ticks_1';
+      else if (input === '5') next.state = 'info_sheep_breeding_1';
+      else return session;
+      return next;
+
+    case 'infoSelectTopic_dog':
+      if      (input === '1') next.state = 'info_dog_care_1';
+      else if (input === '2') next.state = 'info_dog_prevention_1';
+      else if (input === '3') next.state = 'info_dog_breeding_1';
+      else return session;
       return next;
 
     case 'selectAnimal':
@@ -342,6 +430,23 @@ async function handleUSSD(req, res) {
   }
 
   // -------------------------------------------------------------------------
+  // INFO CARE CONTENT — generic paginated navigation (no side effects)
+  // -------------------------------------------------------------------------
+  const infoMatch = currentState.match(/^(info_.+)_(\d+)$/);
+  if (infoMatch) {
+    const base      = infoMatch[1];
+    const num       = parseInt(infoMatch[2], 10);
+    const stateData = flow.states[currentState];
+    if (stateData && stateData.isEnd) {
+      if (input === '1') return sendStateResponse(res, getParentTopicSelector(base), session);
+      return reshowCurrent(res, currentState, session.language, session);
+    }
+    if      (input === '1') return sendStateResponse(res, `${base}_${num + 1}`, session);
+    else if (input === '2') return sendStateResponse(res, getParentTopicSelector(base), session);
+    return reshowCurrent(res, currentState, session.language, session);
+  }
+
+  // -------------------------------------------------------------------------
   // NAMED STATE SWITCH (with side effects)
   // -------------------------------------------------------------------------
   let nextState      = null;
@@ -395,7 +500,7 @@ async function handleUSSD(req, res) {
 
     case 'mainMenu':
       if      (input === '1') nextState = 'selectAnimal';
-      else if (input === '2') nextState = 'informationMenu';
+      else if (input === '2') nextState = 'infoSelectAnimal';
       else if (input === '3') nextState = 'selectVetAnimal';
       else if (input === '4') nextState = 'giveFeedback';
       else return reshowCurrent(res, 'mainMenu', session.language, session);
@@ -407,9 +512,69 @@ async function handleUSSD(req, res) {
       nextState = 'feedbackConfirm';
       break;
 
-    case 'informationMenu':
-      if (input !== '1') return reshowCurrent(res, 'informationMenu', session.language, session);
-      nextState = 'mainMenu';
+    case 'infoSelectAnimal':
+      if      (input === '1') nextState = 'infoSelectTopic_cattle';
+      else if (input === '2') nextState = 'infoSelectTopic_poultry';
+      else if (input === '3') nextState = 'infoSelectTopic_pigs';
+      else if (input === '4') nextState = 'infoSelectTopic_rabbit';
+      else if (input === '5') nextState = 'infoSelectTopic_goat';
+      else if (input === '6') nextState = 'infoSelectTopic_sheep';
+      else if (input === '7') nextState = 'infoSelectTopic_dog';
+      else return reshowCurrent(res, 'infoSelectAnimal', session.language, session);
+      break;
+
+    case 'infoSelectTopic_cattle':
+      if      (input === '1') nextState = 'info_cattle_nutrition_1';
+      else if (input === '2') nextState = 'info_cattle_prevention_1';
+      else if (input === '3') nextState = 'info_cattle_ticks_1';
+      else if (input === '4') nextState = 'info_cattle_breeding_1';
+      else return reshowCurrent(res, 'infoSelectTopic_cattle', session.language, session);
+      break;
+
+    case 'infoSelectTopic_poultry':
+      if      (input === '1') nextState = 'info_poultry_nutrition_1';
+      else if (input === '2') nextState = 'info_poultry_care_1';
+      else if (input === '3') nextState = 'info_poultry_breeds_1';
+      else return reshowCurrent(res, 'infoSelectTopic_poultry', session.language, session);
+      break;
+
+    case 'infoSelectTopic_pigs':
+      if      (input === '1') nextState = 'info_pigs_nutrition_1';
+      else if (input === '2') nextState = 'info_pigs_prevention_1';
+      else if (input === '3') nextState = 'info_pigs_breeding_1';
+      else return reshowCurrent(res, 'infoSelectTopic_pigs', session.language, session);
+      break;
+
+    case 'infoSelectTopic_rabbit':
+      if      (input === '1') nextState = 'info_rabbit_nutrition_1';
+      else if (input === '2') nextState = 'info_rabbit_prevention_1';
+      else if (input === '3') nextState = 'info_rabbit_breeds_1';
+      else return reshowCurrent(res, 'infoSelectTopic_rabbit', session.language, session);
+      break;
+
+    case 'infoSelectTopic_goat':
+      if      (input === '1') nextState = 'info_goat_nutrition_1';
+      else if (input === '2') nextState = 'info_goat_care_1';
+      else if (input === '3') nextState = 'info_goat_prevention_1';
+      else if (input === '4') nextState = 'info_goat_ticks_1';
+      else if (input === '5') nextState = 'info_goat_breeding_1';
+      else return reshowCurrent(res, 'infoSelectTopic_goat', session.language, session);
+      break;
+
+    case 'infoSelectTopic_sheep':
+      if      (input === '1') nextState = 'info_sheep_nutrition_1';
+      else if (input === '2') nextState = 'info_sheep_care_1';
+      else if (input === '3') nextState = 'info_sheep_prevention_1';
+      else if (input === '4') nextState = 'info_sheep_ticks_1';
+      else if (input === '5') nextState = 'info_sheep_breeding_1';
+      else return reshowCurrent(res, 'infoSelectTopic_sheep', session.language, session);
+      break;
+
+    case 'infoSelectTopic_dog':
+      if      (input === '1') nextState = 'info_dog_care_1';
+      else if (input === '2') nextState = 'info_dog_prevention_1';
+      else if (input === '3') nextState = 'info_dog_breeding_1';
+      else return reshowCurrent(res, 'infoSelectTopic_dog', session.language, session);
       break;
 
     case 'selectAnimal':
