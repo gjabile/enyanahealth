@@ -708,7 +708,7 @@
       }
     },
     "info_cattle_nutrition_5": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Cattle Feed (5/5)\nDairy Meal Concentrates boost milk\nyield. Leguminous Shrubs add protein\n— especially good for lactating cows.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -756,7 +756,7 @@
       }
     },
     "info_cattle_prevention_6": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Cattle Prevention (6/6)\nDispose of contaminated materials\nsafely — birth fluids, dead calves.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -780,7 +780,7 @@
       }
     },
     "info_cattle_ticks_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Cattle Tick Control (3/3)\nCheck animals regularly for ticks\nespecially around ears, legs and\nunder the tail.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -820,7 +820,7 @@
       }
     },
     "info_cattle_breeding_5": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Cattle Breeds (5/5)\nSelective Breeding — choose stock\nbased on desired traits like milk\nyield or growth rate.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -852,7 +852,7 @@
       }
     },
     "info_poultry_nutrition_4": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Poultry Feed (4/4)\nMineral supplements: meat and bone\nmeal, fishmeal, seaweed (kelp).\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -876,7 +876,7 @@
       }
     },
     "info_poultry_care_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Poultry Care (3/3)\nUse biosecurity — limit who enters\nthe poultry area. Handle birds\ngently to reduce stress.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -892,7 +892,7 @@
       }
     },
     "info_poultry_breeds_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Poultry Breeds (2/2)\nMeat Breeds: Broilers Type 1 & 2,\nKuroilers.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -908,7 +908,7 @@
       }
     },
     "info_pigs_nutrition_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Pig Feed (2/2)\nEnergy: cassava, maize/corn, sweet\npotato vines, rice bran.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -948,7 +948,7 @@
       }
     },
     "info_pigs_prevention_5": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Pig Prevention (5/5)\nDispose of pig feces properly.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -964,7 +964,7 @@
       }
     },
     "info_pigs_breeding_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Pig Breeds (2/2)\nSelect healthy strong animals for\nbreeding. Ensure breeding pigs get\nadequate nutrition — especially protein.\nMonitor sows during gestation.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -988,7 +988,7 @@
       }
     },
     "info_rabbit_nutrition_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Rabbit Feed (3/3)\nFresh clean water at all times.\nPelleted feed for balanced nutrition.\nFruits as occasional treats only.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1012,7 +1012,7 @@
       }
     },
     "info_rabbit_prevention_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Rabbit Prevention (3/3)\nAvoid sudden changes to diet.\nEnsure rabbits get daily movement\nto prevent gut stasis.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1028,7 +1028,7 @@
       }
     },
     "info_rabbit_breeds_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Rabbit Breeds (2/2)\nWatch for these causes of offspring\ndeath: mother abandoning litter,\ncannibalism, insufficient milk,\ncrushed newborns, weak newborns.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1052,7 +1052,7 @@
       }
     },
     "info_goat_nutrition_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Goat Feed (3/3)\nCrop residues: maize stover, bean\nhaulms, sweet potato vines.\nProvide a salt lick at all times.\nFresh clean water — min 2-3 litres\nper adult per day.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1076,7 +1076,7 @@
       }
     },
     "info_goat_care_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Goat Care (3/3)\nCheck weekly for external parasites:\nmange, ticks, lice. Keep sick\nanimals separate immediately.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1108,7 +1108,7 @@
       }
     },
     "info_goat_prevention_4": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Goat Prevention (4/4)\nRotate pastures — do not overgraze.\nThis breaks the worm life cycle.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1124,7 +1124,7 @@
       }
     },
     "info_goat_ticks_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Goat Tick Control (2/2)\nTicks spread multiple diseases.\nRegular dipping or spraying is\nthe most effective control method.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1148,7 +1148,7 @@
       }
     },
     "info_goat_breeding_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Goat Breeds (3/3)\nIntroduce buck for 4-6 weeks then\nremove. Gestation: ~150 days.\nOften have twins — prepare extra\ncare. Wean kids at 3-4 months.\nDo not breed females under 12 months.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1172,7 +1172,7 @@
       }
     },
     "info_sheep_nutrition_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Sheep Feed (3/3)\nProvide a salt lick at all times.\nPhosphorus and calcium important\nduring pregnancy and lactation.\nMineral blocks are easiest to use.\nFresh clean water always available.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1196,7 +1196,7 @@
       }
     },
     "info_sheep_care_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Sheep Care (3/3)\nCheck weekly for external parasites:\nmange, ticks, lice. Keep sick\nanimals separate immediately.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1220,7 +1220,7 @@
       }
     },
     "info_sheep_prevention_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Sheep Prevention (3/3)\nRotate pastures — do not overgraze.\nThis breaks the worm life cycle.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1236,7 +1236,7 @@
       }
     },
     "info_sheep_ticks_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Sheep Tick Control (2/2)\nTicks spread multiple diseases.\nRegular dipping or spraying is\nthe most effective control method.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1252,7 +1252,7 @@
       }
     },
     "info_sheep_breeding_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Sheep Breeds (2/2)\nIntroduce ram for 4-6 weeks then\nremove. Gestation: ~147 days.\nOften have twins — prepare extra\ncare. Wean lambs at 3-4 months.\nDo not breed females under 12 months.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1284,7 +1284,7 @@
       }
     },
     "info_dog_care_4": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Dog Care (4/4)\nKeep dogs in a clean dry shaded\nshelter. Clean up feces regularly.\nKeep wounds clean — wash cuts with\nclean water. See vet for deep wounds.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1308,7 +1308,7 @@
       }
     },
     "info_dog_prevention_3": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Dog Prevention (3/3)\nIsolate any dog showing signs of\nillness immediately. Do not allow\ndogs to roam freely near wildlife\n— increases disease and injury risk.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",
@@ -1324,7 +1324,7 @@
       }
     },
     "info_dog_breeding_2": {
-      "isEnd": true,
+      "isEnd": false,
       "prompt": {
         "english": "Dog Breeding (2/2)\nWean puppies at 6-8 weeks. Keep\nmother well-fed and hydrated during\npregnancy and nursing.\n1. Back to menu",
         "runyankole": "[PLACEHOLDER]",

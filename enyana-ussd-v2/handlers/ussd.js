@@ -147,14 +147,11 @@ function advanceStateSilent(session, input, farmerData) {
   // Info care content — paginated navigation
   const infoMatch = currentState.match(/^(info_.+)_(\d+)$/);
   if (infoMatch) {
-    const base      = infoMatch[1];
-    const num       = parseInt(infoMatch[2], 10);
-    const stateData = flow.states[currentState];
-    if (stateData && stateData.isEnd) {
-      if (input === '1') return { ...session, state: getParentTopicSelector(base) };
-      return session;
-    }
-    if      (input === '1') return { ...session, state: `${base}_${num + 1}` };
+    const base     = infoMatch[1];
+    const num      = parseInt(infoMatch[2], 10);
+    const nextPage = `${base}_${num + 1}`;
+    const hasNext  = !!flow.states[nextPage];
+    if      (input === '1') return { ...session, state: hasNext ? nextPage : getParentTopicSelector(base) };
     else if (input === '2') return { ...session, state: getParentTopicSelector(base) };
     return session;
   }
@@ -434,14 +431,11 @@ async function handleUSSD(req, res) {
   // -------------------------------------------------------------------------
   const infoMatch = currentState.match(/^(info_.+)_(\d+)$/);
   if (infoMatch) {
-    const base      = infoMatch[1];
-    const num       = parseInt(infoMatch[2], 10);
-    const stateData = flow.states[currentState];
-    if (stateData && stateData.isEnd) {
-      if (input === '1') return sendStateResponse(res, getParentTopicSelector(base), session);
-      return reshowCurrent(res, currentState, session.language, session);
-    }
-    if      (input === '1') return sendStateResponse(res, `${base}_${num + 1}`, session);
+    const base     = infoMatch[1];
+    const num      = parseInt(infoMatch[2], 10);
+    const nextPage = `${base}_${num + 1}`;
+    const hasNext  = !!flow.states[nextPage];
+    if      (input === '1') return sendStateResponse(res, hasNext ? nextPage : getParentTopicSelector(base), session);
     else if (input === '2') return sendStateResponse(res, getParentTopicSelector(base), session);
     return reshowCurrent(res, currentState, session.language, session);
   }
