@@ -12,7 +12,8 @@
       "Bash(node -e \"console.log\\(process.version\\)\")",
       "Bash(node -e \"const t = require\\('node:test'\\); console.log\\(Object.keys\\(t\\)\\)\")",
       "Bash(node -e \"const n = require\\('./services/notify'\\); console.log\\(Object.keys\\(n\\)\\)\")",
-      "Bash(not exist *)"
+      "Bash(not exist *)",
+      "PowerShell(cd \"c:\\\\Users\\\\glpja\\\\enyanahealth\\\\enyana-ussd-v2\" && Remove-Item scripts/inject-care-states.js && \\(Test-Path scripts\\) -and \\(\\(Get-ChildItem scripts\\).Count -eq 0\\) -and \\(Remove-Item scripts -Force\\) ; Write-Host \"done\")"
     ]
   }
 }
