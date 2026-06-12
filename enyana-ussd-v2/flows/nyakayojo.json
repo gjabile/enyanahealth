@@ -2,687 +2,1338 @@
   "metadata": {
     "pilot": "nyakayojo",
     "location": "Nyakayojo Sub-county, Mbarara District, Uganda",
-    "languages": ["english", "runyankole"],
-    "animals": ["cattle", "poultry", "pigs", "rabbit"],
+    "languages": [
+      "english",
+      "runyankole"
+    ],
+    "animals": [
+      "cattle",
+      "poultry",
+      "pigs",
+      "rabbit"
+    ],
     "note": "Runyankole translations provided by native speaker. Acholi text is marked [ACH] and remains placeholder pending local team review."
   },
   "states": {
-
     "selectLanguage": {
       "prompt": {
-       "english":    "Welcome / Twakwakira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi",
-    "runyankole": "Welcome / Twakwakira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi",
-    "acholi":     "Wajoli\n\n1. English\n2. Runyankole\n3. Acholi"
+        "english": "Welcome / Twakwakira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi",
+        "runyankole": "Welcome / Twakwakira / Wajoli\n\n1. English\n2. Runyankole\n3. Acholi",
+        "acholi": "Wajoli\n\n1. English\n2. Runyankole\n3. Acholi"
       }
     },
-
     "selectCommunity": {
       "prompt": {
-        "english":    "Select your community:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum",
+        "english": "Select your community:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum",
         "runyankole": "Ronda ekyanga kyawe:\n\n1. Nyakayojo\n2. Gulu\n3. Nwoya\n4. Amuru\n5. Pader\n6. Kitgum"
       }
     },
-
     "enterName": {
       "isEnd": false,
       "prompt": {
-        "english":    "What is your full name?",
+        "english": "What is your full name?",
         "runyankole": "Eiziina ryawe niriiha?"
       }
     },
-
     "mainMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "Welcome, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet\n4. Give feedback",
+        "english": "Welcome, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet\n4. Give feedback",
         "runyankole": "Twakwakira ahaby'Amagara by'Enyana, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo\n4. Tuhire ebirowoozo byaawe",
-        "acholi":     "Wanongo, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari\n4. Mii tam mamegi"
+        "acholi": "Wanongo, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari\n4. Mii tam mamegi"
       },
       "promptReturning": {
-        "english":    "Welcome back, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet\n4. Give feedback",
+        "english": "Welcome back, {{name}}!\nWhat do you need help with today?\n1. My animal is sick\n2. How to care for my animals\n3. Contact a vet\n4. Give feedback",
         "runyankole": "Kurikayo, {{name}}!\nTukuyambe tuta erizooba?\n1. Eitungo ryangye rirwaire\n2. Okundareeberere amatungo gangye\n3. Okuhikirira omushaho w'amatungo\n4. Tuhire ebirowoozo byaawe",
-        "acholi":     "Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari\n4. Mii tam mamegi"
+        "acholi": "Wanongo cen, {{name}}!\nIyet kony ki ngo tin?\n1. Lee mera two\n2. Nge ngat tino lee mera\n3. Kube ki daktari\n4. Mii tam mamegi"
       }
     },
-
     "selectVetAnimal": {
       "isEnd": false,
       "prompt": {
-        "english":    "Which animal do you need help with?\n\n1. Cow\n2. Poultry\n3. Pig\n4. Rabbit",
+        "english": "Which animal do you need help with?\n\n1. Cow\n2. Poultry\n3. Pig\n4. Rabbit",
         "runyankole": "N'itungo ki erikwetaaga obuyambi?\n1. Ente\n2. Enkoko\n3. Nguruwe\n4. Akame",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]\n4. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]\n3. [PLACEHOLDER]\n4. [PLACEHOLDER]"
       }
     },
-
     "describeVetProblem": {
       "isEnd": false,
       "prompt": {
-        "english":    "Describe your problem and we will\nalert a vet right away.",
+        "english": "Describe your problem and we will\nalert a vet right away.",
         "runyankole": "Coroora enshonga yawe nitwasindikira\nomushaho obubaka.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]"
       }
     },
-
     "vetAlertSent": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you. A vet has been alerted\nand will contact you shortly.",
+        "english": "Thank you. A vet has been alerted\nand will contact you shortly.",
         "runyankole": "[RUN] Webale. Twasindikira omushaho\nobubaka, akugarukamu mangu.",
-        "acholi":     "[ACH] Apwoyo. Daktari omako lok mamegi,\nbicwiny boti weng."
+        "acholi": "[ACH] Apwoyo. Daktari omako lok mamegi,\nbicwiny boti weng."
       }
     },
-
     "informationMenu": {
       "isEnd": false,
       "prompt": {
-        "english":    "This feature is coming soon.\n\n1. Back to main menu",
+        "english": "This feature is coming soon.\n\n1. Back to main menu",
         "runyankole": "Eki kiija mangu.\n\n1. Kanda 1 okigarukayo omu menu enkuru",
-        "acholi":     "[PLACEHOLDER]\n\n1. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n\n1. [PLACEHOLDER]"
       }
     },
-
     "selectAnimal": {
       "isEnd": false,
       "prompt": {
-        "english":    "Which animal is sick?\n\n1. Cow\n2. Poultry (chickens)\n3. Pig\n4. Rabbit",
+        "english": "Which animal is sick?\n\n1. Cow\n2. Poultry (chickens)\n3. Pig\n4. Rabbit",
         "runyankole": "N'itungo ki erirwaire?\n1. Ente\n2. Ebinyonyi birikutungwa omuka (enkoko)\n3. Empunu\n4. Akame",
-        "acholi":     "Lee mene ma two?\n1. Dyel\n2. Cak\n3. Meo\n4. Ekwee"
+        "acholi": "Lee mene ma two?\n1. Dyel\n2. Cak\n3. Meo\n4. Ekwee"
       }
     },
-
-
     "vetConfirm": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
+        "english": "Thank you. A vet has been alerted and will contact you on this number within 24 hours.\n\nEnyana Health — protecting your animals.",
         "runyankole": "[RUN] Webare. Omusawo yabwirwa kandi azakweta kuri nomba yaawe mu masaa 24.\n\nEnyana Health — kugumya ente zawe."
       }
     },
-
     "triage_outcome_high": {
       "isEnd": true,
       "prompt": {
-        "english":    "Your animal is showing serious symptoms\nthat need urgent attention. We are\nalerting a vet who will contact you\nshortly.",
+        "english": "Your animal is showing serious symptoms\nthat need urgent attention. We are\nalerting a vet who will contact you\nshortly.",
         "runyankole": "Eitungo ryaawe niryoreka\nobumanyiso bwamaani oburikwetaaga obuyambi\nbw'ahonaaho. Turiyo nitumanyisa omushaho\nwamatungo arakuterere omubwaire bukye.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]"
       }
     },
-
     "triage_outcome_medium": {
       "isEnd": false,
       "prompt": {
-        "english":    "Your animal may need attention soon.\nWe recommend speaking to a vet.\n\n1. Send my case to a vet\n2. No thank you",
+        "english": "Your animal may need attention soon.\nWe recommend speaking to a vet.\n\n1. Send my case to a vet\n2. No thank you",
         "runyankole": "Eitungo ryaawe ryakubaire\nniryetaaga obuyambi omubwaire butari bwahare.\nNitutensa ngu ogambe n'omushaho wamatungo.\n\n1. Ebyangye mubisindikire omushaho w'amatungo\n2. Ngaaha mwebare",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "triage_outcome_low": {
       "isEnd": false,
       "prompt": {
-        "english":    "Your animal seems stable for now.\nMonitor closely over the next 24 hours.\n\nWould you like to contact a vet anyway?\n1. Yes, send my case to a vet\n2. No thank you",
+        "english": "Your animal seems stable for now.\nMonitor closely over the next 24 hours.\n\nWould you like to contact a vet anyway?\n1. Yes, send my case to a vet\n2. No thank you",
         "runyankole": "Eitungo ryaawe nirirebeka\nnkeririgye hati. Guma norikyeberaho buri\nkaire omushaaha abiri n'ina ezirikwaija.\nNinga nohurira orikwenda kugamba\nn'omushaho w'amatungo hati?\n\n1. Ego, ebyangye bisindikire omushaho w'amatungo\n2. Ngaaha mwebare",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "triage_vet_sent": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you. A vet has been alerted\nand will contact you shortly.\n\nEnyana Health — protecting your animals.",
+        "english": "Thank you. A vet has been alerted\nand will contact you shortly.\n\nEnyana Health — protecting your animals.",
         "runyankole": "Webare. Omushaho w'amatungo\ntwamugambira kandi naija kukuterera\nomubwaire bukye.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]"
       }
     },
-
     "triage_no_vet": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you. If your animal's condition\nworsens, please dial back and we\nwill help you.\n\nEnyana Health — protecting your animals.",
+        "english": "Thank you. If your animal's condition\nworsens, please dial back and we\nwill help you.\n\nEnyana Health — protecting your animals.",
         "runyankole": "[RUN] Webale. Niba orubaare rwake\nrweyongera, zamu utukoohe twakuyamba.\n\nEnyana Health — kugumya ente zawe.",
-        "acholi":     "[PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]"
       }
     },
-
     "cattle_q1": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does your cow have a very high fever?\n\n1. Yes\n2. No",
+        "english": "Does your cow have a very high fever?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe eine omuriro mwingi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q2": {
       "isEnd": false,
       "prompt": {
-        "english":    "Has your cow stopped eating or become\nvery weak quickly?\n\n1. Yes\n2. No",
+        "english": "Has your cow stopped eating or become\nvery weak quickly?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe erekiiraho okurya nari ehwaire\namaani omu bwiire bukye?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q3": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is your cow having difficulty breathing?\n\n1. Yes\n2. No",
+        "english": "Is your cow having difficulty breathing?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe neyitsya kubi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q4": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there swollen lumps on the neck,\nchest or legs?\n\n1. Yes\n2. No",
+        "english": "Are there swollen lumps on the neck,\nchest or legs?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba ahamaraka, ahakifuba\nnari ahamaguru?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q5": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the milk look different —\nwatery, lumpy or bloody?\n\n1. Yes\n2. No",
+        "english": "Does the milk look different —\nwatery, lumpy or bloody?\n\n1. Yes\n2. No",
         "runyankole": "Amate nigareebeka okundi—garimu amaizi,\ngarimu ebitongo nari garimu eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q6": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the udder hot, swollen or hard?\n\n1. Yes\n2. No",
+        "english": "Is the udder hot, swollen or hard?\n\n1. Yes\n2. No",
         "runyankole": "Omuhako nigwotsya, guzimbire nari\ngugangaire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q7": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does your cow kick or refuse\nto be milked?\n\n1. Yes\n2. No",
+        "english": "Does your cow kick or refuse\nto be milked?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe neshamba emigyere nari\nneyanga okukamwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q8": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there cracks, wounds or darkening\non the teats?\n\n1. Yes\n2. No",
+        "english": "Are there cracks, wounds or darkening\non the teats?\n\n1. Yes\n2. No",
         "runyankole": "Eminwa y'amabeere eshatagurikire, eyine\nebironda nari neyiragururwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q9": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there sores or blisters in the mouth\n— is the cow drooling heavily?\n\n1. Yes\n2. No",
+        "english": "Are there sores or blisters in the mouth\n— is the cow drooling heavily?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebironda nari ebizimba omukanwa\n— ente eyine orufuzi rwingi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q10": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the cow limping badly or refusing\nto stand?\n\n1. Yes\n2. No",
+        "english": "Is the cow limping badly or refusing\nto stand?\n\n1. Yes\n2. No",
         "runyankole": "Ente nekyokomboka munonga nari\nn'eyanga kwemerera?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q11": {
       "isEnd": false,
       "prompt": {
-        "english":    "Has your cow lost a calf early or given\nbirth to a dead or weak calf?\n\n1. Yes\n2. No",
+        "english": "Has your cow lost a calf early or given\nbirth to a dead or weak calf?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe efereirwe enyana nto nari\nezaire enyana efaire nari etaine maani marungi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q12": {
       "isEnd": false,
       "prompt": {
-        "english":    "Has your cow failed to get pregnant\nagain after giving birth?\n\n1. Yes\n2. No",
+        "english": "Has your cow failed to get pregnant\nagain after giving birth?\n\n1. Yes\n2. No",
         "runyankole": "Ente yaawe eremairwe kugaruka kuhaka\nyaheza kuzaara?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "cattle_q13": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the bull have swollen testicles?\n\n1. Yes\n2. No",
+        "english": "Does the bull have swollen testicles?\n\n1. Yes\n2. No",
         "runyankole": "Amagosi g'enumi gazimbire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q1": {
       "isEnd": false,
       "prompt": {
-        "english":    "Have any birds died suddenly with\nno warning?\n\n1. Yes\n2. No",
+        "english": "Have any birds died suddenly with\nno warning?\n\n1. Yes\n2. No",
         "runyankole": "Hariho enkoko zifiire ahonaaho\nzitaragire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q2": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are the head, face or wattles swollen\nand dark purple?\n\n1. Yes\n2. No",
+        "english": "Are the head, face or wattles swollen\nand dark purple?\n\n1. Yes\n2. No",
         "runyankole": "Omutwe, ahamaisho nari ebiregyeya\nbizimbire kandi byiragurirwe omu rangi\nya kakobe?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q3": {
       "isEnd": false,
       "prompt": {
-        "english":    "Have birds stopped eating or laying eggs?\n\n1. Yes\n2. No",
+        "english": "Have birds stopped eating or laying eggs?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko zirekiraho kurya nari kuteera\namahuri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q4": {
       "isEnd": false,
       "prompt": {
-        "english":    "Do birds have watery or bloody diarrhea?\n\n1. Yes\n2. No",
+        "english": "Do birds have watery or bloody diarrhea?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko nizirukana amaizi nari eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q5": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are birds gasping for air, coughing or\nmaking gurgling sounds?\n\n1. Yes\n2. No",
+        "english": "Are birds gasping for air, coughing or\nmaking gurgling sounds?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko niziteganisibwa omukwitsya,\nnizikorora nari nikokorima munonga?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q6": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are any birds twisting their neck or\nwalking in circles?\n\n1. Yes\n2. No",
+        "english": "Are any birds twisting their neck or\nwalking in circles?\n\n1. Yes\n2. No",
         "runyankole": "Hariho enkoko ezimwe ezirikwehindura\namaraka nari zirikutambura zirikujengyerera?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q7": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the diarrhea bright green in color?\n\n1. Yes\n2. No",
+        "english": "Is the diarrhea bright green in color?\n\n1. Yes\n2. No",
         "runyankole": "Ekyirukano nikishushana nkorureere\norurikutangaara omurangi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q8": {
       "isEnd": false,
       "prompt": {
-        "english":    "Has egg production dropped suddenly?\n\n1. Yes\n2. No",
+        "english": "Has egg production dropped suddenly?\n\n1. Yes\n2. No",
         "runyankole": "Okushohoza amahuri kukyendeire ahonaaho?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q9": {
       "isEnd": false,
       "prompt": {
-        "english":    "Do birds look hunched, fluffed up\nand dull?\n\n1. Yes\n2. No",
+        "english": "Do birds look hunched, fluffed up\nand dull?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko zikondogwaize, amooya\ngazizangariire kandi zibuzirwe obusingye?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q10": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are chicks not growing and losing\nweight fast?\n\n1. Yes\n2. No",
+        "english": "Are chicks not growing and losing\nweight fast?\n\n1. Yes\n2. No",
         "runyankole": "Obwaana bw'enkoko tiburikukura kandi\nnibuhururuka omubwaire bukye?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "poultry_q11": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are birds drinking a lot but refusing\nto eat?\n\n1. Yes\n2. No",
+        "english": "Are birds drinking a lot but refusing\nto eat?\n\n1. Yes\n2. No",
         "runyankole": "Enkoko nizinywa munonga kwonka\nzanga kurya?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q1": {
       "isEnd": false,
       "prompt": {
-        "english":    "Have any pigs died suddenly —\nspreading through the herd fast?\n\n1. Yes\n2. No",
+        "english": "Have any pigs died suddenly —\nspreading through the herd fast?\n\n1. Yes\n2. No",
         "runyankole": "Hariho empunu ezifiire ahonaaho —\nkutururana omwitungo ahonaaho?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q2": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the pig have a high fever and\nrefuse to move?\n\n1. Yes\n2. No",
+        "english": "Does the pig have a high fever and\nrefuse to move?\n\n1. Yes\n2. No",
         "runyankole": "Empunu eyine omuriro mwingi kandi\nneyanga kutambura?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q3": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there red or purple patches\non the skin?\n\n1. Yes\n2. No",
+        "english": "Are there red or purple patches\non the skin?\n\n1. Yes\n2. No",
         "runyankole": "Hariho nk'ebizimba birikutukura nari\nbyakakobe ahamubiri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q4": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the pig have diarrhea with blood?\n\n1. Yes\n2. No",
+        "english": "Does the pig have diarrhea with blood?\n\n1. Yes\n2. No",
         "runyankole": "Empunu neyirukana eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q5": {
       "isEnd": false,
       "prompt": {
-        "english":    "Has the sow given birth to dead or\nvery weak piglets?\n\n1. Yes\n2. No",
+        "english": "Has the sow given birth to dead or\nvery weak piglets?\n\n1. Yes\n2. No",
         "runyankole": "Empunu enkazi yazireho ebyaana bifiire\nnari bitine maani marungi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q6": {
       "isEnd": false,
       "prompt": {
-        "english":    "Did piglets die within days of birth?\n\n1. Yes\n2. No",
+        "english": "Did piglets die within days of birth?\n\n1. Yes\n2. No",
         "runyankole": "Ebyaana by'empunu bikafa omubiro\nbikye biherize kuzarwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q7": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the pig coughing or struggling\nto breathe?\n\n1. Yes\n2. No",
+        "english": "Is the pig coughing or struggling\nto breathe?\n\n1. Yes\n2. No",
         "runyankole": "Empunu nekorora nari neteganisibwa\nomukwitsya?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q8": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are the ears turning bluish or purple?\n\n1. Yes\n2. No",
+        "english": "Are the ears turning bluish or purple?\n\n1. Yes\n2. No",
         "runyankole": "Amatu garimu nigahinduka agabururu\nnari agakakobe omurangi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q9": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there sores in the mouth — is the\npig drooling and refusing to eat?\n\n1. Yes\n2. No",
+        "english": "Are there sores in the mouth — is the\npig drooling and refusing to eat?\n\n1. Yes\n2. No",
         "runyankole": "Omukanwa harimu ebironda — empunu\neyine orufuzi rwingi kandi neyanga kurya?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q10": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the pig limping or refusing to walk?\n\n1. Yes\n2. No",
+        "english": "Is the pig limping or refusing to walk?\n\n1. Yes\n2. No",
         "runyankole": "Empunu nekyokomboka nari neyanga\nkutambura?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q11": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there blisters on the snout or\nbetween the hooves?\n\n1. Yes\n2. No",
+        "english": "Are there blisters on the snout or\nbetween the hooves?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba ahanyindo nari omunda\nn'ahagati y'ebigyere?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q12": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the pig passing watery diarrhea\nwith blood and mucus?\n\n1. Yes\n2. No",
+        "english": "Is the pig passing watery diarrhea\nwith blood and mucus?\n\n1. Yes\n2. No",
         "runyankole": "Empunu neyirukana amaizi garimu\neshagama n'ebihinzi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q13": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the pig losing weight rapidly?\n\n1. Yes\n2. No",
+        "english": "Is the pig losing weight rapidly?\n\n1. Yes\n2. No",
         "runyankole": "Empunu nehururuka ahanaaho\nn'obwiira?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q14": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the pig have a swollen belly —\nespecially young pigs?\n\n1. Yes\n2. No",
+        "english": "Does the pig have a swollen belly —\nespecially young pigs?\n\n1. Yes\n2. No",
         "runyankole": "Eibondo ry'empunu rizimbire —\nnamunonga omu mpunu ento?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q15": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are worms visible in the pig's feces?\n\n1. Yes\n2. No",
+        "english": "Are worms visible in the pig's feces?\n\n1. Yes\n2. No",
         "runyankole": "Hariho obujoka oburikureebeka\nomumazi g'empunu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "pigs_q16": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there diamond-shaped red patches\non the skin?\n\n1. Yes\n2. No",
+        "english": "Are there diamond-shaped red patches\non the skin?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba birikutukura\nahamubiri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q1": {
       "isEnd": false,
       "prompt": {
-        "english":    "Was the rabbit found dead with no\nprior signs of illness?\n\n1. Yes\n2. No",
+        "english": "Was the rabbit found dead with no\nprior signs of illness?\n\n1. Yes\n2. No",
         "runyankole": "Hariho akame akashangirwe kafiire\nkandi hatakabahoga obumanyiso bwoona\nbw'oburwaire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q2": {
       "isEnd": false,
       "prompt": {
-        "english":    "Was there bleeding from the nose\nor mouth?\n\n1. Yes\n2. No",
+        "english": "Was there bleeding from the nose\nor mouth?\n\n1. Yes\n2. No",
         "runyankole": "Hakabaho okujweera omunyindo\nnari omukanwa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q3": {
       "isEnd": false,
       "prompt": {
-        "english":    "Did the rabbit show sudden extreme\nweakness or seizures?\n\n1. Yes\n2. No",
+        "english": "Did the rabbit show sudden extreme\nweakness or seizures?\n\n1. Yes\n2. No",
         "runyankole": "Akame kakaburwaho amaani ahonaaho\nomubwiira nari kajengyerera?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q4": {
       "isEnd": false,
       "prompt": {
-        "english":    "Has the rabbit stopped eating and\ndrinking completely?\n\n1. Yes\n2. No",
+        "english": "Has the rabbit stopped eating and\ndrinking completely?\n\n1. Yes\n2. No",
         "runyankole": "Akame karekiraaho kimwe okurya\nhamwe n'okunywa?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q5": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there watery or bloody droppings?\n\n1. Yes\n2. No",
+        "english": "Are there watery or bloody droppings?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ekirukano ky'amaizi nari\neky'eshagama?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q6": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the rabbit have a swollen\npot-belly?\n\n1. Yes\n2. No",
+        "english": "Does the rabbit have a swollen\npot-belly?\n\n1. Yes\n2. No",
         "runyankole": "Akame kaine akabondo kahagire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q7": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the rabbit hunched in a corner\nand not moving?\n\n1. Yes\n2. No",
+        "english": "Is the rabbit hunched in a corner\nand not moving?\n\n1. Yes\n2. No",
         "runyankole": "Akame kakondogwize omunshonda\nkandi tikarikutambura?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q8": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is there thick white or yellow discharge\nfrom the nose?\n\n1. Yes\n2. No",
+        "english": "Is there thick white or yellow discharge\nfrom the nose?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebihinzi birikukururuka\nbirikweera nari byakinekye birikuruga\nomunyindo?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q9": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the rabbit sneezing constantly?\n\n1. Yes\n2. No",
+        "english": "Is the rabbit sneezing constantly?\n\n1. Yes\n2. No",
         "runyankole": "Hariho akame akarikwetsyamura\nkatarikuhumuramu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q10": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are the front paws wet and matted?\n\n1. Yes\n2. No",
+        "english": "Are the front paws wet and matted?\n\n1. Yes\n2. No",
         "runyankole": "Ebigyere by'omumaisho bijubire\nnari obwoya bwabyo bukwatiine?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q11": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are the eyes watery or crusty?\n\n1. Yes\n2. No",
+        "english": "Are the eyes watery or crusty?\n\n1. Yes\n2. No",
         "runyankole": "Amaisho garimu amaizi nari ebihonzi?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q12": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is there puffy swelling around the\neyes, ears or nose?\n\n1. Yes\n2. No",
+        "english": "Is there puffy swelling around the\neyes, ears or nose?\n\n1. Yes\n2. No",
         "runyankole": "Hariho nkebizimba haihi n'amaisho,\namatu nari enyindo?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q13": {
       "isEnd": false,
       "prompt": {
-        "english":    "Are there fluid-filled lumps under\nthe skin?\n\n1. Yes\n2. No",
+        "english": "Are there fluid-filled lumps under\nthe skin?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebizimba birimu nkotwizi\naha mubiri?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q14": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the rabbit constantly shaking its\nhead or scratching its ears?\n\n1. Yes\n2. No",
+        "english": "Is the rabbit constantly shaking its\nhead or scratching its ears?\n\n1. Yes\n2. No",
         "runyankole": "Akame nikahindura munonga omutwe\nnari nikeyagura omumatu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q15": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is there brown crusty discharge inside\nthe ears?\n\n1. Yes\n2. No",
+        "english": "Is there brown crusty discharge inside\nthe ears?\n\n1. Yes\n2. No",
         "runyankole": "Hariho ebihinzi birikuksururuka\nbiry'omurangi yakitaka omunda omumatu?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q16": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the rabbit's head tilting to\none side?\n\n1. Yes\n2. No",
+        "english": "Is the rabbit's head tilting to\none side?\n\n1. Yes\n2. No",
         "runyankole": "Omutwe gw'akame gugodamire\norubaju rumwe?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q17": {
       "isEnd": false,
       "prompt": {
-        "english":    "Does the rabbit's abdomen feel\nhard or bloated?\n\n1. Yes\n2. No",
+        "english": "Does the rabbit's abdomen feel\nhard or bloated?\n\n1. Yes\n2. No",
         "runyankole": "Eibondo ryakame rigumire nari\nryaijwire?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "rabbit_q18": {
       "isEnd": false,
       "prompt": {
-        "english":    "Is the rabbit grinding its teeth?\n\n1. Yes\n2. No",
+        "english": "Is the rabbit grinding its teeth?\n\n1. Yes\n2. No",
         "runyankole": "Akame nikeruma amaino?\n\n1. Ego\n2. Ngaha",
-        "acholi":     "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
+        "acholi": "[PLACEHOLDER]\n1. [PLACEHOLDER]\n2. [PLACEHOLDER]"
       }
     },
-
     "giveFeedback": {
       "isEnd": false,
       "prompt": {
-        "english":    "What do you think of Enyana Health?\nShare anything — good or bad.",
+        "english": "What do you think of Enyana Health?\nShare anything — good or bad.",
         "runyankole": "Orowooze ota ku Enyana Health?\nTuhwire ekintu kyona — ekirungi nari ekibi.",
-        "acholi":     "Itamo ango ikum Enyana Health?\nNyut gin mo weng — maber onyo marac."
+        "acholi": "Itamo ango ikum Enyana Health?\nNyut gin mo weng — maber onyo marac."
       }
     },
-
     "feedbackConfirm": {
       "isEnd": true,
       "prompt": {
-        "english":    "Thank you! Your feedback helps us\nimprove Enyana Health.",
+        "english": "Thank you! Your feedback helps us\nimprove Enyana Health.",
         "runyankole": "Webale! Ebirowoozo byaawe bituyamba\nokwongera Enyana Health.",
-        "acholi":     "Apwoyo! Tam mamegi konyo wa\nkwero Enyana Health."
+        "acholi": "Apwoyo! Tam mamegi konyo wa\nkwero Enyana Health."
+      }
+    },
+    "infoSelectAnimal": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Which animal do you need help with?\n\n1. Cow\n2. Poultry\n3. Pig\n4. Rabbit\n5. Goat\n6. Sheep\n7. Dog",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_cattle": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle — what do you need help with?\n\n1. Feed & Nutrition\n2. Disease Prevention\n3. Tick Control\n4. Breeds & Breeding",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_poultry": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry — what do you need help with?\n\n1. Feed & Nutrition\n2. General Care\n3. Breeds",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_pigs": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pigs — what do you need help with?\n\n1. Feed & Nutrition\n2. Disease Prevention\n3. Breeds & Breeding",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_rabbit": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Rabbits — what do you need help with?\n\n1. Feed & Nutrition\n2. Disease Prevention\n3. Breeds & Breeding",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_goat": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goats — what do you need help with?\n\n1. Feed & Nutrition\n2. General Care\n3. Disease Prevention\n4. Tick Control\n5. Breeds & Breeding",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_sheep": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep — what do you need help with?\n\n1. Feed & Nutrition\n2. General Care\n3. Disease Prevention\n4. Tick Control\n5. Breeds & Breeding",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "infoSelectTopic_dog": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dogs — what do you need help with?\n\n1. General Care & Feeding\n2. Disease Prevention\n3. Breeding",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_nutrition_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Feed (1/5)\nCattle need forage like grass and hay\nfor a balanced diet.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_nutrition_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Feed (2/5)\nAllow 6-8 hours of grazing per day.\nProvide clean fresh water at all times\n— always available, not just 4x daily.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_nutrition_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Feed (3/5)\nNapier Grass is best for dairy and\nbeef cattle. High yield, drought\nresistant. Requires regular pruning.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_nutrition_4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Feed (4/5)\nIn dry season, use Maize Stover as\nroughage. Low in nutrients alone —\ncombine with other feeds.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_nutrition_5": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Cattle Feed (5/5)\nDairy Meal Concentrates boost milk\nyield. Leguminous Shrubs add protein\n— especially good for lactating cows.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_prevention_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Prevention (1/6)\nControl ticks regularly. Ticks spread\nEast Coast Fever, Anaplasmosis,\nBabesiosis and Heartwater.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_prevention_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Prevention (2/6)\nVaccinate animals on a\nvet-recommended schedule.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_prevention_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Prevention (3/6)\nIsolate any cow that aborts for\nat least 3 weeks.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_prevention_4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Prevention (4/6)\nKeep udders clean before and\nafter milking.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_prevention_5": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Prevention (5/6)\nMilk sick cows last to avoid\nspreading infection — especially\nimportant for mastitis.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_prevention_6": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Cattle Prevention (6/6)\nDispose of contaminated materials\nsafely — birth fluids, dead calves.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_ticks_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Tick Control (1/3)\nTicks spread East Coast Fever,\nAnaplasmosis, Babesiosis and\nHeartwater. Control is essential.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_ticks_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Tick Control (2/3)\nDip or spray cattle regularly with\nacaricides. Follow the recommended\nschedule from your vet.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_ticks_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Cattle Tick Control (3/3)\nCheck animals regularly for ticks\nespecially around ears, legs and\nunder the tail.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_breeding_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Breeds (1/5)\nAnkole and Zebu — adapted to local\nenvironment. Good for milk and meat.\nEasy to manage but lower milk yield.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_breeding_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Breeds (2/5)\nFriesian x Ankole cross improves\nmilk production.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_breeding_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Breeds (3/5)\nBoran x Ankole cross improves meat\nquality and keeps disease resistance.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_breeding_4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Cattle Breeds (4/5)\nArtificial Insemination (AI)\nintroduces superior genetics to\nimprove milk or meat productivity.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_cattle_breeding_5": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Cattle Breeds (5/5)\nSelective Breeding — choose stock\nbased on desired traits like milk\nyield or growth rate.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_nutrition_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry Feed (1/4)\nEnergy foods: corn, sorghum,\nmilling by-products.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_nutrition_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry Feed (2/4)\nProtein foods: soybean meal,\nfishmeal, groundnuts, cottonseed\nmeal, beans, field peas.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_nutrition_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry Feed (3/4)\nVitamin supplements: banana leaves,\nyam leaves, alfalfa, fish oil\n(provides vitamins A and D), yeast.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_nutrition_4": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Poultry Feed (4/4)\nMineral supplements: meat and bone\nmeal, fishmeal, seaweed (kelp).\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_care_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry Care (1/3)\nKeep housing clean, dry,\nwell-ventilated and spacious.\nFeed according to age and type —\nlayers and broilers need different diets.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_care_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry Care (2/3)\nCheck birds every day for signs of\nillness or injury. Vaccinate on a\nvet-recommended schedule.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_care_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Poultry Care (3/3)\nUse biosecurity — limit who enters\nthe poultry area. Handle birds\ngently to reduce stress.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_breeds_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Poultry Breeds (1/2)\nEgg Layers: Lehman Brown, Gold Brown,\nHarvard White, Bovanche White,\nISA White.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_poultry_breeds_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Poultry Breeds (2/2)\nMeat Breeds: Broilers Type 1 & 2,\nKuroilers.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_nutrition_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pig Feed (1/2)\nProtein: soybean meal, fishmeal,\ngroundnuts, brewers spent grain.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_nutrition_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Pig Feed (2/2)\nEnergy: cassava, maize/corn, sweet\npotato vines, rice bran.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_prevention_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pig Prevention (1/5)\nStrict biosecurity — limit visitors\nto pig area. Avoid contact between\nyour pigs and wild pigs (ASF risk).\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_prevention_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pig Prevention (2/5)\nVaccinate against Foot and Mouth\nDisease and Swine Erysipelas.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_prevention_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pig Prevention (3/5)\nClean housing regularly. Control\nrodents — rats spread Swine\nDysentery. Avoid overcrowding.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_prevention_4": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pig Prevention (4/5)\nDeworm pigs every 3-6 months.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_prevention_5": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Pig Prevention (5/5)\nDispose of pig feces properly.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_breeding_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Pig Breeds (1/2)\nLarge White (Yorkshire), Landrace,\nDuroc, Hampshire, Local/Indigenous.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_pigs_breeding_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Pig Breeds (2/2)\nSelect healthy strong animals for\nbreeding. Ensure breeding pigs get\nadequate nutrition — especially protein.\nMonitor sows during gestation.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_nutrition_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Rabbit Feed (1/3)\nMain diet: grass and hay (Timothy,\nBermuda, alfalfa). Provides fiber to\nprevent gut blockages.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_nutrition_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Rabbit Feed (2/3)\nFresh leafy greens: kale, spinach,\nlettuce. Root vegetables: carrots.\nIntroduce gradually to avoid upset.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_nutrition_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Rabbit Feed (3/3)\nFresh clean water at all times.\nPelleted feed for balanced nutrition.\nFruits as occasional treats only.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_prevention_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Rabbit Prevention (1/3)\nKeep cages clean and disinfect\nregularly. Quarantine new rabbits\nfor 2 weeks before introducing.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_prevention_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Rabbit Prevention (2/3)\nCheck and clean ears regularly\n(mite risk). Vaccinate against\nMyxomatosis and RHD if available.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_prevention_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Rabbit Prevention (3/3)\nAvoid sudden changes to diet.\nEnsure rabbits get daily movement\nto prevent gut stasis.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_breeds_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Rabbit Breeds (1/2)\nNew Zealand White, California White,\nChinchilla, Flemish Giants.\nLocal Ugandan, Kabale Breed,\nKenyan White.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_rabbit_breeds_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Rabbit Breeds (2/2)\nWatch for these causes of offspring\ndeath: mother abandoning litter,\ncannibalism, insufficient milk,\ncrushed newborns, weak newborns.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_nutrition_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Feed (1/3)\nGoats need a mix of grass, shrubs\nand leaves. Provide dry matter equal\nto 3-4% of body weight per day.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_nutrition_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Feed (2/3)\nBrowse plants: Leucaena, Calliandra,\nGliricidia (protein-rich, good for\ndry season). Rhodes grass, Guinea\ngrass, Napier grass.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_nutrition_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Goat Feed (3/3)\nCrop residues: maize stover, bean\nhaulms, sweet potato vines.\nProvide a salt lick at all times.\nFresh clean water — min 2-3 litres\nper adult per day.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_care_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Care (1/3)\nKeep housing dry, clean and\nwell-ventilated. Raised or slatted\nfloors help. Separate young kids\nfrom adults at night.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_care_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Care (2/3)\nTrim hooves every 3-4 months to\nprevent lameness. Deworm regularly\n— worms are the leading cause of\ndeath in goats in northern Uganda.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_care_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Goat Care (3/3)\nCheck weekly for external parasites:\nmange, ticks, lice. Keep sick\nanimals separate immediately.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_prevention_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Prevention (1/4)\nDeworm every 3 months. Helminthosis\n(worms) is the biggest killer of\ngoats in this region.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_prevention_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Prevention (2/4)\nVaccinate against Clostridial\ndiseases annually: Pulpy Kidney,\nBlackleg, Tetanus.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_prevention_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Prevention (3/4)\nIsolate any animal that aborts\n(Brucellosis risk). Quarantine new\nanimals for 2-3 weeks before mixing.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_prevention_4": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Goat Prevention (4/4)\nRotate pastures — do not overgraze.\nThis breaks the worm life cycle.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_ticks_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Tick Control (1/2)\nControl ticks and mange with\nacaricides or dips. Check weekly\nfor ticks, mange and lice.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_ticks_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Goat Tick Control (2/2)\nTicks spread multiple diseases.\nRegular dipping or spraying is\nthe most effective control method.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_breeding_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Breeds (1/3)\nSmall East African Goat — local,\nhardy, good for meat.\nBoer x Local cross — improved\nmeat production.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_breeding_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Goat Breeds (2/3)\nToggenburg/Saanen x Local cross —\nimproved milk production.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_goat_breeding_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Goat Breeds (3/3)\nIntroduce buck for 4-6 weeks then\nremove. Gestation: ~150 days.\nOften have twins — prepare extra\ncare. Wean kids at 3-4 months.\nDo not breed females under 12 months.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_nutrition_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Feed (1/3)\nSheep need a mix of grass, shrubs\nand leaves. Provide dry matter equal\nto 3-4% of body weight per day.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_nutrition_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Feed (2/3)\nBrowse plants: Leucaena, Calliandra,\nGliricidia. Rhodes grass, Guinea\ngrass, Napier grass. Crop residues:\nmaize stover, bean haulms.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_nutrition_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Sheep Feed (3/3)\nProvide a salt lick at all times.\nPhosphorus and calcium important\nduring pregnancy and lactation.\nMineral blocks are easiest to use.\nFresh clean water always available.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_care_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Care (1/3)\nKeep housing dry, clean and\nwell-ventilated. Raised or slatted\nfloors help. Separate young lambs\nfrom adults at night.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_care_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Care (2/3)\nTrim hooves every 3-4 months to\nprevent lameness. Deworm regularly\n— worms are a leading cause of\ndeath in sheep in northern Uganda.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_care_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Sheep Care (3/3)\nCheck weekly for external parasites:\nmange, ticks, lice. Keep sick\nanimals separate immediately.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_prevention_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Prevention (1/3)\nDeworm every 3 months. Vaccinate\nagainst Clostridial diseases\nannually: Pulpy Kidney, Blackleg,\nTetanus.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_prevention_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Prevention (2/3)\nIsolate any animal that aborts\n(Brucellosis risk). Quarantine new\nanimals for 2-3 weeks before mixing.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_prevention_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Sheep Prevention (3/3)\nRotate pastures — do not overgraze.\nThis breaks the worm life cycle.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_ticks_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Tick Control (1/2)\nControl ticks and mange with\nacaricides or dips. Check weekly\nfor ticks, mange and lice.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_ticks_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Sheep Tick Control (2/2)\nTicks spread multiple diseases.\nRegular dipping or spraying is\nthe most effective control method.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_breeding_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Sheep Breeds (1/2)\nUganda Small East African Sheep\n(Nkedi) — local, hardy, suited\nto northern Uganda.\nDorper x Local cross — improved\nmeat breed.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_sheep_breeding_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Sheep Breeds (2/2)\nIntroduce ram for 4-6 weeks then\nremove. Gestation: ~147 days.\nOften have twins — prepare extra\ncare. Wean lambs at 3-4 months.\nDo not breed females under 12 months.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_care_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dog Care (1/4)\nProvide clean fresh water every day.\nFeed once or twice daily — balanced\ndiet for the dog's size and age.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_care_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dog Care (2/4)\nGood foods: cooked meat scraps,\ncooked grains (ugali/posho or rice\nmixed with protein), cooked\nvegetables like sweet potato,\ncarrots, pumpkin.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_care_3": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dog Care (3/4)\nAvoid feeding: raw pork or game\nmeat (parasite risk), onions,\ngarlic, avocado (toxic to dogs),\nchocolate, salty or spiced food.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_care_4": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Dog Care (4/4)\nKeep dogs in a clean dry shaded\nshelter. Clean up feces regularly.\nKeep wounds clean — wash cuts with\nclean water. See vet for deep wounds.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_prevention_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dog Prevention (1/3)\nVaccinate against Rabies annually.\nRabies is fatal and can spread\nto humans.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_prevention_2": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dog Prevention (2/3)\nDeworm every 3 months. Treat\nregularly for ticks, fleas and mange.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_prevention_3": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Dog Prevention (3/3)\nIsolate any dog showing signs of\nillness immediately. Do not allow\ndogs to roam freely near wildlife\n— increases disease and injury risk.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_breeding_1": {
+      "isEnd": false,
+      "prompt": {
+        "english": "Dog Breeding (1/2)\nWait until female is at least\n18 months old before first breeding.\nAverage pregnancy: 63 days.\nLitter size: typically 4-8 puppies.\n1. Next\n2. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
+      }
+    },
+    "info_dog_breeding_2": {
+      "isEnd": true,
+      "prompt": {
+        "english": "Dog Breeding (2/2)\nWean puppies at 6-8 weeks. Keep\nmother well-fed and hydrated during\npregnancy and nursing.\n1. Back to menu",
+        "runyankole": "[PLACEHOLDER]",
+        "acholi": "[PLACEHOLDER]"
       }
     }
-
   }
 }
