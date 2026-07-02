@@ -2,204 +2,632 @@
 
 /**
  * config/triage.js
- * Triage scoring configuration for all four animals.
+ * Vet-approved triage question flow and disease scoring matrix.
  *
- * Schema per animal:
- *   questions   - ordered array of question IDs (matches state suffix, e.g. 'c1')
- *   labels      - short English description per question ID (used in vet alert)
- *   scoring     - map of disease → { questions: [qId,...], thresholds: {MEDIUM,HIGH} }
- *   immediateHigh - (optional) if this question ID is answered Yes, skip remaining
- *                   questions and force the overall outcome to HIGH immediately
+ * Structure:
+ *   questions    - definitions for every question ID (type, text, conditional)
+ *   universalFlow - ordered question IDs asked to every animal
+ *   speciesFlow   - additional question IDs asked per species, appended after universal
+ *   diseases      - per-species disease definitions with scoring questions and thresholds
+ *   scoring       - explicit score values for multiple-choice questions and reversed yes/no;
+ *                   yes/no questions not listed here default to: yes=1, no=0
  *
  * Threshold logic: score >= HIGH → HIGH; score >= MEDIUM → MEDIUM; else → LOW
+ * Conditional questions are skipped (score 0) when the parent answer does not match.
  */
 
 module.exports = {
 
   // ---------------------------------------------------------------------------
-  // CATTLE  (13 questions, 4 diseases)
+  // QUESTION DEFINITIONS
   // ---------------------------------------------------------------------------
-  cattle: {
-    questions: ['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13'],
-    labels: {
-      c1:  'Very high fever',
-      c2:  'Stopped eating or became very weak quickly',
-      c3:  'Difficulty breathing',
-      c4:  'Swollen lumps on neck, chest or legs',
-      c5:  'Milk looks different — watery, lumpy or bloody',
-      c6:  'Udder hot, swollen or hard',
-      c7:  'Kicks or refuses to be milked',
-      c8:  'Cracks, wounds or darkening on teats',
-      c9:  'Sores or blisters in mouth, drooling heavily',
-      c10: 'Limping badly or refusing to stand',
-      c11: 'Lost calf early, or dead/weak calf at birth',
-      c12: 'Failed to get pregnant again after giving birth',
-      c13: 'Bull has swollen testicles',
+  questions: {
+
+    // ── Universal ─────────────────────────────────────────────────────────────
+
+    tq_age: {
+      id: 'tq_age',
+      text: 'How old is the animal?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: null,
     },
-    scoring: {
+    tq_breed: {
+      id: 'tq_breed',
+      text: 'What breed is the animal?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: null,
+    },
+    tq_reproduced: {
+      id: 'tq_reproduced',
+      text: 'Has this animal ever given birth or reproduced?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_eating: {
+      id: 'tq_eating',
+      text: 'How is the animal eating?',
+      type: 'multiple_choice',
+      options: ['not_eating', 'eats_less', 'normal'],
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_duration: {
+      id: 'tq_duration',
+      text: 'How long has the animal been sick?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: null,
+    },
+    tq_water: {
+      id: 'tq_water',
+      text: 'Is the animal drinking water?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_urine: {
+      id: 'tq_urine',
+      text: 'Is the animal urinating?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: { question: 'tq_water', answer: 'yes' },
+    },
+    tq_urine_color: {
+      id: 'tq_urine_color',
+      text: 'What colour is the urine?',
+      type: 'multiple_choice',
+      options: ['bloody', 'very_dark', 'colourless', 'normal'],
+      scoringQuestion: true,
+      conditional: { question: 'tq_urine', answer: 'yes' },
+    },
+    tq_standing: {
+      id: 'tq_standing',
+      text: 'Can the animal stand up on its own?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_getup: {
+      id: 'tq_getup',
+      text: 'Can the animal get up if you help it?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: { question: 'tq_standing', answer: 'no' },
+    },
+    tq_lying_duration: {
+      id: 'tq_lying_duration',
+      text: 'How long has it been unable to get up?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: { question: 'tq_getup', answer: 'no' },
+    },
+    tq_walking: {
+      id: 'tq_walking',
+      text: 'Can the animal walk normally?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_walk_type: {
+      id: 'tq_walk_type',
+      text: 'How is the animal moving?',
+      type: 'multiple_choice',
+      options: ['circles', 'stumbling', 'not_walking', 'straight'],
+      scoringQuestion: true,
+      conditional: { question: 'tq_walking', answer: 'no' },
+    },
+    tq_limping: {
+      id: 'tq_limping',
+      text: 'Is the animal limping?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: { question: 'tq_walking', answer: 'no' },
+    },
+    tq_cough: {
+      id: 'tq_cough',
+      text: 'Is the animal coughing?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_diarrhea: {
+      id: 'tq_diarrhea',
+      text: 'Does the animal have diarrhea?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_stool: {
+      id: 'tq_stool',
+      text: 'What does the stool look like?',
+      type: 'multiple_choice',
+      options: ['bloody', 'watery', 'hard', 'normal'],
+      scoringQuestion: true,
+      conditional: { question: 'tq_diarrhea', answer: 'yes' },
+    },
+    tq_swollen: {
+      id: 'tq_swollen',
+      text: 'Is any part of the body swollen?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_swollen_part: {
+      id: 'tq_swollen_part',
+      text: 'Which part of the body is swollen?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: { question: 'tq_swollen', answer: 'yes' },
+    },
+    tq_lymph: {
+      id: 'tq_lymph',
+      text: 'Are the lymph nodes (glands on the neck or legs) swollen?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_wounds: {
+      id: 'tq_wounds',
+      text: 'Does the animal have any wounds or sores?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_wound_part: {
+      id: 'tq_wound_part',
+      text: 'Where are the wounds or sores?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: { question: 'tq_wounds', answer: 'yes' },
+    },
+    tq_secretions: {
+      id: 'tq_secretions',
+      text: 'Does the animal have any discharge or secretions?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_secretion_type: {
+      id: 'tq_secretion_type',
+      text: 'What type of discharge?',
+      type: 'multiple_choice',
+      options: ['blood', 'pus', 'froth', 'mucus'],
+      scoringQuestion: true,
+      conditional: { question: 'tq_secretions', answer: 'yes' },
+    },
+    tq_secretion_from: {
+      id: 'tq_secretion_from',
+      text: 'Where is the discharge coming from?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: { question: 'tq_secretions', answer: 'yes' },
+    },
+    tq_skin: {
+      id: 'tq_skin',
+      text: 'Does the animal have any skin problems (rash, patches or lesions)?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_skin_desc: {
+      id: 'tq_skin_desc',
+      text: 'Describe the skin problem.',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: { question: 'tq_skin', answer: 'yes' },
+    },
+    tq_vomiting: {
+      id: 'tq_vomiting',
+      text: 'Is the animal vomiting?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_sudden_death: {
+      id: 'tq_sudden_death',
+      text: 'Have any animals in the group died suddenly?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_noise: {
+      id: 'tq_noise',
+      text: 'Is the animal making unusual sounds or crying out?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_sight: {
+      id: 'tq_sight',
+      text: 'Does the animal seem to have problems with its eyesight?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_hair_loss: {
+      id: 'tq_hair_loss',
+      text: 'Is the animal losing hair or wool?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_vaccination: {
+      id: 'tq_vaccination',
+      text: 'What vaccinations has the animal received?',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: null,
+    },
+
+    // ── Species-specific ──────────────────────────────────────────────────────
+
+    tq_udder: {
+      id: 'tq_udder',
+      text: 'Is the udder swollen, hard or painful?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_milk: {
+      id: 'tq_milk',
+      text: 'How is milk production?',
+      type: 'multiple_choice',
+      options: ['stopped', 'different', 'less', 'normal'],
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_reproduction: {
+      id: 'tq_reproduction',
+      text: 'Has the animal reproduced successfully since the last time?',
+      type: 'yes_no',
+      scoringQuestion: true,
+      conditional: { question: 'tq_reproduced', answer: 'yes' },
+    },
+    tq_repro_problem: {
+      id: 'tq_repro_problem',
+      text: 'Describe the reproductive problem.',
+      type: 'free_text',
+      scoringQuestion: false,
+      conditional: { question: 'tq_reproduction', answer: 'no' },
+    },
+    tq_eggs: {
+      id: 'tq_eggs',
+      text: 'How is egg production?',
+      type: 'multiple_choice',
+      options: ['stopped', 'less', 'normal'],
+      scoringQuestion: true,
+      conditional: null,
+    },
+    tq_feed: {
+      id: 'tq_feed',
+      text: 'Is the animal getting adequate feed?',
+      type: 'yes_no',
+      scoringQuestion: false,
+      conditional: null,
+    },
+    tq_shelter: {
+      id: 'tq_shelter',
+      text: 'Does the animal have adequate shelter?',
+      type: 'yes_no',
+      scoringQuestion: false,
+      conditional: null,
+    },
+    tq_ectoparasites: {
+      id: 'tq_ectoparasites',
+      text: 'Does the animal have visible ticks, lice or mites?',
+      type: 'yes_no',
+      scoringQuestion: false,
+      conditional: null,
+    },
+    tq_deworm: {
+      id: 'tq_deworm',
+      text: 'Has the animal been dewormed in the last 3 months?',
+      type: 'yes_no',
+      scoringQuestion: false,
+      conditional: null,
+    },
+  },
+
+  // ---------------------------------------------------------------------------
+  // UNIVERSAL FLOW — asked for every animal, in this order
+  // ---------------------------------------------------------------------------
+  universalFlow: [
+    'tq_age',
+    'tq_breed',
+    'tq_reproduced',
+    'tq_eating',
+    'tq_duration',
+    'tq_water',
+    'tq_urine',
+    'tq_urine_color',
+    'tq_standing',
+    'tq_getup',
+    'tq_lying_duration',
+    'tq_walking',
+    'tq_walk_type',
+    'tq_limping',
+    'tq_cough',
+    'tq_diarrhea',
+    'tq_stool',
+    'tq_swollen',
+    'tq_swollen_part',
+    'tq_lymph',
+    'tq_wounds',
+    'tq_wound_part',
+    'tq_secretions',
+    'tq_secretion_type',
+    'tq_secretion_from',
+    'tq_skin',
+    'tq_skin_desc',
+    'tq_vomiting',
+    'tq_sudden_death',
+    'tq_noise',
+    'tq_sight',
+    'tq_hair_loss',
+    'tq_vaccination',
+  ],
+
+  // ---------------------------------------------------------------------------
+  // SPECIES FLOW — appended after universalFlow for each animal
+  // ---------------------------------------------------------------------------
+  speciesFlow: {
+    cattle: [
+      'tq_udder',
+      'tq_milk',
+      'tq_reproduction',
+      'tq_repro_problem',
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+    poultry: [
+      'tq_eggs',
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+    pigs: [
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+    rabbit: [
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+    goat: [
+      'tq_udder',
+      'tq_milk',
+      'tq_reproduction',
+      'tq_repro_problem',
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+    sheep: [
+      'tq_reproduction',
+      'tq_repro_problem',
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+    dog: [
+      'tq_feed',
+      'tq_shelter',
+      'tq_ectoparasites',
+      'tq_deworm',
+    ],
+  },
+
+  // ---------------------------------------------------------------------------
+  // DISEASE SCORING MATRIX
+  // ---------------------------------------------------------------------------
+  diseases: {
+
+    cattle: {
       Mastitis: {
-        questions:  ['c5','c6','c7','c8'],
+        questions:  ['tq_udder', 'tq_milk', 'tq_secretions', 'tq_limping'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       Brucellosis: {
-        questions:  ['c11','c12','c13'],
+        questions:  ['tq_reproduction', 'tq_reproduced', 'tq_udder'],
         thresholds: { MEDIUM: 1, HIGH: 2 },
       },
       ECF: {
-        questions:  ['c1','c2','c3','c4'],
+        questions:  ['tq_lymph', 'tq_eating', 'tq_cough', 'tq_swollen'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       FMD: {
-        questions:  ['c1','c2','c5','c9','c10'],
+        questions:  ['tq_limping', 'tq_secretions', 'tq_wounds', 'tq_milk', 'tq_vomiting'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
     },
-  },
 
-  // ---------------------------------------------------------------------------
-  // POULTRY  (11 questions, 3 diseases)
-  // ---------------------------------------------------------------------------
-  poultry: {
-    questions: ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11'],
-    labels: {
-      p1:  'Birds died suddenly with no warning',
-      p2:  'Head, face or wattles swollen and dark purple',
-      p3:  'Birds stopped eating or laying eggs',
-      p4:  'Watery or bloody diarrhea',
-      p5:  'Gasping for air, coughing or gurgling sounds',
-      p6:  'Twisting neck or walking in circles',
-      p7:  'Diarrhea bright green in color',
-      p8:  'Egg production dropped suddenly',
-      p9:  'Birds look hunched, fluffed up and dull',
-      p10: 'Chicks not growing and losing weight fast',
-      p11: 'Birds drinking a lot but refusing to eat',
-    },
-    scoring: {
+    poultry: {
       'Avian Flu': {
-        questions:  ['p1','p2','p3','p4','p8'],
+        questions:  ['tq_sudden_death', 'tq_swollen', 'tq_eating', 'tq_diarrhea'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       Newcastle: {
-        questions:  ['p1','p3','p5','p6','p7','p8'],
+        questions:  ['tq_cough', 'tq_walk_type', 'tq_eggs', 'tq_diarrhea'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       Coccidiosis: {
-        questions:  ['p3','p4','p9','p10','p11'],
+        questions:  ['tq_diarrhea', 'tq_stool', 'tq_eating', 'tq_water'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
     },
-  },
 
-  // ---------------------------------------------------------------------------
-  // PIGS  (16 questions, 6 diseases)
-  // ---------------------------------------------------------------------------
-  pigs: {
-    questions: [
-      'pg1','pg2','pg3','pg4','pg5','pg6','pg7','pg8',
-      'pg9','pg10','pg11','pg12','pg13','pg14','pg15','pg16',
-    ],
-    labels: {
-      pg1:  'Pigs died suddenly, spreading through the herd fast',
-      pg2:  'High fever and refuses to move',
-      pg3:  'Red or purple patches on skin',
-      pg4:  'Diarrhea with blood',
-      pg5:  'Sow gave birth to dead or very weak piglets',
-      pg6:  'Piglets died within days of birth',
-      pg7:  'Coughing or struggling to breathe',
-      pg8:  'Ears turning bluish or purple',
-      pg9:  'Sores in mouth, drooling and refusing to eat',
-      pg10: 'Limping or refusing to walk',
-      pg11: 'Blisters on snout or between hooves',
-      pg12: 'Watery diarrhea with blood and mucus',
-      pg13: 'Losing weight rapidly',
-      pg14: 'Swollen belly, especially in young pigs',
-      pg15: 'Worms visible in feces',
-      pg16: 'Diamond-shaped red patches on skin',
-    },
-    scoring: {
+    pigs: {
       ASF: {
-        questions:  ['pg1','pg2','pg3','pg4'],
+        questions:  ['tq_sudden_death', 'tq_skin', 'tq_standing', 'tq_diarrhea'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       PRRS: {
-        questions:  ['pg5','pg6','pg7','pg8'],
-        thresholds: { MEDIUM: 2, HIGH: 3 },
+        questions:  ['tq_reproduced', 'tq_reproduction', 'tq_cough'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
       },
       FMD: {
-        questions:  ['pg2','pg9','pg10','pg11','pg13'],
+        questions:  ['tq_secretions', 'tq_limping', 'tq_wounds', 'tq_vomiting'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       Erysipelas: {
-        questions:  ['pg1','pg2','pg3','pg10','pg16'],
-        thresholds: { MEDIUM: 2, HIGH: 3 },
-      },
-      Dysentery: {
-        questions:  ['pg4','pg12','pg13'],
-        thresholds: { MEDIUM: 2, HIGH: 3 },
-      },
-      Ascariasis: {
-        questions:  ['pg7','pg13','pg14','pg15'],
-        thresholds: { MEDIUM: 2, HIGH: 3 },
-      },
-    },
-  },
-
-  // ---------------------------------------------------------------------------
-  // RABBIT  (18 questions, 6 diseases)
-  // ---------------------------------------------------------------------------
-  rabbit: {
-    questions: [
-      'r1','r2','r3','r4','r5','r6','r7','r8','r9',
-      'r10','r11','r12','r13','r14','r15','r16','r17','r18',
-    ],
-    labels: {
-      r1:  'Rabbit found dead with no prior signs of illness',
-      r2:  'Bleeding from the nose or mouth',
-      r3:  'Sudden extreme weakness or seizures',
-      r4:  'Stopped eating and drinking completely',
-      r5:  'Watery or bloody droppings',
-      r6:  'Swollen pot-belly',
-      r7:  'Hunched in a corner and not moving',
-      r8:  'Thick white or yellow discharge from nose',
-      r9:  'Sneezing constantly',
-      r10: 'Front paws wet and matted',
-      r11: 'Eyes watery or crusty',
-      r12: 'Puffy swelling around eyes, ears or nose',
-      r13: 'Fluid-filled lumps under the skin',
-      r14: 'Shaking head or scratching ears constantly',
-      r15: 'Brown crusty discharge inside the ears',
-      r16: 'Head tilting to one side',
-      r17: 'Abdomen feels hard or bloated',
-      r18: 'Grinding teeth',
-    },
-    scoring: {
-      RHD: {
-        questions:  ['r1','r2','r3'],
+        questions:  ['tq_skin', 'tq_limping', 'tq_sudden_death'],
         thresholds: { MEDIUM: 1, HIGH: 2 },
       },
+      'Swine Dysentery': {
+        questions:  ['tq_diarrhea', 'tq_stool', 'tq_standing'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
+      },
+      Ascariasis: {
+        questions:  ['tq_cough', 'tq_swollen', 'tq_eating'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
+      },
+    },
+
+    rabbit: {
       Coccidiosis: {
-        questions:  ['r4','r5','r6','r7'],
+        questions:  ['tq_diarrhea', 'tq_swollen', 'tq_eating', 'tq_standing'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       Snuffles: {
-        questions:  ['r8','r9','r10','r11'],
-        thresholds: { MEDIUM: 2, HIGH: 3 },
+        questions:  ['tq_secretions', 'tq_secretion_type'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
       },
       Myxomatosis: {
-        questions:  ['r4','r11','r12','r13'],
+        questions:  ['tq_swollen', 'tq_lymph', 'tq_skin', 'tq_eating'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
       'Ear Mites': {
-        questions:  ['r14','r15','r16'],
+        questions:  ['tq_noise', 'tq_skin', 'tq_sight'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
+      },
+      RHD: {
+        questions:  ['tq_sudden_death', 'tq_secretions'],
         thresholds: { MEDIUM: 1, HIGH: 2 },
       },
       'GI Stasis': {
-        questions:  ['r4','r6','r7','r17','r18'],
+        questions:  ['tq_eating', 'tq_diarrhea', 'tq_swollen', 'tq_vomiting'],
         thresholds: { MEDIUM: 2, HIGH: 3 },
       },
     },
-    // r1=Yes alone is sufficient for an immediate HIGH outcome — skip all other questions
-    immediateHigh: 'r1',
+
+    goat: {
+      Helminthosis: {
+        questions:  ['tq_eating', 'tq_standing', 'tq_diarrhea', 'tq_swollen', 'tq_hair_loss'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+      FMD: {
+        questions:  ['tq_limping', 'tq_wounds', 'tq_secretions', 'tq_milk'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+      Brucellosis: {
+        questions:  ['tq_reproduction', 'tq_udder'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
+      },
+      Clostridial: {
+        questions:  ['tq_sudden_death', 'tq_standing', 'tq_walking', 'tq_vomiting'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+    },
+
+    sheep: {
+      Helminthosis: {
+        questions:  ['tq_eating', 'tq_standing', 'tq_diarrhea', 'tq_swollen', 'tq_hair_loss'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+      FMD: {
+        questions:  ['tq_limping', 'tq_wounds', 'tq_secretions'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+      Brucellosis: {
+        questions:  ['tq_reproduction', 'tq_reproduced'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
+      },
+      Clostridial: {
+        questions:  ['tq_sudden_death', 'tq_standing', 'tq_walking', 'tq_vomiting'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+    },
+
+    dog: {
+      Rabies: {
+        questions:  ['tq_noise', 'tq_sight', 'tq_walking', 'tq_vomiting', 'tq_sudden_death'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+      Worms: {
+        questions:  ['tq_eating', 'tq_swollen', 'tq_hair_loss', 'tq_diarrhea'],
+        thresholds: { MEDIUM: 2, HIGH: 3 },
+      },
+      Mange: {
+        questions:  ['tq_skin', 'tq_hair_loss'],
+        thresholds: { MEDIUM: 1, HIGH: 2 },
+      },
+    },
+
+  },
+
+  // ---------------------------------------------------------------------------
+  // SCORING VALUES
+  // Multiple-choice questions and reversed yes/no questions are listed here.
+  // All other yes/no questions default to: yes = 1, no = 0.
+  // ---------------------------------------------------------------------------
+  scoring: {
+    tq_eating: {
+      not_eating: 1,
+      eats_less:  0.5,
+      normal:     0,
+    },
+    tq_urine_color: {
+      bloody:     1,
+      very_dark:  1,
+      colourless: 0.5,
+      normal:     0,
+    },
+    tq_walk_type: {
+      circles:     1,
+      stumbling:   1,
+      not_walking: 1,
+      straight:    0,
+    },
+    tq_stool: {
+      bloody: 1,
+      watery: 1,
+      hard:   0,
+      normal: 0,
+    },
+    tq_secretion_type: {
+      blood:  1,
+      pus:    1,
+      froth:  0.5,
+      mucus:  0.5,
+    },
+    tq_milk: {
+      stopped:   1,
+      different: 1,
+      less:      0.5,
+      normal:    0,
+    },
+    tq_eggs: {
+      stopped: 1,
+      less:    0.5,
+      normal:  0,
+    },
+    // Reversed yes/no: reproductive failure scores 1 (animal did NOT reproduce)
+    tq_reproduction: {
+      yes: 0,
+      no:  1,
+    },
   },
 
 };
