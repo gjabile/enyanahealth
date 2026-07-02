@@ -93,21 +93,26 @@ async function sendTriageVetAlert(session) {
   const to    = process.env.WHATSAPP_TO;
 
   const TRIAGE_CONFIG = require('../config/triage');
-  const config   = TRIAGE_CONFIG[session.animal] || {};
-  const symptoms = session.symptoms || {};
-  const scores   = session.diseaseScores || {};
+  const answers = session.answers || {};
+  const scores  = session.diseaseScores || {};
 
   // Diseases flagged (MEDIUM or HIGH only)
   const flaggedLines = Object.entries(scores)
     .filter(([, d]) => d.level !== 'LOW')
     .map(([name, d]) => `${name}: ${d.score}/${d.maxPossible} — ${d.level}`);
 
-  // Symptom list in question order
-  const sym = val => (val ? '✅' : '❌');
-  const symptomLines = (config.questions || []).map(qId => {
-    const label = (config.labels || {})[qId] || qId;
-    return `${sym(symptoms[qId])} ${label}`;
-  });
+  // Q/A pairs in question order for answered questions only
+  const mergedFlow = [
+    ...TRIAGE_CONFIG.universalFlow,
+    ...(TRIAGE_CONFIG.speciesFlow[session.animal] || []),
+  ];
+  const answerLines = mergedFlow
+    .filter(qId => answers[qId] !== undefined)
+    .map(qId => {
+      const q = TRIAGE_CONFIG.questions[qId];
+      const questionText = q.text.english || qId;
+      return `Q: ${questionText}\nA: ${answers[qId]}`;
+    });
 
   const message = [
     '🐄 Enyana Health Alert',
@@ -120,8 +125,8 @@ async function sendTriageVetAlert(session) {
     'Diseases flagged:',
     ...(flaggedLines.length ? flaggedLines : ['None above LOW']),
     '',
-    'Symptoms reported:',
-    ...symptomLines,
+    'Farmer responses:',
+    ...answerLines,
   ].join('\n');
 
   // Persist to Firestore first — dashboard shows the referral even if Twilio

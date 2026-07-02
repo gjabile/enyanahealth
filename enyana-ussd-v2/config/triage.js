@@ -1,54 +1,33 @@
 'use strict';
 
-/**
- * config/triage.js
- * Vet-approved triage question flow and disease scoring matrix.
- *
- * Structure:
- *   questions    - definitions for every question ID (type, text, conditional)
- *   universalFlow - ordered question IDs asked to every animal
- *   speciesFlow   - additional question IDs asked per species, appended after universal
- *   diseases      - per-species disease definitions with scoring questions and thresholds
- *   scoring       - explicit score values for multiple-choice questions and reversed yes/no;
- *                   yes/no questions not listed here default to: yes=1, no=0
- *
- * Threshold logic: score >= HIGH → HIGH; score >= MEDIUM → MEDIUM; else → LOW
- * Conditional questions are skipped (score 0) when the parent answer does not match.
- */
-
 module.exports = {
 
-  // ---------------------------------------------------------------------------
-  // QUESTION DEFINITIONS
-  // ---------------------------------------------------------------------------
   questions: {
-
-    // ── Universal ─────────────────────────────────────────────────────────────
 
     tq_age: {
       id: 'tq_age',
-      text: 'How old is the animal?',
+      text: { english: 'How old is the animal?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: null,
     },
     tq_breed: {
       id: 'tq_breed',
-      text: 'What breed is the animal?',
+      text: { english: 'What breed is the animal?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: null,
     },
     tq_reproduced: {
       id: 'tq_reproduced',
-      text: 'Has this animal ever given birth or reproduced?',
+      text: { english: 'Has this animal ever given birth or reproduced?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_eating: {
       id: 'tq_eating',
-      text: 'How is the animal eating?',
+      text: { english: 'How is the animal eating?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['not_eating', 'eats_less', 'normal'],
       scoringQuestion: true,
@@ -56,28 +35,28 @@ module.exports = {
     },
     tq_duration: {
       id: 'tq_duration',
-      text: 'How long has the animal been sick?',
+      text: { english: 'How long has the animal been sick?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: null,
     },
     tq_water: {
       id: 'tq_water',
-      text: 'Is the animal drinking water?',
+      text: { english: 'Is the animal drinking water?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_urine: {
       id: 'tq_urine',
-      text: 'Is the animal urinating?',
+      text: { english: 'Is the animal urinating?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: { question: 'tq_water', answer: 'yes' },
     },
     tq_urine_color: {
       id: 'tq_urine_color',
-      text: 'What colour is the urine?',
+      text: { english: 'What colour is the urine?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['bloody', 'very_dark', 'colourless', 'normal'],
       scoringQuestion: true,
@@ -85,35 +64,35 @@ module.exports = {
     },
     tq_standing: {
       id: 'tq_standing',
-      text: 'Can the animal stand up on its own?',
+      text: { english: 'Can the animal stand up on its own?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_getup: {
       id: 'tq_getup',
-      text: 'Can the animal get up if you help it?',
+      text: { english: 'Can the animal get up if you help it?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: { question: 'tq_standing', answer: 'no' },
     },
     tq_lying_duration: {
       id: 'tq_lying_duration',
-      text: 'How long has it been unable to get up?',
+      text: { english: 'How long has it been unable to get up?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: { question: 'tq_getup', answer: 'no' },
     },
     tq_walking: {
       id: 'tq_walking',
-      text: 'Can the animal walk normally?',
+      text: { english: 'Can the animal walk normally?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_walk_type: {
       id: 'tq_walk_type',
-      text: 'How is the animal moving?',
+      text: { english: 'How is the animal moving?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['circles', 'stumbling', 'not_walking', 'straight'],
       scoringQuestion: true,
@@ -121,28 +100,28 @@ module.exports = {
     },
     tq_limping: {
       id: 'tq_limping',
-      text: 'Is the animal limping?',
+      text: { english: 'Is the animal limping?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: { question: 'tq_walking', answer: 'no' },
     },
     tq_cough: {
       id: 'tq_cough',
-      text: 'Is the animal coughing?',
+      text: { english: 'Is the animal coughing?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_diarrhea: {
       id: 'tq_diarrhea',
-      text: 'Does the animal have diarrhea?',
+      text: { english: 'Does the animal have diarrhea?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_stool: {
       id: 'tq_stool',
-      text: 'What does the stool look like?',
+      text: { english: 'What does the stool look like?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['bloody', 'watery', 'hard', 'normal'],
       scoringQuestion: true,
@@ -150,49 +129,49 @@ module.exports = {
     },
     tq_swollen: {
       id: 'tq_swollen',
-      text: 'Is any part of the body swollen?',
+      text: { english: 'Is any part of the body swollen?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_swollen_part: {
       id: 'tq_swollen_part',
-      text: 'Which part of the body is swollen?',
+      text: { english: 'Which part of the body is swollen?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: { question: 'tq_swollen', answer: 'yes' },
     },
     tq_lymph: {
       id: 'tq_lymph',
-      text: 'Are the lymph nodes (glands on the neck or legs) swollen?',
+      text: { english: 'Are the lymph nodes (glands on neck or legs) swollen?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_wounds: {
       id: 'tq_wounds',
-      text: 'Does the animal have any wounds or sores?',
+      text: { english: 'Does the animal have any wounds or sores?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_wound_part: {
       id: 'tq_wound_part',
-      text: 'Where are the wounds or sores?',
+      text: { english: 'Where are the wounds or sores?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: { question: 'tq_wounds', answer: 'yes' },
     },
     tq_secretions: {
       id: 'tq_secretions',
-      text: 'Does the animal have any discharge or secretions?',
+      text: { english: 'Does the animal have any discharge or secretions?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_secretion_type: {
       id: 'tq_secretion_type',
-      text: 'What type of discharge?',
+      text: { english: 'What type of discharge?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['blood', 'pus', 'froth', 'mucus'],
       scoringQuestion: true,
@@ -200,80 +179,78 @@ module.exports = {
     },
     tq_secretion_from: {
       id: 'tq_secretion_from',
-      text: 'Where is the discharge coming from?',
+      text: { english: 'Where is the discharge coming from?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: { question: 'tq_secretions', answer: 'yes' },
     },
     tq_skin: {
       id: 'tq_skin',
-      text: 'Does the animal have any skin problems (rash, patches or lesions)?',
+      text: { english: 'Does the animal have skin problems (rash, patches or lesions)?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_skin_desc: {
       id: 'tq_skin_desc',
-      text: 'Describe the skin problem.',
+      text: { english: 'Describe the skin problem.', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: { question: 'tq_skin', answer: 'yes' },
     },
     tq_vomiting: {
       id: 'tq_vomiting',
-      text: 'Is the animal vomiting?',
+      text: { english: 'Is the animal vomiting?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_sudden_death: {
       id: 'tq_sudden_death',
-      text: 'Have any animals in the group died suddenly?',
+      text: { english: 'Have any animals in the group died suddenly?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_noise: {
       id: 'tq_noise',
-      text: 'Is the animal making unusual sounds or crying out?',
+      text: { english: 'Is the animal making unusual sounds or crying out?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_sight: {
       id: 'tq_sight',
-      text: 'Does the animal seem to have problems with its eyesight?',
+      text: { english: 'Does the animal seem to have problems with its eyesight?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_hair_loss: {
       id: 'tq_hair_loss',
-      text: 'Is the animal losing hair or wool?',
+      text: { english: 'Is the animal losing hair or wool?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_vaccination: {
       id: 'tq_vaccination',
-      text: 'What vaccinations has the animal received?',
+      text: { english: 'What vaccinations has the animal received?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: null,
     },
 
-    // ── Species-specific ──────────────────────────────────────────────────────
-
     tq_udder: {
       id: 'tq_udder',
-      text: 'Is the udder swollen, hard or painful?',
+      text: { english: 'Is the udder swollen, hard or painful?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: null,
     },
     tq_milk: {
       id: 'tq_milk',
-      text: 'How is milk production?',
+      text: { english: 'How is milk production?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['stopped', 'different', 'less', 'normal'],
       scoringQuestion: true,
@@ -281,21 +258,21 @@ module.exports = {
     },
     tq_reproduction: {
       id: 'tq_reproduction',
-      text: 'Has the animal reproduced successfully since the last time?',
+      text: { english: 'Has the animal reproduced successfully since the last time?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: true,
       conditional: { question: 'tq_reproduced', answer: 'yes' },
     },
     tq_repro_problem: {
       id: 'tq_repro_problem',
-      text: 'Describe the reproductive problem.',
+      text: { english: 'Describe the reproductive problem.', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'free_text',
       scoringQuestion: false,
       conditional: { question: 'tq_reproduction', answer: 'no' },
     },
     tq_eggs: {
       id: 'tq_eggs',
-      text: 'How is egg production?',
+      text: { english: 'How is egg production?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'multiple_choice',
       options: ['stopped', 'less', 'normal'],
       scoringQuestion: true,
@@ -303,37 +280,34 @@ module.exports = {
     },
     tq_feed: {
       id: 'tq_feed',
-      text: 'Is the animal getting adequate feed?',
+      text: { english: 'Is the animal getting adequate feed?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: false,
       conditional: null,
     },
     tq_shelter: {
       id: 'tq_shelter',
-      text: 'Does the animal have adequate shelter?',
+      text: { english: 'Does the animal have adequate shelter?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: false,
       conditional: null,
     },
     tq_ectoparasites: {
       id: 'tq_ectoparasites',
-      text: 'Does the animal have visible ticks, lice or mites?',
+      text: { english: 'Does the animal have visible ticks, lice or mites?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: false,
       conditional: null,
     },
     tq_deworm: {
       id: 'tq_deworm',
-      text: 'Has the animal been dewormed in the last 3 months?',
+      text: { english: 'Has the animal been dewormed in the last 3 months?', runyankole: '[PLACEHOLDER]', acholi: '[PLACEHOLDER]' },
       type: 'yes_no',
       scoringQuestion: false,
       conditional: null,
     },
   },
 
-  // ---------------------------------------------------------------------------
-  // UNIVERSAL FLOW — asked for every animal, in this order
-  // ---------------------------------------------------------------------------
   universalFlow: [
     'tq_age',
     'tq_breed',
@@ -370,9 +344,6 @@ module.exports = {
     'tq_vaccination',
   ],
 
-  // ---------------------------------------------------------------------------
-  // SPECIES FLOW — appended after universalFlow for each animal
-  // ---------------------------------------------------------------------------
   speciesFlow: {
     cattle: [
       'tq_udder',
@@ -429,9 +400,6 @@ module.exports = {
     ],
   },
 
-  // ---------------------------------------------------------------------------
-  // DISEASE SCORING MATRIX
-  // ---------------------------------------------------------------------------
   diseases: {
 
     cattle: {
@@ -577,11 +545,6 @@ module.exports = {
 
   },
 
-  // ---------------------------------------------------------------------------
-  // SCORING VALUES
-  // Multiple-choice questions and reversed yes/no questions are listed here.
-  // All other yes/no questions default to: yes = 1, no = 0.
-  // ---------------------------------------------------------------------------
   scoring: {
     tq_eating: {
       not_eating: 1,
@@ -623,10 +586,76 @@ module.exports = {
       less:    0.5,
       normal:  0,
     },
-    // Reversed yes/no: reproductive failure scores 1 (animal did NOT reproduce)
+    // Reversed yes/no: reproductive failure scores 1 (animal did NOT reproduce successfully)
     tq_reproduction: {
       yes: 0,
       no:  1,
+    },
+  },
+
+  optionLabels: {
+    english: {
+      not_eating:  'Not eating at all',
+      eats_less:   'Eats less than usual',
+      normal:      'Normal',
+      bloody:      'Bloody or red',
+      very_dark:   'Very dark',
+      colourless:  'Colourless or watery',
+      circles:     'In circles',
+      stumbling:   'Stumbling or drunk-like',
+      not_walking: 'Not walking at all',
+      straight:    'Straight / normally',
+      watery:      'Watery or loose',
+      hard:        'Hard or pellet-like',
+      blood:       'Blood',
+      pus:         'Pus',
+      froth:       'Froth or saliva',
+      mucus:       'Mucus',
+      stopped:     'Stopped completely',
+      different:   'Looks different',
+      less:        'Less than usual',
+    },
+    runyankole: {
+      not_eating:  '[PLACEHOLDER]',
+      eats_less:   '[PLACEHOLDER]',
+      normal:      '[PLACEHOLDER]',
+      bloody:      '[PLACEHOLDER]',
+      very_dark:   '[PLACEHOLDER]',
+      colourless:  '[PLACEHOLDER]',
+      circles:     '[PLACEHOLDER]',
+      stumbling:   '[PLACEHOLDER]',
+      not_walking: '[PLACEHOLDER]',
+      straight:    '[PLACEHOLDER]',
+      watery:      '[PLACEHOLDER]',
+      hard:        '[PLACEHOLDER]',
+      blood:       '[PLACEHOLDER]',
+      pus:         '[PLACEHOLDER]',
+      froth:       '[PLACEHOLDER]',
+      mucus:       '[PLACEHOLDER]',
+      stopped:     '[PLACEHOLDER]',
+      different:   '[PLACEHOLDER]',
+      less:        '[PLACEHOLDER]',
+    },
+    acholi: {
+      not_eating:  '[PLACEHOLDER]',
+      eats_less:   '[PLACEHOLDER]',
+      normal:      '[PLACEHOLDER]',
+      bloody:      '[PLACEHOLDER]',
+      very_dark:   '[PLACEHOLDER]',
+      colourless:  '[PLACEHOLDER]',
+      circles:     '[PLACEHOLDER]',
+      stumbling:   '[PLACEHOLDER]',
+      not_walking: '[PLACEHOLDER]',
+      straight:    '[PLACEHOLDER]',
+      watery:      '[PLACEHOLDER]',
+      hard:        '[PLACEHOLDER]',
+      blood:       '[PLACEHOLDER]',
+      pus:         '[PLACEHOLDER]',
+      froth:       '[PLACEHOLDER]',
+      mucus:       '[PLACEHOLDER]',
+      stopped:     '[PLACEHOLDER]',
+      different:   '[PLACEHOLDER]',
+      less:        '[PLACEHOLDER]',
     },
   },
 

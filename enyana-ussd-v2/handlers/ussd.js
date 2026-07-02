@@ -16,7 +16,7 @@
  *   - Current state is DERIVED by replaying inputs[0..n-2] through advanceStateSilent
  *   - Only the last input (inputs[n-1]) triggers side effects (Firestore writes, alerts)
  *   - Invalid input re-shows the current screen without advancing state
- *   - Triage question states ({animal}_q{N}) are handled by a single generic block
+ *   - Triage question states (triage_{qIndex}) are handled by a single generic block
  *   - See CLAUDE.md for the full state routing table
  */
 
@@ -55,6 +55,28 @@ const registrationSessions = new Set();
 // ---------------------------------------------------------------------------
 
 function getPrompt(stateName, language, session) {
+  // Triage question states are generated dynamically from config — not in flow JSON
+  if (stateName.match(/^triage_\d+$/)) {
+    const index      = parseInt(stateName.replace('triage_', ''), 10);
+    const mergedFlow = getMergedFlow(session.animal);
+    const qId        = mergedFlow[index];
+    const question   = TRIAGE_CONFIG.questions[qId];
+
+    let promptText = (question.text[language] || question.text.english);
+
+    if (question.type === 'yes_no') {
+      promptText += '\n\n1. Yes\n2. No';
+    } else if (question.type === 'multiple_choice') {
+      question.options.forEach((opt, i) => {
+        promptText += `\n${i + 1}. ${getOptionLabel(opt, language)}`;
+      });
+    } else {
+      promptText += '\n(Type your answer)';
+    }
+
+    return promptText;
+  }
+
   const state = flow.states[stateName];
   if (!state) return `[Error: state "${stateName}" not found in flow]`;
   const isReturning = session && session.isReturningFarmer;
@@ -74,18 +96,47 @@ function getLevel(score, thresholds) {
   return 'LOW';
 }
 
-function calculateScores(animal, symptoms) {
-  const config        = TRIAGE_CONFIG[animal];
-  const RANK          = { LOW: 0, MEDIUM: 1, HIGH: 2 };
+function getMergedFlow(animal) {
+  const universal = TRIAGE_CONFIG.universalFlow;
+  const species   = TRIAGE_CONFIG.speciesFlow[animal] || [];
+  return [...universal, ...species];
+}
+
+function shouldAskQuestion(qId, session) {
+  const q = TRIAGE_CONFIG.questions[qId];
+  if (!q.conditional) return true;
+  const { question, answer } = q.conditional;
+  return session.answers[question] === answer;
+}
+
+function getOptionLabel(opt, language) {
+  const labels = TRIAGE_CONFIG.optionLabels;
+  return (labels[language] && labels[language][opt]) || labels.english[opt] || opt;
+}
+
+function calculateScores(animal, answers) {
+  const diseases   = TRIAGE_CONFIG.diseases[animal];
+  const scoring    = TRIAGE_CONFIG.scoring;
+  const riskOrder  = ['LOW', 'MEDIUM', 'HIGH'];
   const diseaseScores = {};
   let highestRiskLevel = 'LOW';
 
-  for (const [disease, dc] of Object.entries(config.scoring)) {
-    const score       = dc.questions.reduce((n, qId) => n + (symptoms[qId] ? 1 : 0), 0);
-    const level       = getLevel(score, dc.thresholds);
-    const maxPossible = dc.questions.length;
-    diseaseScores[disease] = { score, maxPossible, level };
-    if (RANK[level] > RANK[highestRiskLevel]) highestRiskLevel = level;
+  for (const [disease, config] of Object.entries(diseases)) {
+    let score = 0;
+    for (const qId of config.questions) {
+      const answer = answers[qId];
+      if (!answer) continue;
+      if (scoring[qId]) {
+        score += scoring[qId][answer] || 0;
+      } else {
+        if (answer === 'yes') score += 1;
+      }
+    }
+    const level = getLevel(score, config.thresholds);
+    diseaseScores[disease] = { score, maxPossible: config.questions.length, level };
+    if (riskOrder.indexOf(level) > riskOrder.indexOf(highestRiskLevel)) {
+      highestRiskLevel = level;
+    }
   }
 
   return { diseaseScores, highestRiskLevel };
@@ -114,7 +165,8 @@ function makeEmptySession(phoneNumber) {
     isReturningFarmer: false,
     animal:            null,
     vetAnimal:         null,
-    symptoms:          {},
+    answers:           {},
+    triageIndex:       0,
     diseaseScores:     null,
     highestRiskLevel:  null,
     outcome:           null,
@@ -123,6 +175,12 @@ function makeEmptySession(phoneNumber) {
 }
 
 function sendStateResponse(res, stateName, session) {
+  // Triage question states are always CON — generated from config, not flow JSON
+  if (stateName.match(/^triage_\d+$/)) {
+    const prompt = getPrompt(stateName, session.language, session);
+    return res.send(`CON ${prompt}`);
+  }
+
   const stateData = flow.states[stateName];
   if (!stateData) {
     console.error(`[ussd] State "${stateName}" not found in ${PILOT}.json`);
@@ -156,31 +214,54 @@ function advanceStateSilent(session, input, farmerData) {
     return session;
   }
 
-  // Triage question states  {animal}_q{N}
-  const triageMatch = currentState.match(/^(cattle|poultry|pigs|rabbit)_q(\d+)$/);
+  // Triage question states — triage_{qIndex}
+  const triageMatch = currentState.match(/^triage_(\d+)$/);
   if (triageMatch) {
-    if (input !== '1' && input !== '2') return session;
+    const index      = parseInt(triageMatch[1], 10);
+    const mergedFlow = getMergedFlow(session.animal);
+    const qId        = mergedFlow[index];
+    const question   = TRIAGE_CONFIG.questions[qId];
 
-    const animal   = triageMatch[1];
-    const qNum     = parseInt(triageMatch[2], 10);
-    const config   = TRIAGE_CONFIG[animal];
-    const qId      = config.questions[qNum - 1];
-    const answered = (input === '1');
-    const symptoms = { ...session.symptoms, [qId]: answered };
-    const base     = { ...session, symptoms };
+    let answer = null;
+    if (question.type === 'yes_no') {
+      if      (input === '1') answer = 'yes';
+      else if (input === '2') answer = 'no';
+      else return session;
+    } else if (question.type === 'multiple_choice') {
+      const optionIndex = parseInt(input, 10) - 1;
+      if (optionIndex >= 0 && optionIndex < question.options.length) {
+        answer = question.options[optionIndex];
+      } else {
+        return session;
+      }
+    } else {
+      if (input && input.trim()) {
+        answer = input.trim();
+      } else {
+        return session;
+      }
+    }
 
-    if (config.immediateHigh === qId && answered) {
-      const { diseaseScores } = calculateScores(animal, symptoms);
-      return { ...base, diseaseScores, highestRiskLevel: 'HIGH', outcome: 'vet_referral', state: 'triage_outcome_high' };
+    const newAnswers = { ...session.answers, [qId]: answer };
+    const tempBase   = { ...session, answers: newAnswers };
+
+    // Find next non-skipped question
+    let nextIndex = index + 1;
+    while (nextIndex < mergedFlow.length) {
+      if (shouldAskQuestion(mergedFlow[nextIndex], tempBase)) break;
+      nextIndex++;
     }
-    if (qNum < config.questions.length) {
-      return { ...base, state: `${animal}_q${qNum + 1}` };
+
+    if (nextIndex < mergedFlow.length) {
+      return { ...tempBase, triageIndex: nextIndex, state: `triage_${nextIndex}` };
     }
-    const { diseaseScores, highestRiskLevel } = calculateScores(animal, symptoms);
+
+    // All questions answered — calculate scores
+    const { diseaseScores, highestRiskLevel } = calculateScores(session.animal, newAnswers);
     const nextState = highestRiskLevel === 'HIGH'   ? 'triage_outcome_high'
                     : highestRiskLevel === 'MEDIUM' ? 'triage_outcome_medium'
                     :                                 'triage_outcome_low';
-    return { ...base, diseaseScores, highestRiskLevel, state: nextState };
+    return { ...tempBase, diseaseScores, highestRiskLevel, state: nextState };
   }
 
   const next = { ...session };
@@ -298,13 +379,16 @@ function advanceStateSilent(session, input, farmerData) {
       else return session;
       return next;
 
-    case 'selectAnimal':
-      if      (input === '1') { next.animal = 'cattle';  next.symptoms = {}; next.state = 'cattle_q1';  }
-      else if (input === '2') { next.animal = 'poultry'; next.symptoms = {}; next.state = 'poultry_q1'; }
-      else if (input === '3') { next.animal = 'pigs';    next.symptoms = {}; next.state = 'pigs_q1';    }
-      else if (input === '4') { next.animal = 'rabbit';  next.symptoms = {}; next.state = 'rabbit_q1';  }
-      else return session;
+    case 'selectAnimal': {
+      const animals = { '1':'cattle','2':'poultry','3':'pigs','4':'rabbit','5':'goat','6':'sheep','7':'dog' };
+      const animal  = animals[input];
+      if (!animal) return session;
+      next.animal      = animal;
+      next.answers     = {};
+      next.triageIndex = 0;
+      next.state       = 'triage_0';
       return next;
+    }
 
     case 'triage_outcome_medium':
       if      (input === '1') { next.outcome = 'vet_referral'; next.state = 'triage_vet_sent'; }
@@ -385,45 +469,67 @@ async function handleUSSD(req, res) {
   // -------------------------------------------------------------------------
   // TRIAGE QUESTION STATES — generic handler (with side effects)
   // -------------------------------------------------------------------------
-  const triageMatch = currentState.match(/^(cattle|poultry|pigs|rabbit)_q(\d+)$/);
+  const triageMatch = currentState.match(/^triage_(\d+)$/);
 
   if (triageMatch) {
-    const animal  = triageMatch[1];
-    const qNum    = parseInt(triageMatch[2], 10);
-    const config  = TRIAGE_CONFIG[animal];
-    const qId     = config.questions[qNum - 1];
+    const index      = parseInt(triageMatch[1], 10);
+    const mergedFlow = getMergedFlow(session.animal);
+    const qId        = mergedFlow[index];
+    const question   = TRIAGE_CONFIG.questions[qId];
 
-    if (input !== '1' && input !== '2') {
-      return reshowCurrent(res, currentState, session.language, session);
+    let answer = null;
+    if (question.type === 'yes_no') {
+      if      (input === '1') answer = 'yes';
+      else if (input === '2') answer = 'no';
+      else return reshowCurrent(res, currentState, session.language, session);
+    } else if (question.type === 'multiple_choice') {
+      const optionIndex = parseInt(input, 10) - 1;
+      if (optionIndex >= 0 && optionIndex < question.options.length) {
+        answer = question.options[optionIndex];
+      } else {
+        return reshowCurrent(res, currentState, session.language, session);
+      }
+    } else {
+      if (input && input.trim()) {
+        answer = input.trim();
+      } else {
+        return reshowCurrent(res, currentState, session.language, session);
+      }
     }
 
-    const answered = (input === '1');
-    const symptoms = { ...session.symptoms, [qId]: answered };
-    let   updated  = { ...session, symptoms };
-    let   nextState;
+    const newAnswers = { ...session.answers, [qId]: answer };
+    const tempBase   = { ...session, answers: newAnswers };
 
-    if (config.immediateHigh === qId && answered) {
-      const { diseaseScores } = calculateScores(animal, symptoms);
-      updated   = { ...updated, diseaseScores, highestRiskLevel: 'HIGH', outcome: 'vet_referral' };
-      sendTriageVetAlert(updated).catch(e => console.error('[ussd] Alert failed:', e.message));
-      nextState = 'triage_outcome_high';
+    // Find next non-skipped question
+    let nextIndex = index + 1;
+    while (nextIndex < mergedFlow.length) {
+      if (shouldAskQuestion(mergedFlow[nextIndex], tempBase)) break;
+      nextIndex++;
+    }
 
-    } else if (qNum < config.questions.length) {
-      nextState = `${animal}_q${qNum + 1}`;
+    let sessionUpdates = { answers: newAnswers };
+    let nextState;
 
+    if (nextIndex < mergedFlow.length) {
+      sessionUpdates.triageIndex = nextIndex;
+      nextState = `triage_${nextIndex}`;
     } else {
-      const { diseaseScores, highestRiskLevel } = calculateScores(animal, symptoms);
-      updated = { ...updated, diseaseScores, highestRiskLevel };
+      // All questions answered — calculate scores
+      const { diseaseScores, highestRiskLevel } = calculateScores(session.animal, newAnswers);
+      sessionUpdates.diseaseScores     = diseaseScores;
+      sessionUpdates.highestRiskLevel  = highestRiskLevel;
+
       if (highestRiskLevel === 'HIGH') {
-        updated   = { ...updated, outcome: 'vet_referral' };
-        sendTriageVetAlert(updated).catch(e => console.error('[ussd] Alert failed:', e.message));
+        sessionUpdates.outcome = 'vet_referral';
         nextState = 'triage_outcome_high';
+        sendTriageVetAlert({ ...session, ...sessionUpdates })
+          .catch(e => console.error('[ussd] Triage alert failed:', e.message));
       } else {
         nextState = highestRiskLevel === 'MEDIUM' ? 'triage_outcome_medium' : 'triage_outcome_low';
       }
     }
 
-    return sendStateResponse(res, nextState, updated);
+    return sendStateResponse(res, nextState, { ...session, ...sessionUpdates });
   }
 
   // -------------------------------------------------------------------------
@@ -571,13 +677,16 @@ async function handleUSSD(req, res) {
       else return reshowCurrent(res, 'infoSelectTopic_dog', session.language, session);
       break;
 
-    case 'selectAnimal':
-      if      (input === '1') { sessionUpdates.animal = 'cattle';  nextState = 'cattle_q1';  }
-      else if (input === '2') { sessionUpdates.animal = 'poultry'; nextState = 'poultry_q1'; }
-      else if (input === '3') { sessionUpdates.animal = 'pigs';    nextState = 'pigs_q1';    }
-      else if (input === '4') { sessionUpdates.animal = 'rabbit';  nextState = 'rabbit_q1';  }
-      else return reshowCurrent(res, 'selectAnimal', session.language, session);
+    case 'selectAnimal': {
+      const animals = { '1':'cattle','2':'poultry','3':'pigs','4':'rabbit','5':'goat','6':'sheep','7':'dog' };
+      const animal  = animals[input];
+      if (!animal) return reshowCurrent(res, 'selectAnimal', session.language, session);
+      sessionUpdates.animal      = animal;
+      sessionUpdates.answers     = {};
+      sessionUpdates.triageIndex = 0;
+      nextState = 'triage_0';
       break;
+    }
 
     case 'triage_outcome_medium': {
       const outcome = input === '1' ? 'vet_referral' : input === '2' ? 'advice' : null;
